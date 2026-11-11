@@ -12,16 +12,16 @@ Open **Pulse Dial.blend** In Blender And Press Space In The 3D Viewport. A Monit
 
 ## Build A Variation
 
-Use A Separately Installed Blender. The Included Project And Builder Were Verified In Blender 5.2.2 LTS. All Geometry, Materials, Lighting, Animation, And Lettering Are Built Locally. Run Commands From This Folder In A Fresh Background Process. If Blender Is Outside Your PATH, Use Its Full Executable Path.
+Use A Separately Installed Blender. The Included Project And Builder Were Verified In Blender 5.2.2 LTS. All Geometry, Materials, Lighting, Animation, And Lettering Are Built Locally. A Variation Belongs In The User's Project, Never Inside The Skill Folder. Make A Folder There, Copy `direction.json` Into It, And Edit The Copy. Run The Commands From The User's Project Folder In A Fresh Background Process. `$SKILL` Stands For The Path To The Animated Video Skill Folder, As In The [Skill Guide](../SKILL.md). If Blender Is Outside Your PATH, Use Its Full Executable Path. The Builder Does Not Check Where It Writes, So Check The Output Path Yourself.
 
 ```sh
-blender --background --factory-startup --python-exit-code 1 --python build_scene.py -- --config direction.json --output "My Pulse Dial.blend"
-blender --background "My Pulse Dial.blend" --python-exit-code 1 --python verify_scene.py
+blender --background --factory-startup --python-exit-code 1 --python "$SKILL/blender/build_scene.py" -- --config my-dial/direction.json --output "my-dial/My Pulse Dial.blend"
+blender --background "my-dial/My Pulse Dial.blend" --python-exit-code 1 --python "$SKILL/blender/verify_scene.py"
 ```
 
 The Builder Requires A New Output Filename. The Verifier Opens The Project, Samples The Four Story Markers, Checks Product Framing, And Reports Dial Angles, Key Travel, Illuminated Cells, Camera Positions, And Scene Counts. Both Commands Leave An Editable Scene For In-Editor Review.
 
-Edit `direction.json` Before Building A Variation.
+Edit Your Copy Of `direction.json` Before Building A Variation.
 
 | Setting | Effect |
 | --- | --- |

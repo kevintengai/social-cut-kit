@@ -33,7 +33,15 @@
       "spin": 110,
       "distance": 5.5,
       "gloss": 0.65,
-      "cues": [],
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 1.569,
+          "gain": 0.55,
+          "sound": "Glass Point",
+          "event": "idea-appears"
+        }
+      ],
       "draw": "Idea Seed",
       "params": {},
       "beats": {
@@ -72,7 +80,24 @@
       "spin": 110,
       "distance": 5.5,
       "gloss": 0.65,
-      "cues": [],
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 0.25,
+          "gain": 0.5,
+          "sound": "Paper Tap",
+          "event": "idea-spoken",
+          "pan": -0.2
+        },
+        {
+          "type": "Sound",
+          "at": 2.332,
+          "gain": 0.55,
+          "sound": "Air Sweep",
+          "event": "idea-moves",
+          "pan": 0.6
+        }
+      ],
       "draw": "Idea Spoken",
       "params": {},
       "start": {
@@ -115,7 +140,102 @@
       "spin": 110,
       "distance": 5.5,
       "gloss": 0.65,
-      "cues": [],
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 0.951,
+          "gain": 0.5,
+          "sound": "Twin Tick",
+          "event": "told-1"
+        },
+        {
+          "type": "Sound",
+          "at": 1.091,
+          "gain": 0.5,
+          "sound": "Twin Tick",
+          "event": "told-2",
+          "pan": 0.289
+        },
+        {
+          "type": "Sound",
+          "at": 1.231,
+          "gain": 0.5,
+          "sound": "Twin Tick",
+          "event": "told-3",
+          "pan": -0.289
+        },
+        {
+          "type": "Sound",
+          "at": 2.122,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-4",
+          "pan": -0.48
+        },
+        {
+          "type": "Sound",
+          "at": 2.192,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-5"
+        },
+        {
+          "type": "Sound",
+          "at": 2.262,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-6",
+          "pan": 0.48
+        },
+        {
+          "type": "Sound",
+          "at": 2.332,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-7",
+          "pan": 0.735
+        },
+        {
+          "type": "Sound",
+          "at": 2.402,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-8",
+          "pan": 0.647
+        },
+        {
+          "type": "Sound",
+          "at": 2.472,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-9",
+          "pan": 0.255
+        },
+        {
+          "type": "Sound",
+          "at": 2.542,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-10",
+          "pan": -0.255
+        },
+        {
+          "type": "Sound",
+          "at": 2.612,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-11",
+          "pan": -0.647
+        },
+        {
+          "type": "Sound",
+          "at": 2.682,
+          "gain": 0.25,
+          "sound": "Paper Tap",
+          "event": "told-12",
+          "pan": -0.735
+        }
+      ],
       "draw": "Idea Spread",
       "params": {},
       "start": {
@@ -169,7 +289,22 @@
       "spin": 110,
       "distance": 5.5,
       "gloss": 0.65,
-      "cues": [],
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 1.304,
+          "gain": 0.5,
+          "sound": "Orbit Rise",
+          "event": "town-lights"
+        },
+        {
+          "type": "Sound",
+          "at": 3.704,
+          "gain": 0.5,
+          "sound": "Glass Point",
+          "event": "count.count-end"
+        }
+      ],
       "draw": "Idea Town",
       "params": {},
       "start": {

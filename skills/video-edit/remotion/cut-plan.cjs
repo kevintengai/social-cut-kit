@@ -173,25 +173,35 @@ function overlayHeight(video, width) {
   return Math.max(2, Math.round(width * sh / (sw * 2)) * 2);
 }
 
+// Caption Defaults For A Vertical Canvas, Where The Platform Draws Its Own Controls Over The Video. They Match timeline.py.
+const VERTICAL_CAPTIONS = {size: 0.06, margin: 25, top_margin: 12};
+const HORIZONTAL_MARGIN = 7;
+
 function captionStyle(doc, w, h) {
   const style = doc.caption_style ?? {};
-  fields(style, "font size color outline stroke margin", "Caption Style");
+  fields(style, "font size color outline stroke margin top_margin", "Caption Style");
   const font = choice(style.font ?? "Arial", FONTS, "Caption Font");
   const color = (key, fallback) => {
     const value = style[key] ?? fallback;
     if (typeof value !== "string" || !/^#[0-9a-fA-F]{6}$/.test(value)) fail(`${key} Requires A Six-Digit Hex Color.`);
     return value;
   };
-  const size = integer(style.size ?? Math.max(12, pyRound(Math.min(h * 0.078, w * 0.085))), "Caption Size", 4, 1024);
+  const tall = h > w;
+  const usual = tall ? pyRound(w * VERTICAL_CAPTIONS.size) : pyRound(Math.min(h * 0.078, w * 0.085));
+  const size = integer(style.size ?? Math.max(12, usual), "Caption Size", 4, 1024);
+  const margin = number(style.margin ?? (tall ? VERTICAL_CAPTIONS.margin : HORIZONTAL_MARGIN), "Caption Margin", 0, 45);
+  // A Timeline That Sets Its Own Margin Keeps One Margin For Both Edges, As Before.
+  const above = style.margin !== undefined && style.margin !== null ? margin : tall ? VERTICAL_CAPTIONS.top_margin : HORIZONTAL_MARGIN;
   return {font, size, color: color("color", "#FFFFFF"), outline: color("outline", "#101010"),
     stroke: number(style.stroke ?? Math.max(1, pyRound(size * 0.07)), "Caption Stroke", 0, 96),
-    margin: number(style.margin ?? 7, "Caption Margin", 0, 45)};
+    margin, top_margin: number(style.top_margin ?? above, "Caption Top Margin", 0, 45)};
 }
 
 // Caption Measurements In Canvas Pixels, Matching The Margins And Text Height Of The FFmpeg Route.
 function captionLayout(style, w, h) {
   return {fontFamily: FONT_STACK[style.font], fontSize: style.size * FONT_EM[style.font], lineHeight: style.size,
-    side: pyRound(w * 0.055), edge: pyRound(h * style.margin / 100), stroke: style.stroke,
+    side: pyRound(w * 0.055), edge: pyRound(h * style.margin / 100),
+    topEdge: pyRound(h * (style.top_margin ?? style.margin) / 100), stroke: style.stroke,
     color: style.color, outline: style.outline};
 }
 
@@ -222,8 +232,9 @@ function colorFilter(shot) {
 }
 
 // Validate A Timeline The Way timeline.py Does And Return Its Model In Seconds. probes Maps Each Asset
-// Name To A probeSummary Result. A Missing Entry Means The File Was Not Found.
-function model(doc, probes) {
+// Name To A probeSummary Result. A Missing Entry Means The File Was Not Found. copies Maps The Name Of Each
+// Asset That Has A Working Copy To The probeSummary Result Of That Copy.
+function model(doc, probes, copies = {}) {
   fields(doc, "version title canvas assets shots overlays captions audio caption_style", "Project");
   if (!Number.isInteger(doc.version) || doc.version !== 1) fail("Set Project Version To 1.");
   const title = word(doc.title, "Title");
@@ -238,13 +249,21 @@ function model(doc, probes) {
   const assets = {}, uses = {};
   for (const [key, obj] of Object.entries(doc.assets)) {
     word(key, "Asset Name");
-    fields(obj, "path kind", "Asset");
+    fields(obj, "path kind working_copy", "Asset");
     const file = word(obj.path, "Asset Path");
     const meta = probes[key];
     if (!meta) fail(`Missing Asset ${file}.`);
     const kind = choice(obj.kind, ["video", "image", "audio"], "Asset Kind");
     if (!(kind === "audio" ? meta.audio : meta.video)) fail(`Missing ${kind} Stream In ${file}.`);
     assets[key] = {...meta, path: file, kind};
+    if (obj.working_copy !== undefined) {
+      // The Original Supplies Geometry And Timing. The Working Copy Supplies What Remotion Plays.
+      if (kind !== "video") fail("Only A Video Asset Can Name A Working Copy.");
+      const twin = word(obj.working_copy, "Working Copy Path");
+      if (!copies[key]) fail(`Missing Working Copy ${twin}.`);
+      if (!copies[key].video) fail(`Missing Video Stream In ${twin}.`);
+      assets[key].working = {...copies[key], path: twin};
+    }
   }
   const asset = (item, kinds) => {
     const key = word(item.asset, "Asset");
@@ -325,8 +344,9 @@ function model(doc, probes) {
 }
 
 const HDR_REFUSAL = "The Remotion Route Does Not Apply The Kit's Single HDR Conversion, So Its Colors Would Not Match " +
-  "The Checked Stills. Deliver This Edit Through The FFmpeg Render, Or Prepare With --allow-hdr To Review It In " +
-  "Remotion With Remotion's Own Conversion.";
+  "The Checked Stills. To Review In Remotion, Ask The Owner Once For A Working Copy, Make It With The Working Copy Command, " +
+  "And Name It In The Asset's working_copy Field. Deliver This Edit Through The FFmpeg Render, Or Prepare With " +
+  "--allow-hdr To Review It In Remotion With Remotion's Own Conversion.";
 
 // Everything In The Timeline That Remotion Reproduces Differently From The FFmpeg Route, In Plain Sentences.
 function limits(m, options = {}) {
@@ -334,8 +354,37 @@ function limits(m, options = {}) {
   const soundful = shot => m.assets[shot.asset].kind !== "image" && m.assets[shot.asset].audio && shot.gain > 0;
   for (const [key, places] of Object.entries(m.uses)) {
     const info = m.assets[key].picture || {}, dolby = info.dolby_vision || {};
-    if (info.hdr || dolby.profile === 5) {
-      const label = info.hdr ? `${HDR_NAMES[info.hdr]} HDR` : "Dolby Vision Profile 5";
+    const working = m.assets[key].working, twin = working ? working.picture || {} : null;
+    if (working && !twin.hdr) {
+      // A Working Copy Already Carries The Kit's Conversion And Is Stored Upright, So Nothing Here Is Refused.
+      const size = twin.displayed_size ? `${twin.displayed_size[0]} By ${twin.displayed_size[1]}` : "Its Own Size";
+      const color = info.hdr ? `The Original Is ${HDR_NAMES[info.hdr]} HDR. Picture Color In Remotion Comes From The Working Copy, ` +
+        "Which Already Carries The Kit's Single Conversion To Standard Dynamic Range. " : "";
+      notes.push(`Asset ${key}, Used By ${list(places)}, Plays From Its Working Copy In Remotion At ${size}. ${color}` +
+        "A Remotion Render Would Be Made From That Copy, Not From The Original. Render The Master With FFmpeg From The Original.");
+      const first = m.assets[key].duration, second = working.duration, rate = info.frame_rate || 30;
+      if (first !== null && second !== null && Math.abs(first - second) > Math.max(0.05, 1 / rate))
+        notes.push(`Asset ${key} Working Copy Lasts ${second.toFixed(3)} Seconds And Its Original Lasts ${first.toFixed(3)} Seconds. ` +
+          "Review Timing May Not Match The Render. Make A Fresh Working Copy.");
+      const count = video => /^\d+$/.test(String((video || {}).nb_frames ?? "")) ? Number(video.nb_frames) : null;
+      const a = count(m.assets[key].video), b = count(working.video);
+      if (a !== null && b !== null && Math.abs(a - b) > 1)
+        notes.push(`Asset ${key} Working Copy Has ${b} Frames And Its Original Has ${a}. Frames Seen In Review May Not Be The Frames Rendered. ` +
+          "Make A Fresh Working Copy.");
+      const shown = info.displayed_size, seen = twin.displayed_size;
+      if (shown && seen && Math.abs(shown[0] / shown[1] - seen[0] / seen[1]) > 0.01 * shown[0] / shown[1])
+        notes.push(`Asset ${key} Working Copy Is ${seen[0]} By ${seen[1]} And Its Original Displays At ${shown[0]} By ${shown[1]}. ` +
+          "The Shapes Differ, So Framing In Remotion Will Not Match The Render.");
+      if (twin.rotation) notes.push(`Asset ${key} Working Copy Carries A ${twin.rotation} Degree Display Rotation. A Working Copy Must Be Stored Upright.`);
+      if (info.hdr && [...m.shots, ...m.overlays].some(row => row.asset === key && !row.tone_map))
+        notes.push(`Asset ${key} Is Used Where tone_map Is false, But Its Working Copy Is Already Converted. Remotion Shows The Converted Picture ` +
+          "And The FFmpeg Render Passes The Original Through Unconverted.");
+      if (m.assets[key].audio && !working.audio && (m.shots.some(s => s.asset === key && s.gain > 0) || m.audio.some(c => c.asset === key)))
+        notes.push(`Asset ${key} Working Copy Has No Sound, So Its Shots Are Silent In Remotion. Make A Fresh Working Copy.`);
+      continue;
+    }
+    if (info.hdr || dolby.profile === 5 || (twin && twin.hdr)) {
+      const label = info.hdr ? `${HDR_NAMES[info.hdr]} HDR` : twin && twin.hdr ? `Given A Working Copy That Is Itself ${HDR_NAMES[twin.hdr]} HDR` : "Dolby Vision Profile 5";
       if (!options.allowHdr) fail(`Asset ${key} Is ${label}, Used By ${list(places)}. ${HDR_REFUSAL}`);
       notes.push(`Asset ${key} Is ${label}, Used By ${list(places)}. Remotion Converts It With Its Own Tone Mapping When ` +
         "It Renders, And Remotion Studio Shows The Browser's Conversion. Neither Matches The Kit's Conversion Or Its Stills. " +
@@ -350,7 +399,9 @@ function limits(m, options = {}) {
   }
   const used = new Set([...m.shots, ...m.overlays, ...m.audio].map(row => row.asset));
   for (const key of used) {
-    const a = m.assets[key], video = a.video, audio = a.audio;
+    // Format Checks Describe The File Remotion Plays, Which Is The Working Copy When One Is Named.
+    const a = m.assets[key].working ? {...m.assets[key], ...m.assets[key].working, kind: m.assets[key].kind, picture: m.assets[key].picture} : m.assets[key];
+    const video = a.video, audio = a.audio;
     const container = BROWSER_CONTAINER.test(a.format);
     if (a.kind === "image") {
       if (!BROWSER_IMAGE.has(video.codec_name)) notes.push(`Asset ${key} Is A ${video.codec_name} Image. Chrome May Not Decode It, ` +
@@ -404,15 +455,24 @@ function limits(m, options = {}) {
 // The Remotion Cut: Every Time In Whole Output Frames, Every Position In Canvas Pixels.
 // files Maps Each Asset Name To Its Path Under The Project's public Folder.
 function plan(doc, probes, files = {}, options = {}) {
-  const m = model(doc, probes), fps = m.fps, f = seconds => frameOf(seconds, fps);
+  const m = model(doc, probes, options.copies || {}), fps = m.fps, f = seconds => frameOf(seconds, fps);
   const warnings = limits(m, options);
+  // An HDR Original Is Only Reviewed Here. Its Master Comes From The FFmpeg Render Of The Original.
+  const hdrKeys = Object.keys(m.uses).filter(key => {
+    const info = m.assets[key].picture || {}, dolby = info.dolby_vision || {};
+    return Boolean(info.hdr) || dolby.profile === 5;
+  });
+  const reviewOnly = hdrKeys.length
+    ? `This Project Is For Review Only Because ${hdrKeys.join(", ")} Is HDR Footage. ` +
+      "Render The Master With The Kit's FFmpeg Render From The Original Files After The Owner Approves."
+    : null;
   const file = key => files[key] ?? null;
   const shots = m.shots.map((shot, i) => {
     const a = m.assets[shot.asset], frames = f(shot.duration);
-    const voiced = Boolean(a.audio && a.kind !== "image" && shot.gain);
+    const voiced = Boolean(a.audio && a.kind !== "image" && shot.gain && (!a.working || a.working.audio));
     return {id: `shot-${i + 1}`, asset: shot.asset, kind: a.kind, file: file(shot.asset), from: f(shot.at), frames,
       start: shot.start, end: shot.end, speed: shot.speed, trim: pictureTrim(shot, fps), toneMapped: shot.tone_map,
-      ...shotLayout(shot.geometry), filter: colorFilter(shot),
+      ...(a.working ? {workingCopy: true} : {}), ...shotLayout(shot.geometry), filter: colorFilter(shot),
       sound: voiced ? {trim: shot.start * fps, gain: shot.gain, fadeIn: shot.fade_in, fadeOut: shot.fade_out} : null};
   });
   const overlays = m.overlays.map((row, i) => ({id: `overlay-${i + 1}`, asset: row.asset, kind: m.assets[row.asset].kind, file: file(row.asset),
@@ -422,7 +482,7 @@ function plan(doc, probes, files = {}, options = {}) {
     start: row.start, trim: row.start * fps, gain: row.gain, fadeIn: row.fade_in, fadeOut: row.fade_out}));
   const captions = m.captions.map((row, i) => ({id: `caption-${i + 1}`, from: f(row.at), frames: f(row.end) - f(row.at), text: row.text, position: row.position}));
   return {title: m.title, width: m.width, height: m.height, fps, frames: f(m.duration), captionStyle: m.caption_style,
-    shots, overlays, audio, captions, warnings};
+    shots, overlays, audio, captions, warnings, ...(reviewOnly ? {reviewOnly} : {})};
 }
 
 module.exports = {CutError, pyRound, quantize, frameOf, fraction, rotation, pictureInfo, probeSummary, framing, shotLayout, overlayHeight,

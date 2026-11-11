@@ -66,7 +66,8 @@ def make_server(project, port=0):
             if not asset:
                 return self.send_error(404)
             try:
-                self.stream(Path(asset["path"]))
+                # Review Plays The Working Copy When The Timeline Names One. The Original Is Left For The Checks And The Render.
+                self.stream(Path(asset.get("working_copy") or asset["path"]))
             except (FileNotFoundError, PermissionError):
                 self.send_error(404)
             except (ConnectionResetError, BrokenPipeError, ConnectionAbortedError):

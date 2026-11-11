@@ -169,9 +169,37 @@ async function run() {
   assert.equal(await evaluate("document.getElementById('frame').width + 'x' + document.getElementById('frame').height"), "768x960");
   assert.equal(await evaluate("MotionScenes.problems().length"), 0);
   assert.equal(await evaluate("document.getElementById('approve').disabled && document.getElementById('export').disabled"), true);
+  // A Storyboard On Stand-In Voice Timing Can Be Played And Reviewed, Never Exported. Without The Mark, A Finished Review Opens Approval As Before.
+  const tiny = extra => JSON.stringify(Object.assign({version: 1, title: "Tiny", scenes: [{duration: 0.4, title: "One"}]}, extra));
+  const openBoard = board => evaluate("(" + function(board) {
+    document.getElementById("status").textContent = "";
+    const d = new DataTransfer(); d.items.add(new File([board], "storyboard.timed.json", {type: "application/json"}));
+    const target = document.getElementById("openFile"); target.files = d.files; target.dispatchEvent(new Event("change"));
+  }.toString() + ")(" + JSON.stringify(board) + ")");
+  await openBoard(tiny({voice: {standIn: true, words: [[0.05, 0.2, "One"]]}}));
+  await waitFor("document.getElementById('status').textContent === 'Storyboard Opened.'");
+  assert(await evaluate("document.getElementById('filmNote').textContent.includes('Export Stays Off')"));
+  await evaluate("document.getElementById('review').click()");
+  await waitFor("document.getElementById('status').textContent.startsWith('Review Finished. Export Stays Off.')");
+  assert.equal(await evaluate("document.getElementById('approve').disabled && document.getElementById('export').disabled"), true);
+  // Even With The Controls Forced On, The Export Does Not Start.
+  await evaluate("(() => { const a = document.getElementById('approve'), e = document.getElementById('export'); a.disabled = false; a.checked = true; e.disabled = false; e.click(); })()");
+  await wait(200);
+  assert(await evaluate("document.getElementById('status').textContent.startsWith('Export Is Off.')"));
+  assert.equal(await evaluate("document.getElementById('play').textContent"), "Play");
+  await openBoard(tiny({narration: "None", voice: {words: [[0.05, 0.2, "One"]]}}));
+  await waitFor("document.getElementById('status').textContent === 'Storyboard Opened.'");
+  assert(await evaluate("document.getElementById('filmNote').textContent.includes('Declares No Narration') && !document.getElementById('filmNote').textContent.includes('Stand-In')"));
+  await evaluate("document.getElementById('review').click()");
+  await waitFor("document.getElementById('status').textContent.startsWith('Review Finished.')");
+  assert.equal(await evaluate("document.getElementById('approve').disabled"), false);
+  assert.equal(await evaluate("document.getElementById('export').disabled"), true);
+  // The Film Folder Opens Its Timed Storyboard, And That File Carries The Placed Event Sounds.
+  assert.equal(JSON.parse(filmBoard).scenes.reduce((sum, scene) => sum + scene.cues.filter(cue => cue.event).length, 0), 17);
   assert(!seenError, JSON.stringify(seenError));
   console.log("Passed Browser Playback, Voice Import, Scene Editing, Project Round Trip, And Review Invalidation Checks. No Video Recorded.");
   console.log("Passed Code Scene Film Opening, Module Loading, Painter Parity, Caption Toggle, Parameter Editing, And Custom Frame Checks. No Video Recorded.");
+  console.log("Passed Stand-In Export Refusal And No-Narration Review Checks. No Video Recorded.");
 }
 run().catch(e => { console.error(e); process.exitCode = 1; }).finally(async () => {
   try { await request("Browser.close", {}, undefined); } catch {}

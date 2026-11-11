@@ -1,6 +1,16 @@
 # Directing
 
-Settle The Film In Words Before Anything Is Drawn. Words Are Cheap To Change And Scenes Are Not. This Guide Ends At An Approved Plan. The Look Is Chosen Next In [Style Frames](STYLE-FRAMES.md), The Build Follows [Code Scenes](CODE-SCENES.md) And [Voice Timing](VOICE-TIMING.md), And The Result Is Judged With [Review](REVIEW.md).
+Settle The Film In Words Before Any Scene Is Built. Words Are Cheap To Change And Scenes Are Not. This Guide Ends At An Approved Plan. The Look Is Chosen Next In [Style Frames](STYLE-FRAMES.md), The Build Follows [Code Scenes](CODE-SCENES.md) And [Voice Timing](VOICE-TIMING.md), And The Result Is Judged With [Review](REVIEW.md).
+
+## The Order Of Work
+
+This Guide Covers Steps One And Three Of The Workflow In The [Skill Guide](SKILL.md). Each Part Needs Only What Came Before It.
+
+1. **The Brief.** Run The Intake Below And Have The Format Confirmed. This Needs Nothing But The Owner's Request.
+2. **The Film Folder.** Create The Film Folder In The User's Project With The Script And Its Word Timings, As [Voice Timing](VOICE-TIMING.md) Describes. With No Recording Yet, These Are Stand-In Timings. With No Script Yet, Draft One From The Brief And Show It With The Plan.
+3. **The Plan.** Find The Pictures, Write The Timed Beat Sheet From Those Word Timings, Render Rough Direction Stills Where They Help, And Stop For Approval.
+
+**What May Be Drawn Before Approval.** Before The Plan Is Approved, Draw Only Rough Direction Stills: Plain Shapes And Flat Fills In One Neutral Treatment, For The Two Or Three Beats That Carry The Film. Keep Them In A `directions` Folder Inside The Film Folder So They Are Not Mistaken For The Film. Before The Look Is Approved, Add Only The Style Frames From [Style Frames](STYLE-FRAMES.md). No Finished Scene Is Built Before Both Approvals: No Motion Polish, No Texture Pass, No Caption Styling, And No Sound.
 
 ## Principles
 
@@ -33,13 +43,15 @@ Ask Everything In One Message, Each Question With A Recommendation. Read What Th
 | Who Is Watching, And What Do They Already Know? | Where The Explanation May Begin | Your Reading Of The Audience From The Material |
 | Where Will It Be Shown? | The Aspect Ratio And The Length | The Frame And Length That Suit The Destination |
 | Story Or Explainer? | The Shape Of The Film | Your Reading Of The Brief, With The Reason |
-| Is There A Recorded Voice, Will One Be Recorded, Or Is The Film Text Only? | Where The Timing Comes From | Stand-In Timings Now, Retimed When A Recording Arrives |
+| Is There A Recorded Voice, Will One Be Recorded, Or Will The Film Have No Narration? | Where The Timing Comes From, And Whether The Film Can Be Exported Before A Recording Exists | Stand-In Timings Now, Retimed When A Recording Arrives. A Film With No Narration Says So In Its Storyboard, As [Voice Timing](VOICE-TIMING.md) Describes |
 | Which Films Do You Like, And What Do You Like About Each? | Evidence Of Taste | Going Ahead Without A Reference When None Exists |
 | What Real Material Exists? | What Must Appear, What Must Not, And Which Styles Are Possible | A List Of What You Found, With The Gaps Named |
 | Will A Filmed [Presenter](PRESENTER.md) Appear? | Whether Frames Are Planned Around A Person From The Start | No Presenter, Unless The Film Depends On A Face |
 | Which Music Or Sound? | Tone And Rights | The Kit's Own Sounds, Or A Track The Owner Has The Right To Use |
 
 A Reference Is Studied For Timing And Structure, With Permission, And Never Lifted. Study Only What The Owner Supplies. The Kit Does Not Fetch Other People's Posts Or Media. Note Any Recommendation The Owner Did Not Answer As An Assumption, And Have It Confirmed At The Approval Stop.
+
+**What The Owner Asked To See Decides How Much Is Shown.** When The Owner Asks Only To Confirm The Format And See One Style Frame, Do That. Confirm The Format, Keep The Plan Short, And Do Not Add Rounds They Did Not Ask For. The Plan Still Needs Their Yes, And For A Short Film It Can Travel In The Same Message As The Style Frame. See **The Approval Stop**.
 
 ## Find The Pictures
 
@@ -64,6 +76,8 @@ When No Fresh Agent Can Be Started, Run The Two Passes Yourself As Separate Step
 
 People Agree To Descriptions And Then Reject The Pictures. For The Two Or Three Beats That Carry The Film, Usually The Opening, The Central Mechanism Or Turn, And The Ending, Render Two Or Three Directions Each As Stills At The Delivery Aspect Ratio. Use `tools/stills.cjs` As Described In [Review Tools](REVIEW-TOOLS.md). Keep These In One Plain Treatment So The Owner Chooses The Idea And Not The Finish. Stills Are Not Video Files, So They Can Be Shown Before Any Approval.
 
+These Are The Rough Direction Stills, And They Are All That May Be Drawn Before The Plan Is Approved. Each One Is A Throwaway Scene Module That Places Plain Shapes For A Single Frame. It Needs The Film Folder And The Word Timings From The Step Before, And Nothing Else. When The Owner Asked For Less, Show Less: Render The One Direction You Recommend For Each Key Beat, Name The Alternatives In A Line, And Offer To Render Them.
+
 ## Pitch Concepts That Differ
 
 Assemble Two Or Three Concepts For The Whole Film From The Picks. They Must Differ In Kind. Change The Central Picture, The Structure, Or The Register. The Same Idea In Three Palettes Is One Concept.
@@ -84,7 +98,7 @@ Write One Line Per Beat. Each Line Needs An Event On Screen. An Event Is Somethi
 | 5.8 To 9.5 | Then They Play The Exact Opposite. | A Second Wave Leaves The Speaker, Mirrored, In The Second Color. | A Rising Sweep |
 | 9.5 To 12.0 | Peak Meets Trough, And Both Go Flat. | The Two Waves Overlap And Collapse Into A Level Line That Reaches The Ear. | The Bed Drops Away |
 
-Take The Times From The Voice. With A Recording, Use Its Word Timings. Before One Exists, Use Stand-In Timings From `tools/standin-words.cjs` And Retime With `tools/retime.cjs` When The Recording Arrives. [Voice Timing](VOICE-TIMING.md) Has The Method. Each Event Lands On, Or Just Before, The Word That Names It.
+Take The Times From The Word Timings In The Film Folder. With A Recording, They Are Its Word Timings. Before One Exists, They Are Stand-In Timings From `tools/standin-words.cjs`, Marked As Such On The Beat Sheet, And The Film Is Retimed With `tools/retime.cjs` When The Recording Arrives. For A Film With No Narration, They Are The Reading Pace Or The Times The Author Chose. [Voice Timing](VOICE-TIMING.md) Has The Method. Each Event Lands On, Or Just Before, The Word That Names It.
 
 ## Checks Before Showing It
 
@@ -120,4 +134,6 @@ Show The Concepts, The Rendered Key Beats, And The Beat Sheet For The Concept Yo
 - Wait For An Explicit Answer. Silence Is Not Approval. Interest Is Not Approval.
 - Do Not Build Scenes While You Wait.
 - Approval Of The Plan Is Not Approval Of The Look, And Neither Is Approval To Export. Each Has Its Own Stop.
+- **One Message For A Short Film.** The Plan Stop And The Look Stop May Share One Message When The Film Runs About A Minute Or Less And Has One Clear Concept, Or When The Owner Asked To See A Style Frame Straight Away. Put The Format, The Beat Sheet, And The Recommended Style Frame In That Message, And Ask Two Separate Questions, One For The Plan And One For The Look. Each Stop Still Needs Its Own Explicit Yes. A Reply That Clearly Covers Both, Such As Yes To Both, Approves Both. A Reply About Only One Leaves The Other Open, So Ask Again Before Building.
+- Keep The Two Stops Apart For A Longer Film, For Concepts That Compete, And Whenever The Look Depends On Which Concept Wins.
 - Record What Was Approved, In The Owner's Words. If Something Was Rejected, Record What Was Wrong With It And What They Liked, And Let That Reason Steer The Next Round.

@@ -1,6 +1,6 @@
 # Remotion Review And Render
 
-Turn A Timeline Into A Standalone Remotion Project. The Owner Reviews The Whole Cut In Remotion Studio, And An Approval-Gated Command Renders The MP4. This Is The Default Route For Review And Delivery. The [FFmpeg Render](../SKILL.md#render-with-ffmpeg-without-node-packages) Stays Available And Needs No Node Packages.
+Turn A Timeline Into A Standalone Remotion Project. The Owner Reviews The Whole Cut In Remotion Studio, And An Approval-Gated Command Renders The MP4. This Is The Default Route For Review And Delivery. The [FFmpeg Render](../SKILL.md#render-with-ffmpeg-without-node-packages) Stays Available And Needs No Node Packages. When A Source Is HDR Or Plays From A Working Copy, Remotion Is For Review Only, And The FFmpeg Render From The Original Files Produces The Master.
 
 Preparation Writes Project Files And Media Copies. It Never Writes A Video. Build And Verify The Edit First With The Browser Editor And The Non-Exporting Checks `validate`, `check`, `still`, `loudness`, And `mix`. Those Checks Describe The FFmpeg Route, So Read [What Differs From The FFmpeg Route](#what-differs-from-the-ffmpeg-route) Before Relying On Them For A Remotion Render.
 
@@ -17,7 +17,7 @@ Both Commands Build The Same Project. The Python Command Validates The Timeline 
 
 | Option | Effect |
 | --- | --- |
-| `--allow-hdr` | Prepare A Timeline That Uses HDR Sources. Without It, Preparation Stops. See [HDR Sources](#hdr-sources). |
+| `--allow-hdr` | Prepare A Timeline That Uses HDR Sources Without A Working Copy. Without It, Preparation Stops. An HDR Source That Names A Working Copy Needs No Option. See [HDR Sources](#hdr-sources). |
 | `--link-media` | Hard Link Each Source File Into The Project Instead Of Copying It, Where The Disk Allows. A Linked File Is The Original File, So Never Edit It In Place. |
 
 Read Every Warning. Each One Names Something In This Timeline That Remotion Reproduces Differently From The FFmpeg Route. The Warnings Are Also Saved In `src/cut.json` And Printed Again Before The Render Asks For Approval.
@@ -29,8 +29,8 @@ Read Every Warning. Each One Names Something In This Timeline That Remotion Repr
 | `src/cut.json` | The Cut In Whole Output Frames And Canvas Pixels: Canvas Size, Frame Rate, Total Frames, Shots, Overlays, Audio Cues, Captions, Caption Style, And Warnings. |
 | `src/cut-plan.cjs` | The Timing And Layout Rules. It Imports Nothing And Is The Same File The Kit Tests In Node. |
 | `src/index.jsx` | The Remotion Composition **VideoEdit**. It Only Places What `cut.json` Describes. |
-| `public/media/` | A Copy Of Every Source File The Timeline Names, So The Project Opens Without The Original Folders. |
-| `source-timeline.json` | A Copy Of The Timeline Whose Asset Paths Point At `public/media/`. The Kit's `validate`, `review`, And `still` Open It From The Project Folder. |
+| `public/media/` | A Copy Of Every File The Project Plays, So Studio Opens Without The Original Folders. An Asset With A `working_copy` Contributes That Copy, And Its Original Is Not Copied. |
+| `source-timeline.json` | A Copy Of The Timeline Whose Asset Paths Point At `public/media/`. The Kit's `validate`, `review`, And `still` Open It From The Project Folder. An Original That Has A Working Copy Stays Where It Is And Is Named By Its Full Path, So Run The Checks And The FFmpeg Render On The Computer That Holds It. |
 | `render-reviewed.cjs` | The Approval-Gated Render. |
 | `package.json` | The Pinned Remotion And React Versions, `npm run studio`, And `npm run render-reviewed`. |
 
@@ -85,9 +85,13 @@ The Kit Compared Remotion Stills With `still` Frames From The Same Timelines On 
 
 ### HDR Sources
 
-Preparation Refuses A Timeline Whose Shots Or Overlays Use A PQ Or HLG Source, Or Dolby Vision Profile 5, And Points To The FFmpeg Render. The FFmpeg Route Converts HDR To Standard Dynamic Range Once, With One Known Curve, And `still` Shows That Exact Result. Remotion Does Not Use That Conversion.
+Preparation Refuses A Timeline Whose Shots Or Overlays Use A PQ Or HLG Source, Or Dolby Vision Profile 5, Unless The Asset Names A Working Copy. The Refusal Says How To Make One And Points To The FFmpeg Render. The FFmpeg Route Converts HDR To Standard Dynamic Range Once, With One Known Curve, And `still` Shows That Exact Result. Remotion Does Not Use That Conversion.
 
-With `--allow-hdr` The Project Is Prepared With A Warning. The Render Then Uses Remotion's Own Tone Mapping For Video Frames, Or Passes The Picture Through Unconverted Where The Timeline Sets `tone_map` To `false`. Remotion Studio Shows Whatever Conversion The Browser Applies. Neither Matches The Kit's Stills, And The Kit Has Not Verified Either. Use `--allow-hdr` To Review Timing And Framing, And Deliver HDR Edits Through The FFmpeg Render.
+**With A Working Copy.** Ask The Owner Once, Make The Copy With `working-copy` And `--owner-agreed-working-copy`, And Name It In The Asset's `working_copy` Field, As [Working Copies For Review](../TECHNICAL.md#working-copies-for-review) Describes. Preparation Then Accepts The Timeline Without `--allow-hdr`. The Project Plays The Working Copy, Which Already Carries The Kit's Single Conversion And Is Stored Upright. A Warning States That Picture Color In Remotion Comes From The Working Copy. Layout Still Comes From The Original's Displayed Size, So Framing Matches The FFmpeg Route. Preparation Also Warns When The Copy's Duration, Frame Count, Or Shape Disagrees With Its Original.
+
+**The Master.** The FFmpeg Render From The Original Files Is The Faithful Master For HDR Footage. A Remotion Render Of A Project That Plays Working Copies Would Be Made From Those Smaller, Already Encoded Copies. Use Remotion Studio For The Owner's Review, Then Run `render` With `--owner-approved` From The Video Edit Skill Folder. The Kit Has Not Verified A Working Copy Inside Remotion Studio.
+
+**Without A Working Copy.** With `--allow-hdr` The Project Is Prepared With A Warning. The Render Then Uses Remotion's Own Tone Mapping For Video Frames, Or Passes The Picture Through Unconverted Where The Timeline Sets `tone_map` To `false`. Remotion Studio Shows Whatever Conversion The Browser Applies. Neither Matches The Kit's Stills, And The Kit Has Not Verified Either. Use `--allow-hdr` Only To Review Timing And Framing.
 
 ### Speed Changes And Pitch
 
@@ -122,14 +126,14 @@ Remotion Studio Plays Media With The Browser's Decoders. The Render Decodes Vide
 | Audio | WAV, MP3, AAC, Opus, Or FLAC | AIFF And Other Formats May Be Silent In Studio. |
 | Images | PNG, JPEG, WebP, GIF, Or BMP | TIFF, HEIC, PSD, And Other Formats Fail In Studio And In The Render. Convert Them To PNG Or JPEG. |
 
-Preparation Warns About Each Source Outside The Middle Column. The Kit Verified Only H.264 MP4 Video, PNG Images, And WAV Audio In Remotion. For A Format That Studio Cannot Play, Review With The Kit's Browser Editor And Stills, Or Deliver Through The FFmpeg Render.
+Preparation Warns About Each Source Outside The Middle Column. The Kit Verified Only H.264 MP4 Video, PNG Images, And WAV Audio In Remotion. For A Video That Studio Cannot Play, Ask The Owner Once And Make A [Working Copy](../TECHNICAL.md#working-copies-for-review), Which Is H.264 In An MP4 File. Otherwise Review With Stills, Or Deliver Through The FFmpeg Render.
 
 ### Picture
 
 - **Chroma.** The FFmpeg Route Composes In 4:2:0 Color. Remotion Composes In Full-Resolution RGB. A Remotion Still Of An Unscaled Image Was Identical To Its Source, And Identical To The FFmpeg Still Once Given The Same 4:2:0 Conversion.
 - **Scaling.** The FFmpeg Route Scales With A Bicubic Filter And Chrome Uses Its Own. Fine Detail And Hard Edges Differ Slightly, Most Of All When Small Art Is Enlarged Many Times.
 - **Color Adjustments.** Brightness, Contrast, And Saturation Use CSS Filters In The Same Order And With The Same Weights As The FFmpeg Graph.
-- **Rotated Phone Clips.** The Layout Uses The Displayed, Upright Size. The Kit Has Not Verified That Remotion Turns A Rotated Clip Upright, So Preparation Warns, And The Owner Should Check Framing In Studio.
+- **Rotated Phone Clips.** The Layout Uses The Displayed, Upright Size. The Kit Has Not Verified That Remotion Turns A Rotated Clip Upright, So Preparation Warns, And The Owner Should Check Framing In Studio. A Working Copy Is Stored Upright, So The Warning Does Not Apply To It.
 
 ### Disk Space And Speed
 
@@ -149,6 +153,8 @@ These Figures Compare `npx remotion still` With `edit_video.py still` At The Sam
 | H.264 Video Under A Caption And Two Overlays | 10, 20 | 28.2 dB | Caption Edges |
 | First Frame Of A Shot At 2× Speed, And Of A Shot With A Halfway In Point | 45, 200 | 23.5 To 24.2 dB | A Neighboring Source Frame, As Described Above |
 
+These Figures Were Measured With The Caption Defaults Of The Earlier Edition. The Repair Desk Example And The Generated Example Folder Now Take The Vertical Caption Defaults, And Their Caption Frames Were Not Measured Again.
+
 A Separate Check Matched Each Still To Its Source Frame For Six Shots Cut From One 30 FPS Clip. Both Routes Showed The Same Source Frame On Every Frame Sampled At Speed 1, 0.5, And 1.5, With In Points On And Between Source Frames. At Speed 2 They Differed By One Source Frame On Three Of Four Frames Sampled.
 
 ## Verification
@@ -158,4 +164,12 @@ node --test tests/test_remotion_plan.cjs tests/test_remotion_project.cjs
 python -B -m unittest tests.test_remotion -v
 ```
 
-The Node Tests Check Frame Snapping, Framing, Fades, Caption Layout, Warnings, And Project Generation Without Remotion Installed. The Python Test Compares A Generated Project With The Editor's Own Timeline Model. None Of Them Installs A Package Or Writes A Video.
+The Node Tests Check Frame Snapping, Framing, Fades, Caption Layout, Warnings, Working Copies, And Project Generation Without Remotion Installed. The Python Test Compares A Generated Project With The Editor's Own Timeline Model. None Of Them Installs A Package Or Writes A Video.
+
+## HDR Projects Are Review Only
+
+A Project Prepared From HDR Footage Is For Review In Remotion Studio Only. Its `npm run render-reviewed` Command Refuses To Run And Names The HDR Asset. After The Owner Approves, Render The Master With The FFmpeg Render Below, Which Reads The Original Files.
+
+```sh
+python scripts/edit_video.py render "First Cut/timeline.json" "First Cut/Approved Cut.mp4" --owner-approved
+```

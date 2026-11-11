@@ -30,5 +30,8 @@ const words = Timing.standIn(fs.readFileSync(path.join(film, "script.txt"), "utf
 fs.writeFileSync(path.join(film, "words.json"), JSON.stringify({ standIn: true, note: "Stand-In Word Timings Made From Script Text At 150 Words Per Minute. Replace Them With Timings From The Real Recording.", wpm: 150, words }, null, 2) + "\n");
 const timed = Timing.retime(P.cleanProject(JSON.parse(fs.readFileSync(path.join(film, "storyboard.json"), "utf8"))), Timing.readWords({ standIn: true, words }));
 if (timed.problems.length) throw new Error(timed.problems.join(" "));
-fs.writeFileSync(path.join(film, "storyboard.timed.json"), JSON.stringify(P.cleanProject(timed.project), null, 2) + "\n");
-console.log("Wrote Two Built-In Storyboards, " + parts.length + " Part Examples, And The Timed Storyboard For An Idea Travels.");
+// The Timing Tool Places Event Sounds In The Timed Storyboard. Do The Same Here, So The Example Is What The Tool Would Write.
+const sounded = require("./retime.cjs").placeEventSounds(P.cleanProject(timed.project), film);
+if (sounded.skipped) throw new Error(sounded.skipped);
+fs.writeFileSync(path.join(film, "storyboard.timed.json"), JSON.stringify(sounded.project, null, 2) + "\n");
+console.log("Wrote Two Built-In Storyboards, " + parts.length + " Part Examples, And The Timed Storyboard For An Idea Travels With " + sounded.placed + " Event Sounds.");

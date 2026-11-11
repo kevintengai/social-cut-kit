@@ -55,7 +55,7 @@ def example(folder):
         "overlays": [{"asset": "Second", "at": 1, "end": 1.75, "in": 0, "x": 18, "y": 54, "width": 120}],
         "captions": [{"at": .25, "end": 1.5, "text": "Follow The Circle", "position": "bottom"},
                      {"at": 2.25, "end": 3.5, "text": "Now Change The Rhythm", "position": "top"}],
-        "caption_style": {"font": "Arial", "color": "#FFFFFF", "outline": "#101010", "margin": 7},
+        "caption_style": {"font": "Arial", "color": "#FFFFFF", "outline": "#101010"},
         "audio": [{"asset": "Sound", "at": 0, "end": 4, "in": 0, "gain": .7}],
     }
     path = folder / "timeline.json"

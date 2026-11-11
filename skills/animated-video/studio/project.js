@@ -269,6 +269,11 @@
       }
       out.voice = voice;
     }
+    // A Film With No Spoken Voice Says So. Its Timings Are The Author's Own, Not Stand-Ins For A Recording.
+    if (input.narration != null) {
+      if (input.narration !== "Voice" && input.narration !== "None") fail("Narration Is Voice Or None.");
+      if (input.narration === "None") out.narration = "None";
+    }
     return out;
   }
 
@@ -291,7 +296,9 @@
     const left = m[3] * width, top = m[0] * height, right = width - m[1] * width, bottom = height - m[2] * height;
     return { x: left, y: top, w: right - left, h: bottom - top, left, top, right, bottom, cx: (left + right) / 2, cy: (top + bottom) / 2 };
   }
-  const api = { demo, scene, cleanProject, duration, start, locate, size, safe, modes, motions, shapes, marks, sounds, aspects, aspectNames, safeAreas, captionOptions, clamp };
+  // True While The Film's Timing Comes From Stand-In Words Instead Of A Recording. Such A Film Is Not Ready For Export.
+  const standIn = p => Boolean(p && p.voice && p.voice.standIn === true);
+  const api = { demo, scene, cleanProject, standIn, duration, start, locate, size, safe, modes, motions, shapes, marks, sounds, aspects, aspectNames, safeAreas, captionOptions, clamp };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.MotionProject = api;
 })(globalThis);

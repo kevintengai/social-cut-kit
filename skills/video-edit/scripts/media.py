@@ -29,6 +29,8 @@ def ass(model):
     style = model["caption_style"]
     size, outline = style["size"],style["stroke"]
     margin = round(h*style["margin"]/100)
+    above = round(h*style.get("top_margin", style["margin"])/100)
+    sides = round(w*.055)
     def colour(value):
         return "&H00" + value[5:7] + value[3:5] + value[1:3]
     ink, edge = colour(style["color"]),colour(style["outline"])
@@ -37,14 +39,18 @@ def ass(model):
         "[V4+ Styles]",
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
         f"Style: Default,{style['font']},{size},{ink},{ink},{edge},&H00000000,-1,0,0,0,100,100,0,0,1,{outline},0,2,{round(w*.055)},{round(w*.055)},{margin},1",
+        # A Second Style Exists Only When Top Captions Sit At Their Own Distance From The Edge.
+        *([f"Style: Top,{style['font']},{size},{ink},{ink},{edge},&H00000000,-1,0,0,0,100,100,0,0,1,{outline},0,2,{sides},{sides},{above},1"]
+          if above != margin else []),
         "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
     for cue in model["captions"]:
         alignment = {"top": 8, "center": 5, "bottom": 2}[cue["position"]]
         raw = cue["text"].replace("\\", "＼").replace("{", "｛").replace("}", "｝")
         content = r"\N".join(raw.splitlines())
-        style = "{\\an" + str(alignment) + "}"
-        result.append(f"Dialogue: 0,{timecode(cue['at'],100,'.')},{timecode(cue['end'],100,'.')},Default,,0,0,0,,{style}{content}")
+        tag = "{\\an" + str(alignment) + "}"
+        look = "Top" if cue["position"] == "top" and above != margin else "Default"
+        result.append(f"Dialogue: 0,{timecode(cue['at'],100,'.')},{timecode(cue['end'],100,'.')},{look},,0,0,0,,{tag}{content}")
     return "\n".join(result) + "\n"
 
 

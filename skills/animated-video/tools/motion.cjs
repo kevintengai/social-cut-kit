@@ -50,6 +50,7 @@ async function main() {
   const film = Film.loadFilm(positionals[0]), project = film.project, executable = Browser.browserPath(options.browser);
   const least = options.still == null ? 0.75 : Number(options.still), threshold = options.threshold == null ? 0.05 : Number(options.threshold);
   if (!(least > 0) || !(threshold >= 0)) throw new Error("--still Needs Positive Seconds And --threshold A Percentage Of Zero Or More.");
+  if (options.report) Film.guardOutput(options.report, "The Report");
   if (options.report && fs.existsSync(path.resolve(options.report)) && !options.overwrite) throw new Error("Choose A New Report File, Or Add --overwrite.");
   const fps = project.fps, total = P.duration(project), frames = Math.ceil(total * fps - 1e-7), size = P.size(project), scale = Math.min(1, 320 / Math.max(size[0], size[1]));
   const page = await Browser.openFilmPage(executable, film), changes = [], problems = new Map();

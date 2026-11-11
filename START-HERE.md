@@ -44,7 +44,7 @@ Most Videos Use Three Or Four Skills In This Order. Every Skill Also Works Alone
 
 ## 4. Three Rules The Kit Follows
 
-- **You Approve Before Any Export.** The Agent Saves An Editable Project For You To Review. By Default That Is A Remotion Project You Open In Remotion Studio. It Creates No Video File, Including Test Or Preview Files, Until You Say So. The Render Command Then Asks You To Confirm In Person.
+- **You Approve Before Any Export.** The Agent Saves An Editable Project For You To Review. By Default That Is A Remotion Project You Open In Remotion Studio. It Creates No Video Of Your Edit, Including Test Or Preview Files, Until You Say So. The Render Command Then Asks You To Confirm In Person. When Your Browser Cannot Play A Phone Clip, The Agent Asks You Once Before Making A Smaller Working Copy Of That Clip For Review. Your Original Is Never Changed.
 - **Your Original Audio Stays As Recorded.** Gain And Loudness Changes Happen Only When You Ask.
 - **Use Only Material You Have Rights To.** The Kit Does Not Download Other People's Posts.
 
@@ -60,4 +60,4 @@ An Eight-Second Example Edit Opens In Your Browser. For Animation, Open `skills/
 
 Each Skill Has Its Own Guide At `skills/NAME/SKILL.md`. The [Product Overview](README.md) Lists What The Download Contains, And [Usage Terms](USAGE.md) Covers What You May Do With It.
 
-Camera Edits And Animated Videos Are Both Reviewed And Finished In Remotion By Default. Each Generated Project Needs Node.js And Its Own `npm install`, And Remotion Has Its Own License Terms. When That Is Not Possible, The Video Editor Renders With FFmpeg And Motion Studio Exports Without Any Install. The Same Approval Rule Applies On Every Route. See [Remotion Review And Render](skills/video-edit/remotion/README.md) For Camera Edits And The [Remotion Adapter Guide](skills/animated-video/adapter/README.md) For Animation.
+Camera Edits And Animated Videos Are Both Reviewed And Finished In Remotion By Default. Each Generated Project Needs Node.js And Its Own `npm install`, And Remotion Has Its Own License Terms. When That Is Not Possible, The Video Editor Renders With FFmpeg And Motion Studio Exports Without Any Install. HDR Phone Footage Is Reviewed Through A Working Copy And Finished With The FFmpeg Render From Your Original Files. The Same Approval Rule Applies On Every Route. See [Remotion Review And Render](skills/video-edit/remotion/README.md) For Camera Edits And The [Remotion Adapter Guide](skills/animated-video/adapter/README.md) For Animation.

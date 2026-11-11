@@ -27,7 +27,8 @@ A Person Speaks To Camera And The Words Carry The Value. The Edit Makes Each Sen
 
 | Setting | Start With | Reason |
 | --- | --- | --- |
-| Canvas | 1080 By 1920 At The Whole-Number Rate Nearest The Source | Vertical Delivery. Set The Rate Before Timing Captions. |
+| Canvas | 1080 By 1920 At The Rate The [Canvas Frame Rate](../SKILL.md#canvas-frame-rate) Rule Gives, Which Is 30 For A 29.97 Or 59.94 Phone Clip | Vertical Delivery. Set The Rate Before Timing Captions. |
+| Captions | Phrases Of Up To 3 Words And 20 Characters, A `size` Of 65, And A Bottom `margin` Of 25 On A 1080 By 1920 Canvas | These Are The Tool Defaults For A Vertical Canvas. Each Phrase Stays On One Line, Clear Of The Platform's Buttons And Description. |
 | Framing | Footage Filling The Full Height Of The Frame, `zoom` At 1, Eyes In The Upper Third | The Viewer Meets A Person At Conversational Distance And The Lower Frame Stays Free For Captions. For A Horizontal Source Use `cover` And Set `pan_x` To Keep The Speaker Centered. |
 | Color | `brightness`, `contrast`, And `saturation` At 1 | The Camera's Own Color Is The Owner's Look Until They Ask For A Grade. |
 | Speed | `speed` At 1 For All Dialogue | Natural Delivery |
@@ -35,7 +36,7 @@ A Person Speaks To Camera And The Words Carry The Value. The Edit Makes Each Sen
 | Handles | `lead` And `tail` Long Enough To Keep Each First Consonant, Last Syllable, And Breath | A Cut Is Judged By The Words On Either Side Of It. |
 | Ending | The Final Shot Runs Through The Last Word And Its Natural Tail | Shorten Elsewhere. The Close Carries The Ask. |
 
-Cut From The Words. Transcribe First, Use `python scripts/takes.py` To Find Repeated Attempts, And Use `analyze` To Find Long Silences. Remove False Starts, Abandoned Sentences, And Dead Air. Keep The Pause Before A Sentence That Needs Weight. After Mapping Captions, Read `speech_units_cut_at_boundaries`. Any Count Above Zero Means A Cut Runs Through A Word, So Move That Cut Outward.
+Cut From The Words. Transcribe First, Use `python scripts/takes.py words.json --retakes` To Find Restarts And Full Retakes, Add `--script script.txt` When The Project Has A Script, And Use `analyze` To Find Long Silences. The Tool Cannot Hear Performance. When Several Attempts At A Line Or At The Ending Are Equally Complete, Offer The Owner The Choice And Recommend The Latest. Remove False Starts, Abandoned Sentences, And Dead Air. Keep The Pause Before A Sentence That Needs Weight. After Mapping Captions, Read `speech_units_cut_at_boundaries`. Any Count Above Zero Means A Cut Runs Through A Word, So Move That Cut Outward.
 
 ## Supporting Visuals
 
@@ -80,7 +81,8 @@ Design The Hook As Its Own Composition. It Is A Headline, Separate From The Runn
 
 ## Captions
 
-- Map Captions From Word Timings With `python scripts/speech.py captions`. The Text Matches The Words As Spoken. Keep The Owner's Spelling Of Names And Of Any Keyword.
+- Map Captions From Word Timings With `python scripts/speech.py captions` And `--phrases`. The Text Matches The Words As Spoken. Keep The Owner's Spelling Of Names And Of Any Keyword, Taken From The Script When There Is One.
+- Start From The Tool Defaults For A Vertical Canvas: Up To 3 Words And 20 Characters In A Phrase, A `size` Of 6 Percent Of The Canvas Width, And A Bottom `margin` Of 25. Change Them Only For The Owner's Saved Caption Style Or A Stated Reason.
 - A Caption Stays Fixed While A Word Is Being Spoken And Leaves With Its Sentence.
 - Spread Emphasis By Meaning. Emphasize The Number, The Name, The Word That Turns The Argument, And The Keyword In The Ask. Most Sentences Get None. When Every Line Carries A Highlight, The Highlight Carries No Information.
 - The Timeline Gives All Captions One Style. To Emphasize A Line, Replace Its Caption Cue With A Title Overlay That Highlights The Key Word, Placed Where The Caption Sat. A JSON Newline Escape Can Also Break A Line So The Key Word Ends It.
@@ -88,7 +90,19 @@ Design The Hook As Its Own Composition. It Is A Headline, Separate From The Runn
 
 ## Sound Cues
 
-- A Cue Marks Something The Viewer Sees, Such As A Card Arriving, A Punch-In, Or A Number Appearing. Where Nothing Visible Happens, Add No Cue.
+- A Cue Marks Something The Viewer Sees. Where Nothing Visible Happens, Add No Cue.
+- A Plain Talking Head Still Has Visible Events. The List Below Is Complete For A Cut With No Other Effects.
+
+| Visible Event | A Cue That Fits |
+| --- | --- |
+| The Hook Text Arriving Or Leaving | `soft-swipe`, `whoosh-light`, Or `page-flick` |
+| An On-Screen Keyword Or Number Appearing | `pop-bubble`, `counter-step`, Or `glass-point` |
+| A Punch-In | `focus-shift` Or `quick-pass` |
+| An Inserted Visual Arriving Or Leaving | `button-up`, `soft-swipe`, Or `success-pair` For A Result |
+
+- A Plain Cut Between Two Takes Is Not A Visible Event. It Is Meant To Pass Unnoticed, So It Takes No Cue. A Caption Phrase Changing Is Not One Either.
+- When The Brief Asks For Light Sound Effects, List The Visible Events The Edit Already Has And Give Each At Most One Cue. Light Means Two To Four Cues In A 30 To 45 Second Video.
+- When The Edit Has No Visible Event, Do Not Scatter Cues Across The Cuts, And Do Not Leave The Request Unmet In Silence. Propose One Or Two Events To The Owner, Each With The Cue It Would Carry. Good First Proposals Are The Hook Text Arriving, A Punch-In On The Line That Turns The Argument, And The Key Number Appearing As Text On Its Word. Add Them After The Owner Agrees, And Record The Answer In The [Brief File](../BRIEF.md).
 - Use Few. A Handful In A Minute Keeps Each One Meaningful. The Same Tap On Every Cut Turns Into A Metronome.
 - Level Each Cue Against The Speech Around It. Start Well Below The Voice. The Included Example Sets A Short Tap To A `gain` Of 0.36. The `loudness` Command Measures The Mix Without Writing A File And Can Compare Each Cue With The Speech Under It. Numbers Guide The Level And Ears Decide It, So Ask The Owner To Judge On A Phone Speaker During Review.
 - Land The Cue In The Gap After The Cue Word. A Transient On Top Of A Consonant Hides The Word. Take The End Time Of The Word From The Transcript And Start The Cue There. If The Sound Then Trails The Picture Noticeably, Move The Start Of The Visual To The Same Moment So Both Land Together.
@@ -105,4 +119,4 @@ Leave The Speaker On Screen And List The Gap For The Owner. A Plain Face Is Bett
 
 ## Before Review
 
-Run `validate` And `check`, Then Open `review`. Use `still` To Inspect A Frame At Delivery Size For The Hook, For Each Visual, And For The Busiest Caption. The Owner Then Reviews The Saved Project In The Editor. No Video File Is Created Before They Approve, Including A Test Or Preview Export.
+Run `validate` And `check`, Then Open `review`. Use `still` To Inspect A Frame At Delivery Size For The Hook, For Each Visual, And For The Busiest Caption. When A Source Cannot Play In A Browser, Ask The Owner Once For A Working Copy First, As [The Skill Guide](../SKILL.md#when-a-browser-cannot-play-the-source) Describes. The Owner Then Reviews The Saved Project In The Editor. No Video Of The Edit Is Created Before They Approve, Including A Test Or Preview Export.

@@ -18,31 +18,46 @@ function ffprobe(file) {
   return Cut.probeSummary(JSON.parse(done.stdout));
 }
 
-// One Readable, Unique File Name Under public/media For Each Distinct Source File.
+// One Readable, Unique File Name Under public/media For Each Distinct File The Project Plays. An Asset With A
+// Working Copy Plays That Copy, So Its Original Is Probed For Geometry But Is Not Copied Into The Project.
 function mediaNames(doc, root) {
-  const byPath = new Map(), names = {}, sources = {};
-  if (!doc || typeof doc !== "object" || !doc.assets || typeof doc.assets !== "object" || Array.isArray(doc.assets)) return {names, sources};
+  const byPath = new Map(), names = {}, sources = {}, originals = {}, copies = {};
+  if (!doc || typeof doc !== "object" || !doc.assets || typeof doc.assets !== "object" || Array.isArray(doc.assets)) return {names, sources, originals, copies};
+  const isFile = full => fs.existsSync(full) && fs.statSync(full).isFile();
   for (const [key, obj] of Object.entries(doc.assets)) {
     if (!obj || typeof obj.path !== "string" || !obj.path.trim()) continue;
     const full = path.resolve(root, obj.path);
-    if (!fs.existsSync(full) || !fs.statSync(full).isFile()) continue;
-    if (!byPath.has(full)) {
-      const safe = path.basename(full).replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-+/, "") || "media";
-      byPath.set(full, "media/" + String(byPath.size + 1).padStart(2, "0") + "-" + safe);
+    if (!isFile(full)) continue;
+    originals[key] = full;
+    let played = full;
+    if (typeof obj.working_copy === "string" && obj.working_copy.trim()) {
+      played = path.resolve(root, obj.working_copy);
+      if (played === full) throw new Cut.CutError(`The Working Copy Of ${key} Must Be A Different File From Its Original.`);
+      if (!isFile(played)) continue;
+      copies[key] = played;
     }
-    names[key] = byPath.get(full); sources[key] = full;
+    if (!byPath.has(played)) {
+      const safe = path.basename(played).replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-+/, "") || "media";
+      byPath.set(played, "media/" + String(byPath.size + 1).padStart(2, "0") + "-" + safe);
+    }
+    names[key] = byPath.get(played); sources[key] = played;
   }
-  return {names, sources};
+  return {names, sources, originals, copies};
 }
 
 // The Plan And Every File Of The Project Except The Media. options.probe Replaces FFprobe In Tests.
 function build(doc, root, options = {}) {
-  const {names, sources} = mediaNames(doc, root), probes = {};
-  for (const [key, full] of Object.entries(sources)) probes[key] = (options.probe || ffprobe)(full);
-  const plan = Cut.plan(doc, probes, names, {allowHdr: Boolean(options.allowHdr)});
+  const {names, sources, originals, copies} = mediaNames(doc, root), probes = {}, twins = {};
+  for (const [key, full] of Object.entries(originals)) probes[key] = (options.probe || ffprobe)(full);
+  for (const [key, full] of Object.entries(copies)) twins[key] = (options.probe || ffprobe)(full);
+  const plan = Cut.plan(doc, probes, names, {allowHdr: Boolean(options.allowHdr), copies: twins});
   // The Copy Of The Timeline Points At The Project's Own Media, So The Kit's Editor And Checks Open It From The Project Folder.
+  // An Original That Has A Working Copy Stays Where It Is, And The Copy Of The Timeline Names It By Its Full Path.
   const copy = JSON.parse(JSON.stringify(doc));
-  for (const key of Object.keys(copy.assets)) copy.assets[key].path = "public/" + names[key];
+  for (const key of Object.keys(copy.assets)) {
+    if (copies[key]) Object.assign(copy.assets[key], {path: originals[key].split(path.sep).join("/"), working_copy: "public/" + names[key]});
+    else copy.assets[key].path = "public/" + names[key];
+  }
   const files = new Map();
   files.set("src/cut.json", pretty(plan));
   files.set("src/cut-plan.cjs", fs.readFileSync(path.join(__dirname, "cut-plan.cjs")));
@@ -56,7 +71,7 @@ function build(doc, root, options = {}) {
   }));
   const media = new Map();
   for (const [key, full] of Object.entries(sources)) media.set("public/" + names[key], full);
-  return {plan, files, media};
+  return {plan, files, media, workingCopies: Object.keys(copies).length};
 }
 
 function place(source, target, link) {
@@ -71,7 +86,7 @@ function prepare(source, target, options = {}) {
   if (fs.existsSync(dest)) throw new Cut.CutError("Choose A New Output Directory.");
   let doc;
   try { doc = JSON.parse(read(from)); } catch (error) { throw new Cut.CutError(`Cannot Read Project ${from}. ${error.message}`); }
-  const {plan, files, media} = build(doc, path.dirname(from), options);
+  const {plan, files, media, workingCopies} = build(doc, path.dirname(from), options);
   fs.mkdirSync(path.dirname(dest), {recursive: true});
   const staging = fs.mkdtempSync(path.join(path.dirname(dest), ".cut-prepare-"));
   try {
@@ -90,7 +105,7 @@ function prepare(source, target, options = {}) {
   }
   return {project: dest, composition: COMPOSITION, title: plan.title, width: plan.width, height: plan.height, fps: plan.fps, frames: plan.frames,
     shots: plan.shots.length, overlays: plan.overlays.length, audio_cues: plan.audio.length, captions: plan.captions.length,
-    media_files: media.size, warnings: plan.warnings};
+    media_files: media.size, working_copies: workingCopies, warnings: plan.warnings};
 }
 
 module.exports = {build, prepare, mediaNames, PACKAGES, COMPOSITION};

@@ -33,6 +33,22 @@ Read `sounds/index.json`. Each Entry Describes One File.
 
 One Cue Per Event Is Usually Enough. A Playful Sound Over A Sincere Passage Tells The Viewer The Speaker Does Not Mean It. Check The Rejected List In The [Active Brief File](../../BRIEF.md) Before Adding A Sound The Owner Has Already Turned Down.
 
+## Attach Each Cue To A Visible Event
+
+A Cue Marks Something The Viewer Sees. A Cut That Is Meant To Pass Unnoticed Takes No Cue.
+
+| Visible Event | Present In A Plain Talking Head? | Reach For |
+| --- | --- | --- |
+| The Hook Text Arriving Or Leaving | Yes, When The Edit Has A Hook Headline | `soft-swipe`, `whoosh-light`, `page-flick` |
+| An On-Screen Keyword Or Number Appearing | Yes, When One Is Added As A Title Overlay | `pop-bubble`, `counter-step`, `glass-point` |
+| A Punch-In | Yes, When A Shot Is Split And Zoomed | `focus-shift`, `quick-pass` |
+| An Inserted Visual Arriving Or Leaving | Yes, When The Edit Has One | `button-up`, `soft-swipe`, `success-pair` |
+| An Action On A Screen, A Result, Or A Reveal | Only With Screen Or Product Footage | The Table Above |
+
+- A Request For Light Sound Effects Means Two To Four Cues In A Short Video, Each On One Of These Events.
+- When The Edit Has None Of These Events, Do Not Scatter Cues Across The Cuts And Do Not Add None Silently. Propose One Or Two Events To The Owner, Such As The Hook Text Arriving And A Punch-In On The Key Line, Each With Its Cue. Add Them After The Owner Agrees.
+- A Caption Phrase Changing Is Not An Event. A Cue On Every Phrase Turns Into A Metronome.
+
 ## Place A Cue
 
 Copy The WAV Into The Project Folder So The Project Stays Portable, Add It As An Audio Asset In The Timeline, And Set Its `at`, `end`, And `gain`. Source Audio Stays On Its Own Track.

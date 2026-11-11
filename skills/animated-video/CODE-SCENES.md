@@ -4,21 +4,26 @@ A Code Scene Is A Storyboard Scene Whose Picture Is Drawn By A JavaScript Functi
 
 ## The Shape Of A Film Folder
 
-Keep One Folder Per Film. The Storyboard Lists Its Scene Modules By Relative Path, And Every Tool Finds Them Beside It.
+Keep One Folder Per Film. It Lives In The User's Project, Never Inside The Skill Folder. The Bundled Examples Are Read-Only Starting Points: Copy One Out And Edit The Copy. The Tools Refuse To Write Inside The Skill Folder. The Storyboard Lists Its Scene Modules By Relative Path, And Every Tool Finds Them Beside It.
 
 ```text
 my-film/
-  storyboard.json          The Authored Storyboard. Edit This One.
-  storyboard.timed.json    Written By tools/retime.cjs. Review And Export This One.
+  script.txt               The Spoken Words, Or The On-Screen Words Of A Film With No Narration.
   words.json               Word Timings, Stand-In Or From The Recording.
+  storyboard.json          The Authored Storyboard. Edit This One.
+  storyboard.timed.json    Written By tools/retime.cjs, With Event Sounds In Place. Check, Review, And Export This One.
   scenes/intro.js          A Scene Module.
+  voice.wav                The Recording, Once It Exists.
+  board/                   Stills From tools/stills.cjs.
 ```
 
-In Motion Studio, Select **Open Film Folder** And Pick The Folder. The Editor Opens The Timed Storyboard When One Exists, Loads The Listed Modules, And Loads A Voice Recording Named In The Storyboard. **Open Storyboard** Also Accepts The JSON File And Its Module Files Selected Together. A Page Opened From Disk Cannot Fetch Files, So The Modules Always Arrive Through One Of These Pickers. Opening A Folder Again Reloads Edited Modules.
+There Is One Storyboard To Review. `storyboard.json` Is The Source, And `storyboard.timed.json` Is What The Timing Tool Builds From It: Every Time Resolved, And A Sound Cue Placed On Every Picture Event That Has A Sound. Every Tool Reads The Timed File, The Remotion Project Is Prepared From It, And The Owner Reviews And Exports It. Never Edit It By Hand. Change The Authored Storyboard Or A Scene Module, And Run The Timing Tool Again.
+
+To Look At A Film While Building It, Open [Motion Studio](studio/index.html), Select **Open Film Folder**, And Pick The Folder. The Editor Opens The Timed Storyboard When One Exists, Loads The Listed Modules, And Loads A Voice Recording Named In The Storyboard. **Open Storyboard** Also Accepts The JSON File And Its Module Files Selected Together. A Page Opened From Disk Cannot Fetch Files, So The Modules Always Arrive Through One Of These Pickers. Opening A Folder Again Reloads Edited Modules.
 
 ## A Complete Small Example
 
-This Is [examples/first-code-scene](examples/first-code-scene/storyboard.json). Copy The Folder, Rename The Draw Function, And Change What It Draws.
+This Is [First Code Scene](examples/first-code-scene/storyboard.json). Copy The Folder Into The User's Project, Rename The Draw Function, And Change What It Draws.
 
 `storyboard.json`
 
@@ -92,11 +97,14 @@ This Is [examples/first-code-scene](examples/first-code-scene/storyboard.json). 
 })();
 ```
 
-Render It From The Skill Folder. Stills Are Images, Not Video, So This Needs No Approval.
+Copy It Into The User's Project And Render It There. `$SKILL` Stands For The Path To This Skill Folder, As In The [Skill Guide](SKILL.md). Stills Are Images, Not Video, So This Needs No Approval.
 
 ```sh
-node tools/stills.cjs examples/first-code-scene/storyboard.json Stills-First --browser "/path/to/chrome" --half --times 0.5,1.2,1.9,3
+cp -r "$SKILL/examples/first-code-scene" my-film
+node "$SKILL/tools/stills.cjs" my-film/storyboard.json my-film/board --browser "/path/to/chrome" --half --times 0.5,1.2,1.9,3
 ```
+
+In PowerShell, Copy The Folder With `Copy-Item -Recurse "$SKILL/examples/first-code-scene" my-film`.
 
 ## Rules For A Scene Module
 
@@ -137,10 +145,10 @@ node tools/stills.cjs examples/first-code-scene/storyboard.json Stills-First --b
 | `duration` | Seconds, From 0.25 To 600. The Timing Tool Rewrites It When The Scene Is Anchored. |
 | `start`, `end` | Phrase Anchors For The Cut Into And Out Of The Scene. See [Voice Timing](VOICE-TIMING.md). |
 | `beats` | Named Moments. `{ "pop": "pops up", "hold": 1.5 }` Ties One To A Phrase And Gives The Other A Fixed Scene Time. |
-| `sounds` | Sound Choices For The Scene's Events, By Event `id` Or `kind`. `"None"` Silences One. |
+| `sounds` | Sound Choices For The Scene's Events, By Event `id` Or `kind`. `"None"` Silences One. These Survive Every Retime. |
 | `cues` | Timed Sound And Voice Cues, As In Any Scene. A Cue May Carry An `anchor` Phrase And A `pan` From -1 To 1. |
 
-At The Top Level, `modules` Lists The Scene Modules, `safe` Chooses The Safe Area, `aspect` May Be `"Custom"` With `"size": [1080, 1350]` For Any Even Size From 240 To 4096, And `captions` And `voice` Are Described In [Voice Timing](VOICE-TIMING.md). A Hand-Written Scene Needs Only The Fields It Uses. The Editor And Tools Fill In The Rest.
+At The Top Level, `modules` Lists The Scene Modules, `safe` Chooses The Safe Area, `aspect` May Be `"Custom"` With `"size": [1080, 1350]` For Any Even Size From 240 To 4096, And `captions`, `voice`, And `narration` Are Described In [Voice Timing](VOICE-TIMING.md). A Hand-Written Scene Needs Only The Fields It Uses. The Editor And Tools Fill In The Rest.
 
 | Safe Area | Margins: Top, Right, Bottom, Left |
 | --- | --- |
@@ -201,12 +209,12 @@ Faces Are Sorted Whole, So Keep Meshes From Passing Through Each Other. For A Ph
 
 ## Events
 
-An Events Function Returns What Happens In The Picture: `{ id, at, what, kind, pan, sound, gain }`. `at` Is Scene Seconds, `what` Is A Plain Description, `pan` Runs From -1 At The Left Edge To 1 At The Right, And `sound` Suggests One Of The Seven Bank Sounds. Compute `at` From The Same Constants And Beats The Draw Function Uses. Then `tools/events.cjs` Can Place Sounds That Move When The Picture Moves. See [Review Tools](REVIEW-TOOLS.md).
+An Events Function Returns What Happens In The Picture: `{ id, at, what, kind, pan, sound, gain }`. `at` Is Scene Seconds, `what` Is A Plain Description, `pan` Runs From -1 At The Left Edge To 1 At The Right, And `sound` Suggests One Of The Seven Bank Sounds. Compute `at` From The Same Constants And Beats The Draw Function Uses. The Timing Tool Then Places A Sound Cue On Each Event In `storyboard.timed.json`, And The Sounds Move When The Picture Moves. `tools/events.cjs` Lists Them And Says Whether They Are Current. See [Review Tools](REVIEW-TOOLS.md).
 
 ## A Larger Example
 
-[An Idea Travels](examples/an-idea-travels/storyboard.json) Is A Twelve-Second Voiced Film In Four Scenes. Its [Scene Module](examples/an-idea-travels/scenes/idea.js) Shows Words Rising In Time With Speech, A Part Used Inside A Scene, A Camera Pull-Back With A Parallax Layer, Custom 3D Geometry, Beats, Events, And Captions. Open The Folder In Motion Studio With **Open Film Folder**.
+[An Idea Travels](examples/an-idea-travels/storyboard.json) Is A Twelve-Second Voiced Film In Four Scenes. Its [Scene Module](examples/an-idea-travels/scenes/idea.js) Shows Words Rising In Time With Speech, A Part Used Inside A Scene, A Camera Pull-Back With A Parallax Layer, Custom 3D Geometry, Beats, Events, And Captions. Open The Folder In Motion Studio With **Open Film Folder** To Study It. It Is A Bundled Example, So Copy It Out Before Changing Anything.
 
 ## Before Any Export
 
-Run `node tools/check.cjs` For The Kit, And The Still And Motion Tools For The Film. Then Give The Film Folder To The Project Owner. The Owner Personally Reviews The Editable Storyboard In Motion Studio Before Any Video Is Exported. That Includes Test And Preview Exports. Follow The Review And Export Section Of The [Skill Guide](SKILL.md).
+Run `node "$SKILL/tools/check.cjs"` For The Kit, And The Still, Motion, Event, And Sound Tools For The Film. Then Prepare A Remotion Project From `storyboard.timed.json` And Give It To The Project Owner. The Owner Personally Reviews The Editable Project In Remotion Studio Before Any Video Is Exported. That Includes Test And Preview Exports. Motion Studio Is The Owner's Review Route Only When Node.js Packages Cannot Be Installed. Follow The Review And Export Section Of The [Skill Guide](SKILL.md).

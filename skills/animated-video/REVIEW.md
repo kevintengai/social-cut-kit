@@ -1,6 +1,6 @@
 # Review
 
-Judge The Film Without Watching Playback. An Agent Sees Frames, Not Motion, And Hears Nothing. This Guide Covers What An Agent Can Check From Frames And Numbers, How To Use Independent Judges, And What Happens At The Export Gate. The Owner's Own Viewing In The Editor Is A Separate Review That None Of This Replaces. [Review Tools](REVIEW-TOOLS.md) Has The Exact Usage Of `tools/stills.cjs` For Stills, Boards, And Frame Strips, `tools/motion.cjs` For Measuring Motion, And `tools/events.cjs` For Checking Events.
+Judge The Film Without Watching Playback. An Agent Sees Frames, Not Motion, And Hears Nothing. This Guide Covers What An Agent Can Check From Frames And Numbers, How To Use Independent Judges, And What Happens At The Export Gate. The Owner's Own Viewing In Remotion Studio Is A Separate Review That None Of This Replaces. [Review Tools](REVIEW-TOOLS.md) Has The Exact Usage Of `tools/stills.cjs` For Stills, Boards, And Frame Strips, `tools/motion.cjs` For Measuring Motion, `tools/events.cjs` For Checking Events, `tools/audio.cjs` For Measuring The Sound Mix, And `tools/export-check.cjs` For Checking A Finished Export. All Of Them Read `storyboard.timed.json`, The One Storyboard That Is Reviewed And Exported.
 
 ## Judge Motion From Strips
 
@@ -9,7 +9,7 @@ A Single Still Cannot Show Whether A Move Is Smooth Or Broken. Check Motion From
 - **Dense Strips Around Events.** Take Every Frame Across An Event, From Just Before It Starts To Just After It Settles. Read The Spacing Between Positions. Even Spacing Is Linear And Mechanical. Spacing That Tightens Is A Deceleration. One Gap Larger Than Its Neighbors Is A Pop.
 - **Sparse Strips Across The Film.** Take A Frame Every Half Second Or So. Read The Rhythm Of Change. Long Runs Of Near-Identical Frames Show Where The Film Stalls.
 - **Measurement.** Use The Motion Measurement To Find Stretches Of Very Low Change And Sudden Spikes, Then Look At Those Frames.
-- **Sound.** Check Sound From Its Numbers. Compare The Frame Of Each Cue With The Frame Of The Event It Marks.
+- **Sound.** Check Sound From Its Numbers. Compare The Frame Of Each Cue With The Frame Of The Event It Marks. Measure The Mix With `tools/audio.cjs`, And Read Which Cues Sit On Key Spoken Words And How Far Under The Voice Each One Is.
 
 ## What To Look For
 
@@ -69,20 +69,26 @@ A Whole-Cut Rejection Means The Pictures Are Wrong. Easing, Color, And Transitio
 
 ## Final Checks And The Export Gate
 
-Before Handing Over, Confirm The Following.
+Before Handing Over, Confirm The Following On `storyboard.timed.json`.
 
 - Every Scene Renders At The First Frame, The Last Frame, And Each Scene Boundary.
-- The Frame Rate, Size, And Length Match The Brief. The Timing Follows The Final Voice Recording, And Any Stand-In Timings Still In Place Are Listed For The Report.
+- The Frame Rate, Size, And Length Match The Brief.
+- The Timing Follows The Final Voice Recording. A Storyboard Still On Stand-In Timing Is Not Ready, And Both Export Routes Refuse It. A Film With No Narration Declares That In Its Storyboard, With The Owner's Agreement.
 - Caption Text Matches The Voice. Names And Figures Are Spelled And Stated Correctly.
+- `tools/events.cjs` Reports That The Storyboard Carries All Its Event Sounds.
+- `tools/audio.cjs` Has Measured The Mix With The Real Recording Attached. Report Its Integrated Loudness, Loudness Range, And True Peak Against The Defaults Of About -14 LUFS And -1.5 dBTP, And Every Cue It Lists To Check. These Are Reported, Never Applied Automatically.
 - Every Blocking Issue Is Closed, And The Repeat-Render Check Passes.
 - Every Outside Asset Has A Recorded Source And Rights.
 
-Then Hand The Saved, Editable Project To The Owner. The Owner Personally Reviews It In The Editor Before Any Video File Is Created. That Includes Test And Preview Exports. Agent Checks And Judges Do Not Replace That Review. Before Approval, Use Stills, Boards, Strips, And In-Editor Playback. Wait For Explicit Approval Of The Current Cut. Any Edit After Approval Needs A New Review. After Approval, Follow The Export Steps In The [Skill Guide](SKILL.md), Write To A New File, And Check That File's Size, Rate, Length, And Sound Before Reporting.
+Then Prepare A Remotion Project From The Timed Storyboard, Read Its Warnings, And Hand The Editable Project To The Owner. The Owner Personally Reviews It In Remotion Studio Before Any Video File Is Created. That Includes Test And Preview Exports. Motion Studio Is The Owner's Review Route Only When Node.js Packages Cannot Be Installed. Agent Checks And Judges Do Not Replace That Review. Before Approval, Use Stills, Boards, Strips, Measurements, And Playback Inside The Editable Project. Wait For Explicit Approval Of The Current Cut. Any Edit After Approval Needs A New Review.
+
+After Approval, Follow The Export Steps In The [Skill Guide](SKILL.md) And Write To A New File. Then Run `tools/export-check.cjs` On That File With The Timed Storyboard. It Checks The File's Size, Frame Size, Frame Rate, Length, And Sound, And Measures Its Loudness. Report What It Prints. When It Fails, Do Not Present The File As Finished.
 
 ## What To Report
 
 - **Path.** The Current Editable Project And, After An Approved Export, The Video File.
 - **Open Issues.** Each Issue Left Unfixed, With The Reason.
-- **Skipped Checks.** Each Check Not Run, With The Reason. Include A Silent Viewing Test Or A Judge Round That Could Not Be Run.
+- **Skipped Checks.** Each Check Not Run, With The Reason. Include A Silent Viewing Test Or A Judge Round That Could Not Be Run, And A Sound Or Export Check Skipped Because FFmpeg Is Not Installed.
+- **Sound Levels.** The Measured Loudness And True Peak Of The Mix And Of The Export, And Any Cue Listed To Check. The Owner Decides Whether To Change A Level.
 - **Sourced Images.** Every Image, Clip, Font, And Sound That Was Not Made In The Project, With Its Source And Rights.
 - **Anything Synthetic Or Invented.** Generated Images Or Voices, Stand-In Timings, Placeholder Data, Figures Or Quotes Without A Source From The Owner, A Render Of A Product That Does Not Exist, And Any Interface State That Was Redrawn Instead Of Captured. The Owner Decides What To Disclose. Your Part Is Making Sure They Know.

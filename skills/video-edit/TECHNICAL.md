@@ -1,6 +1,6 @@
 # Technical Reference
 
-A Working Reference For The Tools In This Folder. Each Section States What The Kit Does, What To Measure, And Which Command Measures It. Run Commands From The Skill Folder. No Command In This Reference Writes A Video. In This Kit Only A Render That Carries `--owner-approved` Does.
+A Working Reference For The Tools In This Folder. Each Section States What The Kit Does, What To Measure, And Which Command Measures It. Run Commands From The Skill Folder. In This Kit Only Two Commands Write A Video: A Render That Carries `--owner-approved`, And A [Working Copy](#working-copies-for-review) That Carries `--owner-agreed-working-copy`. No Other Command In This Reference Does.
 
 ## Probing And Displayed Geometry
 
@@ -18,10 +18,19 @@ python scripts/edit_video.py probe "Footage/Phone Clip.mov"
 | `color_transfer`, `color_primaries`, `color_space`, `color_range` | Color Signalling As Tagged In The File, Or `unspecified`. |
 | `hdr`, `peak_nits`, `dolby_vision` | `pq`, `hlg`, Or Null. The Peak Comes From Light Level Metadata When Present. Dolby Vision Lists Its Profile. |
 
+`probe` Also Prints Two Hints Beside The Streams.
+
+| Hint | Meaning |
+| --- | --- |
+| `browser_playback` | `likely` Says Whether A Common Desktop Browser Should Play The File. `reasons` Names Each Doubt, Such As HEVC, HDR, A 10-Bit Picture, Or A Large Frame At A High Rate. `advice` Points To A [Working Copy](#working-copies-for-review). |
+| `canvas_fps` | The Canvas Rate That The [Canvas Frame Rate](SKILL.md#canvas-frame-rate) Rule Gives For This Source, With The Reason. |
+
+`setup --project-folder` Lists The Same Hints Under `sources` For Each Video It Finds In The Project Folder And Up To Two Folders Below It.
+
 - FFmpeg Turns Rotated Frames Upright Before Any Filter Runs, And The Kit Frames The Displayed Picture. Crop, `zoom`, `pan_x`, `pan_y`, And Overlay Positions All Refer To What A Viewer Sees. Never Add A Rotation To Correct A Phone Clip.
 - `validate` Warns When A Source In Use Is Rotated Or HDR, And Names The Displayed Size It Framed.
 - Phone Clips And Screen Recordings Often Have A Variable Frame Rate. The Kit Places Frames By Timestamp And Resamples Every Shot To The Canvas Rate, So Work In Seconds And Never In Source Frame Counts.
-- Choose A Canvas Rate The Main Source Divides Into Evenly. A 60 FPS Source Plays Cleanly On A 30 FPS Canvas. A 30 FPS Source On A 24 FPS Canvas Drops One Frame In Five And Stutters On Motion.
+- Choose The Canvas Rate By The [Canvas Frame Rate](SKILL.md#canvas-frame-rate) Rule. It Gives A Rate The Main Source Divides Into Evenly, So A 60 FPS Source Plays Cleanly On A 30 FPS Canvas. A Secondary Clip That Does Not Divide Evenly Stutters On Motion. A 30 FPS Clip On A 24 FPS Canvas Drops One Frame In Five.
 - A Mono Source Plays From Both Channels. A Stereo Source Keeps Its Left And Right. The Mix Is Stereo At 48 kHz.
 - A Selection That Runs Past The End Of Its Source Is Refused By `validate`. Compare `out` Plus `tail` With The Probed `duration`.
 
@@ -38,11 +47,11 @@ python scripts/edit_video.py still "First Cut/timeline.json" "First Cut/After Cu
 
 **Why Picture And Sound Segments Must Match In Length.** The Kit Builds Each Shot As One Picture Segment And One Sound Segment, Then Joins The Shots In Order. If The Sound Of One Shot Were A Few Milliseconds Longer Than Its Picture, Every Later Shot Would Start Late By That Amount, And The Error Would Grow With Each Cut Until Lips And Words Part. The Kit Therefore Trims Or Pads Each Shot's Sound To Exactly The Shot's Frame-Snapped Length, And Holds The Last Picture Frame When A Source Ends Early. `check` Confirms The Total Frame Count. When Sync Slips After A Cut, Fix The Shot Where It First Slips. Do Not Nudge Later Cues To Compensate.
 
-At 24, 25, 30, 50, And 60 FPS One Frame Is A Whole Number Of 48 kHz Samples, So Segments Match To The Sample. Prefer Those Rates.
+At 24, 25, 30, 50, And 60 FPS One Frame Is A Whole Number Of 48 kHz Samples, So Segments Match To The Sample. The [Canvas Frame Rate](SKILL.md#canvas-frame-rate) Rule Always Lands On One Of Those Rates.
 
 ## Handles And Short Fades At Joins
 
-- `lead` And `tail` Extend A Shot Before Its `in` And After Its `out`. Use Them To Keep The Breath Before A Word And The Consonant That Ends It. A Tenth Of A Second Is A Common Start. `python scripts/takes.py words.json` Suggests Audition Ranges With Handles For Repeated Takes.
+- `lead` And `tail` Extend A Shot Before Its `in` And After Its `out`. Use Them To Keep The Breath Before A Word And The Consonant That Ends It. A Tenth Of A Second Is A Common Start. `python scripts/takes.py words.json --retakes` Suggests Audition Ranges With Speech-Safe Handles For Restarts And Full Retakes.
 - Cut Sound Where It Is Quiet. `analyze` Lists Silences, And A Word Transcript Gives The Gap Between Two Words. A Cut Inside A Held Vowel Or A Loud Room Clicks, Because The Waveform Jumps.
 - When A Click Remains, Add A Fade Of 0.005 To 0.02 Seconds: `fade_out` On The Outgoing Shot And `fade_in` On The Incoming Shot. The Fade Is A Straight Ramp On That Shot's Own Sound. It Is Opt-In, It Changes Only Those Milliseconds, And The Picture Is Untouched. Past About 0.03 Seconds A Dialogue Fade Starts To Sound Like A Dip.
 - Use The Same Fields On An `audio[]` Entry To Ease Music Or A Bed In And Out Over 0.25 To 2 Seconds.
@@ -136,8 +145,18 @@ Vertical Players Draw Their Own Interface Over The Video: An Account Name And De
 | Left | About 6 Percent | 65 |
 | Right | About 15 Percent | 160 |
 
-- `caption_style.margin` Is A Percentage Of The Canvas Height. It Sets How Far A `bottom` Caption Sits Above The Bottom Edge And A `top` Caption Below The Top Edge. The Default Of 7 Suits Horizontal Video. For Vertical Delivery Set It Near 25 For Bottom Captions.
-- Captions Are Centered With A Side Margin Of 5.5 Percent. A Long Line Reaches Under The Button Column. Keep Lines Short With The Phrase Options. At A Caption `size` Of 80, About 17 Characters Stay Inside The Middle 70 Percent Of The Width. At 64, About 21.
+The Tool Defaults Follow This Table. Explicit Values Always Override Them.
+
+| Default | Vertical Canvas | Horizontal Or Square Canvas |
+| --- | --- | --- |
+| `caption_style.size` | 6 Percent Of The Canvas Width, Which Is 65 At 1080 Wide | About 7.8 Percent Of The Canvas Height, Which Is 84 At 1080 High |
+| `caption_style.margin`, For Bottom Captions | 25 | 7 |
+| `caption_style.top_margin`, For Top Captions | 12 | 7 |
+| Phrase Words, `--max-words` | 3 | 4 |
+| Phrase Characters, `--max-chars` | 20 | 28 |
+
+- `caption_style.margin` Is A Percentage Of The Canvas Height Between A `bottom` Caption And The Bottom Edge. `caption_style.top_margin` Is The Same Measure Between A `top` Caption And The Top Edge. A Timeline That Sets `margin` Alone Uses That Value At Both Edges, As Earlier Editions Did.
+- Captions Are Centered With A Side Margin Of 5.5 Percent. A Long Line Reaches Under The Button Column, So Keep Lines Short With The Phrase Options. At The Default Vertical `size` Of 65, About 20 Characters Stay Inside The Middle 70 Percent Of A 1080 Wide Canvas, Which Is Why Vertical Phrases Default To 20 Characters. At A `size` Of 80, About 17 Characters Fit.
 - Place A [Title Overlay](TITLES.md) With `--margin 230` Or More At The Top Of A Vertical Frame.
 - Keep The Face, The Caption, And Any Title In Separate Bands. One Caption Per Position At A Time.
 - Check With A Still At Delivery Size, Viewed At The Width Of A Phone. The Browser Editor Shows The Whole Frame Without Any Platform Interface.
@@ -153,7 +172,7 @@ No Check Below Creates A Video, And None Of Them Is An Approval. The Owner Still
 
 | Question | Command | What It Proves |
 | --- | --- | --- |
-| Is The Project Valid? | `validate` | Fields, Ranges, And Sources Are Sound. Warnings Name HDR And Rotated Sources. |
+| Is The Project Valid? | `validate` | Fields, Ranges, And Sources Are Sound. Warnings Name HDR And Rotated Sources And Any Working Copy That Disagrees With Its Original. |
 | Does The Whole Edit Compose? | `check` | Every Source Decodes Through The Final Graph Into A Null Sink And The Frame Count Matches. Add `--no-burn` To Leave Captions Out. |
 | Does This Frame Look Right? | `still --at` | One Composed Frame As A PNG, With Tone Mapping, Color, Overlays, And Captions, Built From The Same Graph As The Render. |
 | Are Levels Right? | `loudness` | Loudness, Peaks, And Cue Against Speech, Decoded Into A Null Sink. |
@@ -197,9 +216,50 @@ Phones Record HLG, Often With A Dolby Vision 8.4 Layer, Or HDR10 With A PQ Trans
 - **Peak.** HLG Is Treated As A 1000 Nit Signal. PQ Uses The Content Light Level When The File Carries One, Otherwise The Mastering Display Peak, Otherwise 1000 Nits, Kept Between 400 And 10000.
 - **Turning It Off.** Set `tone_map` To `false` On The Canvas, On A Shot, Or On An Overlay. The Picture Then Passes Through Unconverted, And The Export May Carry HDR Tags. Use This Only When A Clip Is Mistagged Or When The Grade Will Be Done Elsewhere.
 - **A Limited Build.** The Conversion Uses The `zscale` And `tonemap` Filters. Without One, `check`, `still`, And `render` Stop With A Message Naming It, And `setup` Lists It Under `ffmpeg-hdr`.
-- **Preview.** The Browser Editor Plays The Original File, So It Shows The Browser's Own HDR Conversion, Which Differs From The Kit's. Judge Converted Color On A Still. Some Browsers Cannot Play HEVC At All. The FFmpeg Checks Still Work, And The Owner Can Review In Resolve Through The [Native Build](RESOLVE.md).
+- **Preview.** Without A Working Copy The Browser Editor Plays The Original File, So It Shows The Browser's Own HDR Conversion, Which Differs From The Kit's, And Some Browsers Cannot Play HEVC At All. Judge Converted Color On A Still, Or Make A [Working Copy](#working-copies-for-review), Which Carries The Kit's Conversion Into The Browser Editor And Remotion. The FFmpeg Checks Always Work, And The Owner Can Also Review In Resolve Through The [Native Build](RESOLVE.md).
+- **Master.** The FFmpeg `render` From The Original Files Produces The Master For HDR Footage. Remotion Is The Review Route There.
 - **Outside The Composition Graph.** The Native Resolve Build Imports Original Files And Leaves Color To Resolve's Color Management. [Camera Transfer](CAMERA.md) Works In 8-Bit RGB And Does Not Tone Map, So An HDR Target Looks Flat There.
 - **Not Converted.** Dolby Vision Profile 5 Has No Standard Base Layer, And A BT.2020 Clip Without A PQ Or HLG Transfer Is Treated As Standard Video. Both Draw A Warning. Use A Version Recorded Or Converted As HLG, HDR10, Or Standard Video.
+
+## Working Copies For Review
+
+A Working Copy Is A Converted Copy Of One Untouched Source Clip, Made So The Browser Editor And Remotion Can Play Footage They Cannot Decode. It Is Not A Cut And Not An Export Of The Edit. It Is Still A Video File, So The Command Writes It Only With `--owner-agreed-working-copy`, After The Owner Has Agreed To A Working Copy Of That Source. Ask Once, In Plain Words, And Name The Clips The Answer Covers.
+
+```sh
+python scripts/edit_video.py working-copy "Footage/Phone Clip.mov" "Footage/Phone Clip Working Copy.mp4" --plan
+python scripts/edit_video.py working-copy "Footage/Phone Clip.mov" "Footage/Phone Clip Working Copy.mp4" --check --seconds 5
+python scripts/edit_video.py working-copy "Footage/Phone Clip.mov" "Footage/Phone Clip Working Copy.mp4" --owner-agreed-working-copy
+python scripts/working_copy.py "Footage/Phone Clip.mov" "Footage/Phone Clip Working Copy.mp4" --owner-agreed-working-copy --long-side 1280
+```
+
+| Option | Effect |
+| --- | --- |
+| `--owner-agreed-working-copy` | Write The Working Copy. Use It Only After The Owner Agrees. It Does Not Approve Any Export Of An Edit, And `--owner-approved` Is Not Accepted Here. |
+| `--plan` | Print The Planned FFmpeg Command And The Filter Chain. Nothing Is Run And Nothing Is Written. |
+| `--check` | Run The Picture Conversion Into A Null Sink To Prove This FFmpeg Build Can Do It. Nothing Is Written. Add `--seconds` To Check Only The Start. |
+| `--long-side 1920` | The Longest Side Of The Working Copy In Pixels. The Picture Is Never Enlarged. A 2160 By 3840 Phone Clip Becomes 1080 By 1920. |
+
+- **Picture.** H.264 In An MP4 File, 8-Bit 4:2:0, Stored Upright At The Displayed Shape. An HDR Source Gets The Same Single Conversion That `check`, `still`, And `render` Apply, In The Same Order: Scale First, Then Convert. A Standard Source Is Only Scaled And Encoded Again.
+- **Timing.** Every Source Frame Keeps Its Own Timestamp. No Frame Is Dropped, Repeated, Or Retimed, So The Copy Has The Duration And Frame Count Of The Original. The Command Probes The Result And Refuses To Publish It When Either Disagrees.
+- **Sound.** AAC Sound Is Copied Bit For Bit. Any Other Codec Is Encoded As AAC With No Filter, So Level, Channels, And Sample Rate Stay As Recorded.
+- **Files.** The Original Is Only Read. The Output Must Be A New MP4 Name. An Existing File Is Never Replaced, And The Original Cannot Be Named As The Output.
+
+Name The Copy In The Timeline And Keep `path` On The Original.
+
+```json
+{"assets": {"Phone": {"path": "Footage/Phone Clip.mov", "kind": "video", "working_copy": "Footage/Phone Clip Working Copy.mp4"}}}
+```
+
+| Command | Reads |
+| --- | --- |
+| `review`, `remotion` | The Working Copy |
+| `validate`, `check`, `still`, `loudness`, `mix`, `render`, `handoff`, `resolve` | The Original |
+
+- `validate` Names Each Video In Use That A Browser Is Unlikely To Play And That Has No Working Copy Yet, And Notes Each Asset That Plays From One. It Warns When The Copy's Duration Or Frame Count Disagrees With Its Original, When Its Shape Differs, When It Is Itself HDR Or Rotated, And When A Browser Is Unlikely To Play It.
+- Framing Still Comes From The Original's Displayed Size, So `zoom`, `pan_x`, And `pan_y` Mean The Same In Review And In The Render.
+- The Working Copy Shows The Kit's Color. Fine Detail Is Softer Than The Master, Because The Copy Is Smaller And Encoded A Second Time. Judge Sharpness On A `still`, Which Reads The Original.
+- **The Master Comes From The Original.** For An HDR Source, Or Any Timeline With Working Copies, The FFmpeg `render` With `--owner-approved` Produces The Master. Remotion Is For Review There, Because A Remotion Render Would Be Made From The Smaller Copies.
+- The Kit's Tests Inspect The Command And The Graph, And Run The Picture Chain On Generated HDR Patterns Into A Null Sink. They Do Not Convert A File. Compare One `still` With The Same Moment In The Working Copy Before Relying On Its Color.
 
 ## FFmpeg And Shell Pitfalls
 

@@ -88,15 +88,18 @@ def style_caption(item, cue, plan):
     text = next((v for v in comp.GetToolList().values() if v.GetAttrs().get("TOOLS_RegID") == "TextPlus"), None)
     require(text, "Could Not Find The Editable Text+ Node.")
     style = plan["caption_style"]
-    margin = style["margin"]/100
+    margin, above = style["margin"]/100, style.get("top_margin", style["margin"])/100
     fusion_input(text, "StyledText", cue["text"])
     fusion_input(text, "Font", style["font"])
     fusion_input(text, "Style", "Bold")
     fusion_input(text, "Size", style["size"]/plan["width"])
     fusion_input(text, "LayoutType", 1)
     fusion_input(text, "LayoutWidth", .89)
-    fusion_input(text, "LayoutHeight", 1-2*margin)
-    fusion_input(text, "Center", {1: .5, 2: .5})
+    # The Layout Box Runs From The Bottom Margin To The Top Margin. Equal Margins Give The Centered Box Used Before.
+    if cue["position"] == "center":
+        above = margin
+    fusion_input(text, "LayoutHeight", 1-margin-above)
+    fusion_input(text, "Center", {1: .5, 2: .5+(margin-above)/2})
     text.SetInput("VerticalJustification"+cue["position"].title(), 1)
     alignment = {"top": -1, "center": 0, "bottom": 1}[cue["position"]]
     require(near(text.GetInput("VerticalTopCenterBottom"), alignment), "Resolve Could Not Align The Caption.")

@@ -12,14 +12,14 @@ Answer One Question Per Layer Before Cutting. Write The Answers In The [Active B
 | Payoff | How Does Each Beat Reward The Viewer? | A Visual On Its Word, A Result After An Action, A Reaction After A Set-Up, A Reveal After A Question | Shot Order, Overlay Start Times, And Holds |
 | Picture | What Does The Viewer See, And What Is The Camera Doing? | A Speaker At Full Height, A Screen Capture, One Held Shot, Cutaways, Locked Off Or Handheld | `shots[]` With `fit`, `zoom`, `pan_x`, And `pan_y`, Plus [Camera Transfer](CAMERA.md) |
 | Words | What Words Are On Screen? | A Hook Headline, Running Captions, Labels, One Line That Carries A Joke, Or None | `captions[]` And [Title Overlays](TITLES.md) |
-| Sound | What Carries The Energy In Sound? | The Voice Alone, A Music Bed, One Song Phrase, Sparse Cues, Or Silence Before A Cut | Shot `gain`, `audio[]`, And The [Cue Bank](assets/cue-bank/README.md) |
+| Sound | What Carries The Energy In Sound? | The Voice Alone, A Music Bed, One Song Phrase, Sparse Cues On Visible Events, Or Silence Before A Cut | Shot `gain`, `audio[]`, And The [Cue Bank](assets/cue-bank/README.md) |
 | Effects | Which Effects Land On Picture Beats? | A Punch-In, A Speed Change, A Color Shift, An Overlay Arriving | Split Shots With `zoom`, `speed`, Or The Color Fields |
 
 The Clock Matters Most Because It Defines A Good Cut. On A Speech Clock A Cut Is Right When The Phrase Is Complete. On A Music Clock It Is Right On The Beat. On An Action Clock It Is Right When The Action Finishes. A Section That Tries To Obey Two Clocks Lands Its Cuts On Neither.
 
 ## Choose A Style
 
-Read The Footage Before The Adjectives In The Request. Run `probe` And `analyze`, Read Any Transcript, And Look At Stills. What Was Filmed Narrows The Choice More Than Taste Does.
+Read The Footage Before The Adjectives In The Request. Run `probe` And `analyze`, Read Any Transcript And Any Script In The Project Folder, And Look At Stills. What Was Filmed Narrows The Choice More Than Taste Does.
 
 1. **Footage.** A Person Speaking To The Lens For Most Of The Recording Is A Talking Head. Takes Played To Camera Without Dialogue Are A Skit. A Screen Recording, Or A Product Shown On A Screen, Is A Screen Demo. Mixed Footage Becomes Sections, Each With Its Own Style.
 2. **Goal.** Ask What The Viewer Should Believe Or Do At The End. Teaching And Arguing Favor A Speech Clock. Proof Favors The Screen And Its Result. Recognition And Sharing Favor The Skit.
@@ -61,7 +61,7 @@ Numbers In A Guide Are Starting Values. When You Depart From One, Note The Reaso
 
 ## Rules That Hold In Every Style
 
-- **Owner Review.** The Project Owner Personally Reviews The Saved, Editable Project In The Editor Before Any Video File Is Created. That Includes Test And Preview Exports. Agent Checks Do Not Replace That Review. Before Approval, Check With Single Frames From `still`, The Null-Sink Decodes From `check` And `loudness`, And Playback In `review`.
+- **Owner Review.** The Project Owner Personally Reviews The Saved, Editable Project In The Editor Before Any Video Of The Edit Is Created. That Includes Test And Preview Exports. Agent Checks Do Not Replace That Review. The Only Other Video File The Kit Writes Is A Working Copy Of A Raw Clip That A Browser Cannot Play, And Only After The Owner Agrees To It. Before Approval, Check With Single Frames From `still`, The Null-Sink Decodes From `check` And `loudness`, And Playback In `review`.
 - **Source Audio.** The Owner's Original Dialogue Stays As Recorded By Default. Gain Changes, Noise Reduction, And Any Other Processing Are Opt-In.
 - **Rights.** Use Only Footage, Clips, Music, And Sounds The Owner Has The Right To Use, And Record Each Source In The [Asset Library](../asset-library/SKILL.md). A Reference Video Is Studied With Permission And Never Lifted.
 

@@ -57,7 +57,7 @@ Start Each Presenter Shot On A Frame Where The Eyes Are Already On The Lens. End
 1. Choose The Hardest Shot. That Is The One With The Finest Hair, The Most Movement, Or The Largest Change Of Background.
 2. Finish It Completely At Delivery Size, With The Matte, The Light Match, The Black Level, The Grain, The Sharpness, And The Animation Around It.
 3. Inspect Stills At Full Size And At Phone Size, And A Strip For Crawling Edges.
-4. Show The Owner The Stills And The Editable Project. No Video File Is Created Before The Owner Reviews It In The Editor And Approves, Including A Test Or Preview Export.
+4. Show The Owner The Stills And The Editable Project. No Video File Is Created Before The Owner Reviews The Editable Project In Remotion Studio And Approves, Including A Test Or Preview Export.
 5. Record The Recipe That Worked, With The Black Lift, The Grain Amount, The Softening, And The Tint. Apply It To The Remaining Shots.
 
 If The Hardest Shot Cannot Be Made Believable, The Others Will Not Rescue It. Fall Back To Clean Cuts, Or To Animation Around The Presenter.

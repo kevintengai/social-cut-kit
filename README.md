@@ -62,13 +62,14 @@ The Video Editor Also Exposes These Workflows As `camera`, `resolve`, And `post`
 
 ## Work With Your Footage
 
-- Inspect A Source, Find Silences And Scene Changes, And Assemble Selected Takes In Timeline Order. Use The Original Recording For Speech And Keep Audio Handles On The Cut.
+- Inspect A Source, Find Silences And Scene Changes, And Assemble Selected Takes In Timeline Order. Use The Original Recording For Speech And Keep Audio Handles On The Cut. The Take Finder Groups Restarts And Full Retakes, And Checks Them Against Your Script. [Reference And Take Tools](skills/video-edit/RECREATION.md)
+- Review HDR Or HEVC Phone Footage That A Browser Cannot Play Through A Working Copy, Made Only After You Agree. The Original File Is Never Changed, And The Finished Video Is Rendered From It. [Working Copies For Review](skills/video-edit/TECHNICAL.md#working-copies-for-review)
 - Transcribe With A Separately Installed Local Recognizer, Or Import Existing Word Timings, SRT, Or WebVTT. The Caption Mapper Follows Trims, Handles, Repeated Shots, And Speed Changes. [Speech Tools](skills/video-edit/SPEECH.md)
 - Track A Single Detail To Study A Shot, Or Transfer Its Overall Pan, Zoom, And Rotation To A Second Clip. [Reference And Take Tools](skills/video-edit/RECREATION.md) · [Camera Motion Transfer](skills/video-edit/CAMERA.md)
 - Build A Transparent Title With A Highlighted Keyword, Or Add One Of The 63 Original Sound Cues Across The Footage And Animation Tools. [Title Overlays](skills/video-edit/TITLES.md) · [Editorial Cues](skills/video-edit/assets/cue-bank/README.md)
 - Build Directly In Resolve When That Is The Delivery Editor. For Interchange With Other Editors, The Kit Also Writes OTIO And SRT. [Native Resolve Assembly](skills/video-edit/RESOLVE.md)
 - For School Productions, Let The Owner Personally Review The Saved Edit In Its Editor Before Any Video Export, Including Test And Preview Exports. By Default That Editor Is Remotion Studio. A Source Check Or Still Image Can Help Diagnose An Issue During Preparation.
-- Deliver Through The Approval-Gated Remotion Render By Default, Or Through The Approval-Gated FFmpeg Render For HDR Footage, A Loudness Target, Or A Machine Without Node Packages. [Remotion Review And Render](skills/video-edit/remotion/README.md)
+- Deliver Through The Approval-Gated Remotion Render By Default, Or Through The Approval-Gated FFmpeg Render For HDR Footage, Any Edit Reviewed Through Working Copies, A Loudness Target, Or A Machine Without Node Packages. [Remotion Review And Render](skills/video-edit/remotion/README.md)
 
 ## What The Download Contains
 

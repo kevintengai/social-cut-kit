@@ -16,6 +16,7 @@ import defaults
 import edit_video
 import setup_check
 import speech
+import takes
 
 GUIDES = ["SKILL.md", "SPEECH.md", "TECHNICAL.md", "TITLES.md", "RECREATION.md", "CAMERA.md", "RESOLVE.md",
           "PUBLISH.md", "assets/cue-bank/README.md", "remotion/README.md"]
@@ -52,7 +53,8 @@ def commands(text):
 
 
 MESSAGE_FILES = ["scripts/setup_check.py", "scripts/defaults.py", "scripts/loudness.py", "scripts/media.py",
-                 "scripts/timeline.py", "scripts/edit_video.py", "scripts/speech.py", "assets/cue-bank/build.py"]
+                 "scripts/timeline.py", "scripts/edit_video.py", "scripts/speech.py", "assets/cue-bank/build.py",
+                 "scripts/working_copy.py", "scripts/takes.py"]
 # Program, Filter, Package, And Literal Value Names That Appear Inside Messages.
 NAMED = SPELLED | {"zscale", "tonemap", "libzimg", "libass", "ebur128", "pip", "ensurepip", "whisper", "faster",
                    "true", "false", "refuse", "cap", "bt2020"}
@@ -109,7 +111,7 @@ class MessageTests(unittest.TestCase):
         self.assertGreater(checked, 60)
 
     def test_every_option_has_capitalized_help(self):
-        parsers = [edit_video.parser(), speech.build_parser(), setup_check.parser(), defaults.parser()]
+        parsers = [edit_video.parser(), speech.build_parser(), setup_check.parser(), defaults.parser(), takes.build_parser()]
         seen = 0
         while parsers:
             current = parsers.pop()

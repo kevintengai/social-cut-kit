@@ -131,6 +131,7 @@ async function main() {
     "no-captions": { type: "boolean" }, silent: { type: "boolean" }, half: { type: "boolean" }, columns: { type: "string" }, overwrite: { type: "boolean" }, help: { type: "boolean" } } });
   if (options.help) { console.log(usage); return; }
   if (positionals.length !== 2) throw new Error(usage);
+  Film.guardOutput(positionals[1], "The Stills");
   const film = Film.loadFilm(positionals[0]), project = film.project, target = path.resolve(positionals[1]), executable = Browser.browserPath(options.browser);
   if (fs.existsSync(target)) {
     const present = fs.readdirSync(target);
@@ -146,7 +147,8 @@ async function main() {
   layout.width = layout.pad + columns * (cellWidth + layout.pad); layout.height = layout.top + rows * (cellHeight + layout.labelHeight + layout.pad);
   if (layout.height > 16000 || layout.width > 16000) throw new Error("The Contact Sheet Would Be Too Large. Choose Fewer Stills Or More Columns.");
   const flags = [];
-  if (project.voice && project.voice.standIn) flags.push("Stand-In Voice Timing");
+  if (P.standIn(project)) flags.push("Stand-In Voice Timing");
+  if (project.narration === "None") flags.push("No Narration Declared");
   if (options.silent) flags.push("Silent Review");
   else if (!captions) flags.push("Captions Hidden");
   if (options.half) flags.push("Half Size");
@@ -172,11 +174,12 @@ async function main() {
   } finally { await page.close(); }
   fs.writeFileSync(path.join(target, "board.html"), boardPage({ title: project.title, summary, flags, column: Math.max(180, Math.round(cellWidth * 0.8)) }, stills));
   fs.writeFileSync(path.join(target, "stills.json"), JSON.stringify({ title: project.title, storyboard: path.basename(film.file), size, fps: project.fps, duration: P.duration(project),
-    scale, captionsShown: captions, silent: Boolean(options.silent), standInVoice: Boolean(project.voice && project.voice.standIn), stills, problems: [...problems.values()] }, null, 2) + "\n");
+    scale, captionsShown: captions, silent: Boolean(options.silent), standInVoice: P.standIn(project), narration: project.narration || "Voice", stills, problems: [...problems.values()] }, null, 2) + "\n");
   console.log("Rendered " + stills.length + " Still" + (stills.length === 1 ? "" : "s") + (options.half ? " At Half Size" : " At Full Size") + (captions ? "" : " With Captions Hidden") + ". No Video Was Written.");
   console.log("Board: " + path.join(target, "board.html"));
   console.log("Contact Sheet: " + path.join(target, "contact-sheet.png"));
-  if (flags.includes("Stand-In Voice Timing")) console.log("The Storyboard Uses Stand-In Voice Timing. Retime It When The Recording Exists.");
+  if (flags.includes("Stand-In Voice Timing")) console.log("The Storyboard Uses Stand-In Voice Timing. It Is Not Ready For Export. Retime It When The Recording Exists.");
+  if (project.narration === "None") console.log("The Storyboard Declares No Narration. Its Timings Are The Author's Own.");
   if (problems.size) {
     for (const problem of problems.values()) console.error("Scene " + problem.scene + ": " + problem.message);
     throw new Error(problems.size + " Scene Problem" + (problems.size === 1 ? "" : "s") + " Found While Drawing. The Stills Show An Error Card Where A Scene Failed.");

@@ -320,6 +320,63 @@ def disk_report(folder, minimum_gb):
     return report
 
 
+SOURCE_SUFFIXES = {".mp4", ".mov", ".m4v", ".mkv", ".webm", ".avi", ".mts", ".m2ts", ".mxf"}
+SOURCE_LIMIT = 25
+
+
+def source_files(folder, depth=2):
+    """Video Files In The Project Folder And Up To Two Folders Below It, In Name Order."""
+    found = []
+
+    def walk(place, level):
+        try:
+            entries = sorted(place.iterdir(), key=lambda entry: entry.name.lower())
+        except OSError:
+            return
+        for entry in entries:
+            if entry.name.startswith(".") or entry.name == "node_modules":
+                continue
+            if entry.is_file() and entry.suffix.lower() in SOURCE_SUFFIXES:
+                found.append(entry)
+            elif entry.is_dir() and level < depth:
+                walk(entry, level + 1)
+
+    walk(Path(folder).expanduser().resolve(), 0)
+    return found
+
+
+def source_report(folder):
+    """What Each Video In The Project Folder Needs Before Review: A Canvas Rate, And A Working Copy If A Browser Cannot Play It."""
+    if not which("ffprobe"):
+        return None
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import timeline
+    files = source_files(folder)
+    rows = []
+    for path in files[:SOURCE_LIMIT]:
+        try:
+            meta = timeline.probe(path)
+        except (timeline.EditError, OSError, ValueError, KeyError):
+            rows.append({"file": str(path), "readable": False})
+            continue
+        info, playback, rate = meta.get("picture") or {}, timeline.browser_playback(meta), timeline.canvas_rate_hint(meta)
+        row = {"file": str(path), "readable": True, "duration_seconds": meta.get("duration"),
+               "displayed_size": info.get("displayed_size"), "frame_rate": info.get("frame_rate"),
+               "hdr": info.get("hdr"), "rotation": info.get("rotation"),
+               "suggested_canvas_fps": rate["suggested"] if rate else None,
+               "plays_in_a_browser": playback["likely"]}
+        if not playback["likely"]:
+            row.update(reasons=playback["reasons"], advice=playback.get("advice"))
+        rows.append(row)
+    report = {"folder": str(Path(folder).expanduser().resolve()), "found": len(files), "listed": len(rows), "files": rows,
+              "canvas_rate_rule": timeline.CANVAS_RATE_RULE}
+    blocked = [row["file"] for row in rows if row.get("plays_in_a_browser") is False]
+    if blocked:
+        report["note"] = (f"{len(blocked)} Source{'s Are' if len(blocked) > 1 else ' Is'} Unlikely To Play In A Browser. "
+                          "Ask The Owner Once Before Making A Working Copy For Review.")
+    return report
+
+
 def check(folder=".", minimum_gb=2.0):
     """Inspect The Machine And Return The Report With Its Exit Code."""
     managers = package_managers()
@@ -350,6 +407,9 @@ def check(folder=".", minimum_gb=2.0):
                          "package_managers": managers},
               "missing_required": required, "missing_optional": optional, "items": rows, "disk": disk,
               "install_policy": POLICY}
+    sources = source_report(folder)
+    if sources and sources["found"]:
+        report["sources"] = sources
     return report, 1 if required else 0
 
 

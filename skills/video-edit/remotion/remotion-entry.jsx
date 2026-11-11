@@ -39,7 +39,7 @@ function Cue({row}) {
 }
 
 function Caption({row, look}) {
-  const edge = row.position === "top" ? {top: look.edge} : row.position === "bottom" ? {bottom: look.edge} : {top: "50%", transform: "translateY(-50%)"};
+  const edge = row.position === "top" ? {top: look.topEdge} : row.position === "bottom" ? {bottom: look.edge} : {top: "50%", transform: "translateY(-50%)"};
   return <Sequence from={row.from} durationInFrames={row.frames} name={row.id}>
     <div style={{position: "absolute", left: look.side, right: look.side, ...edge, textAlign: "center", whiteSpace: "pre-line", textWrap: "balance",
       fontFamily: look.fontFamily, fontWeight: 700, fontSize: look.fontSize, lineHeight: look.lineHeight + "px", color: look.color,

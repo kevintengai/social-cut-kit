@@ -1,6 +1,8 @@
 # Style Frames
 
-Choose The Look After The Plan From [Directing](DIRECTING.md) Is Approved. The Owner Picks By Looking At The Same Beat Rendered In Each Offered Style. A Description Of A Style Is Not A Choice Anyone Can Make.
+Choose The Look After The Plan From [Directing](DIRECTING.md) Is Approved. For A Short Film, The Look May Be Shown In The Same Message As The Plan, As The Approval Stop In That Guide Describes, And Each Still Needs Its Own Explicit Yes. The Owner Picks By Looking At A Beat Rendered In Each Offered Style. A Description Of A Style Is Not A Choice Anyone Can Make.
+
+A Style Frame Needs The Film Folder, The Script, And The Word Timings From The Earlier Steps, And One Scene Module For The Chosen Beat. It Is The Only Finished-Looking Picture Made Before The Look Is Approved.
 
 ## The Styles
 
@@ -28,13 +30,24 @@ Start With What The Subject Really Has, Then Fit The Register The Owner Wants.
 
 Offer Two Or Three Styles That Could Each Do The Job. Do Not Choose By What The Kit Makes Easiest Or By What Was Made Last Time.
 
+## How Many Frames To Show
+
+The Owner's Stated Preference Decides How Many Frames Are Shown. It Comes Before The Kit's Default.
+
+- **No Preference Stated.** Render The Same Beat In Two Or Three Styles, Side By Side.
+- **The Owner Asks For One Style Frame.** Render The One Style You Recommend, With The Reason. Name The Alternatives In A Single Line, Each With What It Would Change, And Offer To Render Them. Do Not Render Frames They Did Not Ask For.
+- **The Owner Names A Style.** Render That Style. Mention One Alternative Only When The Named Style Has A Clear Problem For This Subject, And Say What The Problem Is.
+- **The Owner Asks For More.** Render More, Up To What You Can Sustain Across The Whole Film.
+
+One Frame Or Three, The Look Is Approved Only By An Explicit Yes To A Picture The Owner Has Seen.
+
 ## Render The Same Beat In Each Offered Style
 
 1. Choose The Beat That Carries The Film. Prefer One That Contains The Hardest Elements, Such As A Character, A Line Of Text, And The Key Object.
-2. Render That Beat In Each Offered Style, With The Same Words And The Same Intent, At The Delivery Aspect Ratio. Use `tools/stills.cjs` As Described In [Review Tools](REVIEW-TOOLS.md).
+2. Render That Beat In Each Style You Are Showing, With The Same Words And The Same Intent, At The Delivery Aspect Ratio. Use `tools/stills.cjs` As Described In [Review Tools](REVIEW-TOOLS.md), And Write The Stills Into The Film Folder In The User's Project.
 3. Finish Each Frame Far Enough To Judge. Use The Real Colors, The Real Type, The Texture, And The Light. A Style Frame Is A Promise. Show Only What You Can Sustain Across The Whole Film.
 4. Where A Style Depends On Movement, Add A Second Still Or A Short Frame Strip, And A Line On How It Moves. The Held Drawings Of Hand-Made 2D Cannot Be Seen In One Still.
-5. Put The Frames Side By Side On One Board With Plain Labels. State Your Recommendation And The Reason.
+5. When More Than One Frame Is Shown, Put Them Side By Side On One Board With Plain Labels. State Your Recommendation And The Reason Either Way.
 6. When The Owner Asks For A Blend, Such As The Texture Of One With The Palette Of Another, Render The Blend Before Building. Blends Fail In Ways A Description Hides.
 
 Stills Are Not Video Files. Nothing Is Exported At This Stage.

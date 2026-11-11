@@ -110,6 +110,140 @@ def picture_info(video):
             "hdr": HDR_TRANSFERS.get(transfer), "peak_nits": peak, "dolby_vision": dolby}
 
 
+STANDARD_RATES = (24, 25, 30, 48, 50, 60, 100, 120)
+CANVAS_RATE_RULE = ("Take The Standard Rate Nearest The Main Source, From 24, 25, 30, 48, 50, 60, 100, And 120, And "
+                    "Halve It While It Is Above 30. Keep A Higher Rate Only When The Owner Asks For 50 Or 60 FPS "
+                    "Delivery.")
+
+
+def nearest_standard_rate(rate):
+    # A Source Exactly Between Two Standard Rates Takes The Higher One.
+    return min(STANDARD_RATES, key=lambda standard: (abs(standard - rate), -standard))
+
+
+def canvas_rate(rate):
+    """The Canvas Rate For A Source Rate: The Nearest Standard Rate, Halved While It Is Above 30."""
+    if type(rate) not in (int, float) or not math.isfinite(rate) or rate <= 0:
+        return 30
+    chosen = nearest_standard_rate(rate)
+    while chosen > 30:
+        chosen //= 2
+    return chosen
+
+
+def still_image(meta):
+    return bool(re.search(r"image2|_pipe", meta.get("format") or ""))
+
+
+def rate_text(rate):
+    return f"{rate:.3f}".rstrip("0").rstrip(".")
+
+
+def canvas_rate_hint(meta):
+    """A Suggested Canvas Rate For One Source, Or None When It Has No Moving Picture."""
+    rate = (meta.get("picture") or {}).get("frame_rate")
+    if not rate or still_image(meta):
+        return None
+    suggested, nearest = canvas_rate(rate), nearest_standard_rate(rate)
+    if suggested == nearest:
+        reason = f"{suggested} Is The Standard Rate Nearest The Source Rate Of {rate_text(rate)} FPS."
+    else:
+        reason = (f"The Standard Rate Nearest The Source Rate Of {rate_text(rate)} FPS Is {nearest}, Which Is Above 30, So "
+                  f"It Is Halved To {suggested}.")
+    return {"suggested": suggested, "source_fps": rate, "reason": reason, "rule": CANVAS_RATE_RULE}
+
+
+BROWSER_VIDEO = {"h264", "vp8", "vp9", "av1"}
+BROWSER_AUDIO = {"aac", "mp3", "opus", "vorbis", "flac"}
+BROWSER_IMAGE = {"png", "mjpeg", "webp", "gif", "bmp", "apng"}
+WORKING_COPY_ADVICE = ("Ask The Owner Once, Then Make A Working Copy With The Working Copy Command And Name It In "
+                       "The Asset's working_copy Field. The Browser Editor And Remotion Then Play The Working Copy. "
+                       "The Checks And The FFmpeg Render Keep Reading The Original.")
+
+
+def browser_playback(meta):
+    """Whether A Common Desktop Browser Is Likely To Play This Source, With Plain Reasons When It Is Not."""
+    video, audio, info = meta.get("video"), meta.get("audio"), meta.get("picture") or {}
+    reasons = []
+    if video and still_image(meta):
+        if video.get("codec_name") not in BROWSER_IMAGE:
+            reasons.append(f"Browsers Do Not Draw {video.get('codec_name')} Images. Convert It To PNG Or JPEG.")
+        return {"likely": not reasons, "reasons": reasons}
+    if video:
+        codec = video.get("codec_name")
+        if codec == "hevc":
+            reasons.append("HEVC Video Plays In A Browser Only Where The Computer Has Hardware Support For It.")
+        elif codec and codec not in BROWSER_VIDEO:
+            reasons.append(f"Browsers Do Not Play {codec} Video.")
+        elif (info.get("bit_depth") or 8) > 8 and codec == "h264":
+            reasons.append(f"Browsers Rarely Play {info['bit_depth']}-Bit H.264 Video.")
+        if info.get("hdr"):
+            reasons.append(f"The Picture Is {HDR_NAMES[info['hdr']]} HDR. A Browser Shows Its Own Conversion, Or A "
+                           "Flat Picture, And Not The Kit's Conversion.")
+        size, rate = info.get("coded_size") or [0, 0], info.get("frame_rate") or 0
+        if all(isinstance(n, int) for n in size) and size[0] * size[1] > 2560 * 1440 and rate > 31:
+            reasons.append(f"{size[0]} By {size[1]} At {rate_text(rate)} FPS Is Heavy For Live Browser Playback And May Stutter.")
+    if audio:
+        codec = str(audio.get("codec_name") or "")
+        if codec and codec not in BROWSER_AUDIO and not codec.startswith("pcm_"):
+            reasons.append(f"Browsers Do Not Play {codec} Sound.")
+    if not re.search(r"mp4|mov|m4a|webm|matroska|ogg|wav|mp3|flac", meta.get("format") or ""):
+        reasons.append(f"Browsers Do Not Open A {meta.get('format') or 'Unknown'} File.")
+    report = {"likely": not reasons, "reasons": reasons}
+    if reasons and video:
+        report["advice"] = WORKING_COPY_ADVICE
+    return report
+
+
+def playback_warnings(assets, uses):
+    """One Note For Each Video In Use That A Browser Is Unlikely To Play And That Has No Working Copy Yet."""
+    notes = []
+    for key in uses:
+        item = assets[key]
+        if item["kind"] != "video" or item.get("working_copy"):
+            continue
+        playback = browser_playback(item)
+        if not playback["likely"]:
+            notes.append(f"Asset {key} Is Unlikely To Play In The Browser Editor Or In Remotion Studio. "
+                         f"{' '.join(playback['reasons'])} {WORKING_COPY_ADVICE}")
+    return notes
+
+
+def frame_total(video):
+    frames = str((video or {}).get("nb_frames") or "")
+    return int(frames) if frames.isdigit() else None
+
+
+def working_copy_notes(key, original, copy):
+    """Plain Notes About One Working Copy: Where It Is Used, And Any Disagreement With Its Original."""
+    notes = [f"Asset {key} Plays From Its Working Copy In The Browser Editor And In Remotion. Check, Still, "
+             "Loudness, Mix, And Render Read The Original."]
+    first, second = original.get("picture") or {}, copy.get("picture") or {}
+    rate = first.get("frame_rate") or 30
+    a, b = original.get("duration"), copy.get("duration")
+    if a is not None and b is not None and abs(a - b) > max(0.05, 1 / rate):
+        notes.append(f"Asset {key} Working Copy Lasts {b:.3f} Seconds And Its Original Lasts {a:.3f} Seconds. "
+                     "Review Timing May Not Match The Render. Make A Fresh Working Copy.")
+    a, b = frame_total(original.get("video")), frame_total(copy.get("video"))
+    if a is not None and b is not None and abs(a - b) > 1:
+        notes.append(f"Asset {key} Working Copy Has {b} Frames And Its Original Has {a}. Frames Seen In Review "
+                     "May Not Be The Frames Rendered. Make A Fresh Working Copy.")
+    a, b = first.get("displayed_size"), second.get("displayed_size")
+    if a and b and abs(a[0] / a[1] - b[0] / b[1]) > 0.01 * a[0] / a[1]:
+        notes.append(f"Asset {key} Working Copy Is {b[0]} By {b[1]} And Its Original Displays At {a[0]} By {a[1]}. "
+                     "The Shapes Differ, So Framing In Review Will Not Match The Render.")
+    if second.get("hdr"):
+        notes.append(f"Asset {key} Working Copy Is Itself {HDR_NAMES[second['hdr']]} HDR. Make It With The "
+                     "Working Copy Command So It Carries The Kit's Conversion.")
+    if second.get("rotation"):
+        notes.append(f"Asset {key} Working Copy Carries A {second['rotation']} Degree Display Rotation. A Working "
+                     "Copy Must Be Stored Upright.")
+    playback = browser_playback(copy)
+    if not playback["likely"]:
+        notes.append(f"Asset {key} Working Copy May Not Play In A Browser. {' '.join(playback['reasons'])}")
+    return notes
+
+
 def probe(path):
     args = [binary("ffprobe"), "-v", "error", "-show_format", "-show_streams", "-of", "json", str(path)]
     data = json.loads(run(args).stdout)
@@ -200,19 +334,34 @@ def framing(video, w, h, fit, zoom, pan_x, pan_y):
             "browser": [(w-draw_w)*anchor_x/w,(h-draw_h)*anchor_y/h,draw_w/w,draw_h/h]}
 
 
+# Caption Defaults For A Vertical Canvas, Where The Platform Draws Its Own Controls Over The Video.
+# The Size Is A Share Of The Canvas Width. Each Margin Is A Percentage Of The Canvas Height.
+VERTICAL_CAPTIONS = {"size": 0.06, "margin": 25, "top_margin": 12}
+HORIZONTAL_MARGIN = 7
+
+
+def vertical(w, h):
+    return h > w
+
+
 def caption_style(doc, w, h):
     style = doc.get("caption_style", {})
-    fields(style, "font size color outline stroke margin", "Caption Style")
+    fields(style, "font size color outline stroke margin top_margin", "Caption Style")
     font = choice(style.get("font", "Arial"), ("Arial","Georgia","Verdana","Tahoma","Trebuchet MS"), "Caption Font")
     def color(key, default):
         value = style.get(key, default)
         if not isinstance(value,str) or not re.fullmatch(r"#[0-9a-fA-F]{6}",value):
             raise EditError(f"{key} Requires A Six-Digit Hex Color.")
         return value
-    size = integer(style.get("size",max(12,round(min(h*.078,w*.085)))), "Caption Size", 4, 1024)
+    tall = vertical(w, h)
+    usual = round(w * VERTICAL_CAPTIONS["size"]) if tall else round(min(h*.078,w*.085))
+    size = integer(style.get("size",max(12,usual)), "Caption Size", 4, 1024)
+    margin = number(style.get("margin",VERTICAL_CAPTIONS["margin"] if tall else HORIZONTAL_MARGIN),"Caption Margin",0,45)
+    # A Timeline That Sets Its Own Margin Keeps One Margin For Both Edges, As Before.
+    above = margin if "margin" in style else (VERTICAL_CAPTIONS["top_margin"] if tall else HORIZONTAL_MARGIN)
     return {"font":font, "size":size, "color":color("color","#FFFFFF"), "outline":color("outline","#101010"),
             "stroke":number(style.get("stroke",max(1,round(size*.07))),"Caption Stroke",0,96),
-            "margin":number(style.get("margin",7),"Caption Margin",0,45)}
+            "margin":margin, "top_margin":number(style.get("top_margin",above),"Caption Top Margin",0,45)}
 
 
 def source_warnings(assets, uses):
@@ -228,8 +377,11 @@ def source_warnings(assets, uses):
             on = ", ".join(name for name, tone in places if tone)
             off = ", ".join(name for name, tone in places if not tone)
             if on:
+                converted = assets[key].get("working_copy") and not assets[key].get("working_copy_hdr")
+                shown = ("The Browser Editor And Remotion Play The Working Copy, Which Already Carries That "
+                         "Conversion." if converted else "The Browser Player Shows Its Own Conversion.")
                 notes.append(f"{label} Tone Mapping Converts {on} To Standard Dynamic Range Once In Check, Still, "
-                             "And Render. The Browser Player Shows Its Own Conversion.")
+                             f"And Render. {shown}")
             if off:
                 notes.append(f"{label} Tone Mapping Is Off For {off}. That Picture Passes Through Unconverted "
                              "And Can Look Flat.")
@@ -265,12 +417,12 @@ def prepare(doc, root):
     fps = integer(canvas.get("fps", 30), "FPS", 1, 120)
     fit = choice(canvas.get("fit", "contain"), ("contain", "cover"), "Fit")
     tone_default = flag(canvas.get("tone_map", True), "Canvas Tone Map")
-    assets, uses = {}, {}
+    assets, uses, copies = {}, {}, []
     if not isinstance(doc.get("assets"), dict):
         raise EditError("Assets Requires A Named Object.")
     for key, obj in doc["assets"].items():
         word(key, "Asset Name")
-        fields(obj, "path kind", "Asset")
+        fields(obj, "path kind working_copy", "Asset")
         path = (root / word(obj.get("path"), "Asset Path")).resolve()
         if not path.is_file():
             raise EditError(f"Missing Asset {path}.")
@@ -280,6 +432,22 @@ def prepare(doc, root):
         if not stream:
             raise EditError(f"Missing {kind} Stream In {path}.")
         assets[key] = dict(meta, path=str(path), kind=kind)
+        if "working_copy" in obj:
+            # The Original Stays The Source For Every Check And For The Render. Only Review Players Use The Copy.
+            if kind != "video":
+                raise EditError("Only A Video Asset Can Name A Working Copy.")
+            copy = (root / word(obj["working_copy"], "Working Copy Path")).resolve()
+            if copy == path:
+                raise EditError(f"The Working Copy Of {key} Must Be A Different File From Its Original.")
+            if not copy.is_file():
+                raise EditError(f"Missing Working Copy {copy}.")
+            twin = probe(copy)
+            if not twin["video"]:
+                raise EditError(f"Missing Video Stream In {copy}.")
+            assets[key]["working_copy"] = str(copy)
+            if (twin.get("picture") or {}).get("hdr"):
+                assets[key]["working_copy_hdr"] = True
+            copies += working_copy_notes(key, meta, twin)
 
     def asset(item, kinds):
         key = word(item.get("asset"), "Asset")
@@ -379,7 +547,7 @@ def prepare(doc, root):
                              position=choice(obj.get("position", "bottom"), ("top", "center", "bottom"), "Caption Position")))
     return dict(title=title, width=w, height=h, fps=fps, duration=total, assets=assets, shots=shots,
                 overlays=overlays, captions=captions, audio=audio, caption_style=caption_style(doc,w,h),
-                warnings=source_warnings(assets, uses))
+                warnings=source_warnings(assets, uses) + copies + playback_warnings(assets, uses))
 
 
 def timecode(t, scale, separator):

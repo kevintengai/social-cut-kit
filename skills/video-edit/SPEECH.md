@@ -15,6 +15,10 @@ For External Audio, A Positive `secondary_event_later_by_seconds` Means The Matc
 
 Measure Available Gain Before Boosting A Quiet Track. When Gain Would Overload A Peak, Use Source Selection Or The Editor’s Dynamics Controls. Preserve Original Stereo Channels And Leave Natural Speech Handles.
 
+## Choose Takes Before Captioning
+
+Run `python scripts/takes.py words.json --retakes` On The Word Transcript To Group Restarts And Full Retakes, And Add `--script script.txt` When The Project Has A Script. [Reference And Take Analysis](RECREATION.md#repeated-takes-and-full-retakes) Explains The Report. Take Caption Spellings Of Names, Numbers, And Keywords From The Script And Pass Them With `--fix`. The Captions Still Show The Words As Spoken.
+
 ## Phrase Captions
 
 Without The Options Below, The Mapper Writes Sentence-Length Cues Exactly As Before. Add `--phrases`, Or Any Single Phrase Option, To Group Word Timings Into Short On-Screen Phrases.
@@ -27,8 +31,8 @@ python scripts/speech.py captions words.json edit.json --asset interview --max-w
 | Option | Effect |
 | --- | --- |
 | `--phrases` | Turn On Phrase Grouping With The Defaults In This Table. |
-| `--max-words 4` | The Most Words In One Phrase. A Rejoined Number Counts As One Word. |
-| `--max-chars 28` | The Most Characters In One Phrase. A Single Longer Word Still Gets Its Own Phrase. |
+| `--max-words 3` | The Most Words In One Phrase. The Default Is 3 On A Vertical Canvas And 4 On A Horizontal Or Square Canvas. A Rejoined Number Counts As One Word. |
+| `--max-chars 20` | The Most Characters In One Phrase. The Default Is 20 On A Vertical Canvas And 28 On A Horizontal Or Square Canvas. A Single Longer Word Still Gets Its Own Phrase. |
 | `--pause 0.4` | A Silence At Least This Long Between Two Words Starts A New Phrase. Shorter Gaps Between Phrases Are Closed So The Text Does Not Flicker. |
 | `--sentence-breaks on` | Start A New Phrase After A Period, A Question Mark, Or An Exclamation Mark. Titles Such As Dr. And Lone Initials Do Not Count. Use `off` To Let A Phrase Run Across A Sentence End. |
 | `--join-numbers on` | Rejoin One Spoken Number That The Recognizer Split, Such As `$2` With `,000`, `3` With `.5`, Or `50` With `%`. Use `off` To Keep The Fragments. |
@@ -38,6 +42,8 @@ python scripts/speech.py captions words.json edit.json --asset interview --max-w
 | `--position bottom` | Caption Position For The New Cues: `top`, `center`, Or `bottom`. |
 | `--srt Phrases.srt` | Also Write The New Cues To A New SubRip File. |
 | `--replace-existing` | With `--with-timeline`, Remove Existing Captions At The Same Position Before Adding The New Ones. Use It When Regenerating Captions After A Recut. |
+
+The Mapper Reads The Canvas From The Timeline. A Canvas Taller Than It Is Wide Is Vertical, And A Timeline Without A Canvas Uses The Vertical 1080 By 1920 Default. The Vertical Defaults Keep Each Phrase On One Line Inside The Middle 70 Percent Of The Width At The Default Caption Size, Clear Of The Platform's Button Column. [Caption Safe Areas](TECHNICAL.md#caption-safe-areas-on-vertical-platforms) Lists The Matching Caption Style Defaults. An Explicit Option Always Overrides A Default, And The Report Prints The Limits In Use As `phrase_limits`.
 
 Every Phrase Starts And Ends On An Output Frame. A Phrase Never Crosses A Cut, Never Overlaps Another Phrase, Never Starts Before Its Shot, And Never Ends After The Edit.
 

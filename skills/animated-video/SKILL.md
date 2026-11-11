@@ -11,26 +11,47 @@ Before Anything Else, Read The User's Saved Defaults In `~/.social-cut-kit/anima
 
 ## Make A Film In Code
 
-1. **Find The Film.** Settle The One Sentence, The Audience, Story Or Explainer, And A Beat Sheet With Timings Where Each Beat Shows Something Happening. Stop For The Owner's Approval Of The Plan. [Directing](DIRECTING.md)
-2. **Choose The Look From Stills.** Render The Same Beat In Two Or Three Styles And Let The Owner Pick. [Style Frames](STYLE-FRAMES.md) And The Guides In [styles/](styles/)
-3. **Set Up The Film Folder.** Write The Script, Make Stand-In Word Timings If There Is No Recording Yet, And Anchor Scenes, Beats, And Captions To Spoken Phrases. [Voice Timing](VOICE-TIMING.md)
-4. **Draw The Scenes.** Write Scene Modules With The Drawing Kit, And Use Or Restyle A Globe, Phone, Character, Or Chart Where It Is The Right Picture. [Code Scenes](CODE-SCENES.md) And [Parts](PARTS.md)
-5. **Check From Stills And Numbers.** Render Boards And Frame Strips, Measure Motion, Check Determinism, And Place Sounds On Picture Events. No Video Is Written. [Review Tools](REVIEW-TOOLS.md)
-6. **Judge It.** Read Motion From Strips, Use Independent Judges, And Run The Silent Viewing Test. [Review](REVIEW.md)
-7. **Retime To The Real Voice.** When The Recording Arrives, Run The Timing Tool With Its Word Timings And Check The Stills Again. [Voice Timing](VOICE-TIMING.md)
-8. **Hand The Film To The Owner In Remotion.** Prepare A Remotion Project From The Timed Storyboard. The Owner Opens It In Remotion Studio, Watches The Whole Cut With Sound, And Approves It Before Any Video Is Exported. That Includes Test And Preview Exports. See **Review And Export With Remotion** Below.
+**Where A Film Lives.** Each Film Has Its Own Folder In The User's Project, Never Inside The Skill Folder. The Bundled Examples Are Read-Only Starting Points. Copy One Out And Work On The Copy. The Tools Refuse To Write Inside The Skill Folder.
+
+**One Storyboard.** Edit `storyboard.json`. The Timing Tool Builds `storyboard.timed.json` From It, With Every Time Resolved And Every Event Sound In Place. That Timed File Is The Only One To Check, Prepare For Remotion, Review, And Export. Never Edit It By Hand.
+
+**Who Reviews Where.** The Agent Draws, Times, And Checks Stills With The Tools And Motion Studio. The Owner's Approval Review Happens In Remotion Studio. Motion Studio Is The Owner's Review Route Only When Node.js Packages Cannot Be Installed.
+
+Each Step Below Needs Only What The Steps Before It Produced.
+
+1. **Settle The Brief.** Read What The Owner Supplied. Ask What Is Missing In One Message, Each Question With A Recommendation: The One Sentence, The Audience, The Destination With Its Frame And Length, Story Or Explainer, And Whether A Voice Is Recorded, Will Be Recorded, Or Will Never Exist. Have The Format Confirmed. Nothing Is Drawn Yet. [Directing](DIRECTING.md)
+2. **Set Up The Film Folder.** Create The Folder In The User's Project. Save The Script There, Or Draft One From The Brief For The Owner To Approve With The Plan. Make Word Timings From The Recording When One Exists, Or Stand-In Timings From The Script When It Is Still To Come. Write A First Storyboard With The Frame, Frame Rate, And Safe Area. A Film That Will Never Have A Spoken Voice Declares That Instead. [Voice Timing](VOICE-TIMING.md) And [Code Scenes](CODE-SCENES.md)
+3. **Find The Film.** Search For The Pictures, Write The Beat Sheet With Times Taken From The Word Timings, And Stop For The Owner's Approval Of The Plan. Before That Approval, Only Rough Direction Stills May Be Drawn: Plain Shapes In One Flat Treatment, For The Two Or Three Beats That Carry The Film. No Finished Scene, Motion, Texture, Caption Styling, Or Sound Is Built Yet. [Directing](DIRECTING.md)
+4. **Choose The Look From Stills.** Render One Beat In The Offered Styles And Let The Owner Pick. Show As Many Frames As The Owner Asked For. For A Short Film, This Stop May Share One Message With The Plan Stop, And Each Still Needs Its Own Explicit Yes. [Style Frames](STYLE-FRAMES.md) And The Guides In [The Styles Folder](styles/)
+5. **Draw The Scenes.** Only After The Plan And The Look Are Both Approved, Write Scene Modules With The Drawing Kit, And Use Or Restyle A Globe, Phone, Character, Or Chart Where It Is The Right Picture. Run The Timing Tool After Each Change. [Code Scenes](CODE-SCENES.md) And [Parts](PARTS.md)
+6. **Check From Stills And Numbers.** Render Boards And Frame Strips, Measure Motion, Check Determinism, List The Picture Events And Their Sounds, And Measure The Sound Mix. No Video Is Written. [Review Tools](REVIEW-TOOLS.md)
+7. **Judge It.** Read Motion From Strips, Use Independent Judges, And Run The Silent Viewing Test. [Review](REVIEW.md)
+8. **Retime To The Real Voice.** When The Recording Arrives, Get Its Word Timings, Run The Timing Tool Again, And Repeat The Checks. A Film On Stand-In Timing Cannot Be Exported. The Preparation Step Warns About It, And Both Export Routes Refuse It. [Voice Timing](VOICE-TIMING.md)
+9. **Hand The Film To The Owner In Remotion Studio.** Prepare A Remotion Project From `storyboard.timed.json`. The Owner Opens It In Remotion Studio, Watches The Whole Cut With Sound, And Approves It Before Any Video Is Exported. That Includes Test And Preview Exports. See **Review And Export With Remotion** Below.
+10. **Export After Approval, Then Check The File.** The Owner Runs The Reviewed Render. Check The Exported File Against The Storyboard With The Export Check, Then Report. [Review](REVIEW.md)
 
 For A Revision To A Finished Film, Or An Animated Insert For A Camera Edit, Follow [Handoffs](HANDOFFS.md). When A Filmed Presenter Appears Inside The Film, Plan It From The Start With [Presenter](PRESENTER.md).
 
+Run These From The User's Project Folder. `$SKILL` Stands For The Path To This Skill Folder, And `my-film` Is The Film Folder. Set `$SKILL` Once As A Shell Variable, Or Write The Real Path In Its Place. The Same Command Lines Then Work In POSIX Shells And In PowerShell.
+
 ~~~sh
-node tools/standin-words.cjs my-film/script.txt my-film/words.json
-node tools/retime.cjs my-film/storyboard.json my-film/words.json my-film/storyboard.timed.json --overwrite
-node tools/stills.cjs my-film/storyboard.timed.json my-film/board --browser "/path/to/chrome" --half --every 1 --overwrite
-node tools/motion.cjs my-film/storyboard.timed.json --browser "/path/to/chrome" --determinism
-node tools/events.cjs my-film/storyboard.timed.json --place my-film/storyboard.sound.json --overwrite
+SKILL="/path/to/skills/animated-video"
 ~~~
 
-Run These From The Folder Containing This Guide. They Use Node.js And Its Standard Library, And The Still And Motion Tools Use A Local Chromium Browser. [An Idea Travels](examples/an-idea-travels/storyboard.json) Is A Complete Small Film To Study, And [First Code Scene](examples/first-code-scene/storyboard.json) Is The Smallest One To Copy.
+~~~powershell
+$SKILL = "C:/Path/To/skills/animated-video"
+~~~
+
+~~~sh
+node "$SKILL/tools/standin-words.cjs" my-film/script.txt my-film/words.json
+node "$SKILL/tools/retime.cjs" my-film/storyboard.json my-film/words.json my-film/storyboard.timed.json --overwrite
+node "$SKILL/tools/stills.cjs" my-film/storyboard.timed.json my-film/board --browser "/path/to/chrome" --half --every 1 --overwrite
+node "$SKILL/tools/motion.cjs" my-film/storyboard.timed.json --browser "/path/to/chrome" --determinism
+node "$SKILL/tools/events.cjs" my-film/storyboard.timed.json
+node "$SKILL/tools/audio.cjs" my-film/storyboard.timed.json
+~~~
+
+The Tools Use Node.js And Its Standard Library. The Still And Motion Tools Use A Local Chromium Browser, And The Sound Tools Use FFmpeg From PATH. [An Idea Travels](examples/an-idea-travels/storyboard.json) Is A Complete Small Film To Study, And [First Code Scene](examples/first-code-scene/storyboard.json) Is The Smallest One To Copy Into The User's Project.
 
 ## Motion Studio
 
@@ -45,7 +66,7 @@ Open [Motion Studio](studio/index.html) In A Desktop Browser. The Editor Runs Di
 | [Give An Idea Shape](examples/give-an-idea-shape.json) | Build A Portrait Explainer From A Kinetic Hook, A Three-Step Sequence, And An Orbiting Ring. This Is Also The Initial Demo. |
 | [Facet Turntable](examples/facet-turntable.json) | Stage Two Landscape Object Studies With Different Meshes, Surface Finishes, Camera Angles, And Audio Cues. |
 
-Select **Open Storyboard** To Load Either Example Or A Previously Saved JSON File. For A Film With Scene Modules, Select **Open Film Folder** And Pick The Film's Folder, Or Select The Storyboard And Its Module Files Together. Set **Frame** To Portrait, Square, Landscape, Or Custom With Any Even Width And Height. Set **Frame Rate** To 24, 30, Or 60 FPS.
+Select **Open Storyboard** To Load Either Example Or A Previously Saved JSON File. For A Film With Scene Modules, Select **Open Film Folder** And Pick The Film's Folder, Or Select The Storyboard And Its Module Files Together. A Film Folder Opens Its `storyboard.timed.json` When It Has One. Set **Frame** To Portrait, Square, Landscape, Or Custom With Any Even Width And Height. Set **Frame Rate** To 24, 30, Or 60 FPS.
 
 ## Build The Storyboard
 
@@ -90,29 +111,33 @@ Two Transparent 1080 × 1920 Overlays Are Included For Compositing In An Editor 
 
 ## Review And Export With Remotion
 
-Remotion Is The Default Route For The Finished Video. Motion Studio Stays The Place To Draw, Time, And Check Stills. Remotion Needs Node.js And A One-Time Package Install Inside Each Generated Project, Which Uses The Network. Remotion Has Its Own License Terms. See The [Remotion Adapter Guide](adapter/README.md).
+The Owner's Approval Review Happens In Remotion Studio By Default, And Remotion Renders The Finished Video. Motion Studio Is Where The Agent Draws, Times, And Checks Stills. It Is The Owner's Review Route Only When Node.js Packages Cannot Be Installed, As The Next Section Describes. Remotion Needs Node.js And A One-Time Package Install Inside Each Generated Project. That Install Uses The Network And Needs The Owner's Agreement. Remotion Has Its Own License Terms. See The [Remotion Adapter Guide](adapter/README.md).
 
-1. Prepare A Project From The Saved Storyboard. For A Film In Code, Use The Timed Storyboard So Scene Modules, Captions, Sounds, And The Voice Recording Transfer. The Command Writes An Editable Project And No Video.
-2. Install The Declared Packages Inside The Project And Open Remotion Studio.
-3. The Project Owner Opens **MotionStoryboard**, Watches The Entire Cut With Sound, And Checks Word Boundaries, Readability, Framing, And The Timing Of Every Cue. Revise The Storyboard In Motion Studio, Prepare A Fresh Project, And Repeat The Review Whenever An Edit Changes The Cut.
-4. Wait For The Owner's Explicit Approval Before Creating Any Video File, Including A Test Render Or Preview Export. A Storyboard Marked As Using Stand-In Voice Timing Is Not Ready For Export.
-5. After Approval, The Owner Runs The Reviewed Render. It Asks For Personal Confirmation And Writes An MP4 To A New File.
+1. Prepare A Project From `storyboard.timed.json`. Scene Modules, Captions, Placed Event Sounds, And The Voice Recording Transfer. For A Quick Storyboard Built In Motion Studio, Prepare From The Saved Storyboard. The Command Writes An Editable Project And No Video.
+2. Read What The Command Prints. It Warns When The Storyboard Uses Stand-In Voice Timing, Declares No Narration, Or Lacks The Event Sounds Its Scenes Declare. Fix The Storyboard And Prepare Again Before The Owner Reviews.
+3. Install The Declared Packages Inside The Project, With The Owner's Agreement, And Open Remotion Studio.
+4. The Project Owner Opens **MotionStoryboard**, Watches The Entire Cut With Sound, And Checks Word Boundaries, Readability, Framing, And The Timing Of Every Cue. To Change The Cut, Edit The Authored Storyboard Or A Scene Module, Run The Timing Tool Again, Prepare A Fresh Project, And Repeat The Review.
+5. Wait For The Owner's Explicit Approval Before Creating Any Video File, Including A Test Render Or Preview Export. A Storyboard On Stand-In Voice Timing Is Not Ready For Export, And The Reviewed Render Refuses It.
+6. After Approval, The Owner Runs The Reviewed Render. It Asks For Personal Confirmation And Writes An MP4 To A New File.
+7. Check The Exported File Against The Storyboard, And Report What The Check Prints.
 
 ~~~sh
-node adapter/prepare-remotion.cjs examples/facet-turntable.json My-Facet-Project
-cd My-Facet-Project
+node "$SKILL/adapter/prepare-remotion.cjs" my-film/storyboard.timed.json my-film-remotion
+cd my-film-remotion
 npm install
 npm run studio
 npm run render-reviewed -- Final-Cut.mp4
+cd ..
+node "$SKILL/tools/export-check.cjs" my-film-remotion/Final-Cut.mp4 my-film/storyboard.timed.json
 ~~~
 
 The Remotion Picture Comes From The Same Painter As Motion Studio, So Stills Checked There Match The Render.
 
 ## Export From Motion Studio Without Installing Anything
 
-Use This Route When Node.js Packages Cannot Be Installed. Give The Owner The Editable Storyboard. For A Film In Code, Give The Whole Film Folder, And Have The Owner Open It With **Open Film Folder** So The Scene Modules And Voice Recording Load. They Select **Review From Start**, Keep The Tab Visible, And Watch The Entire Cut With Sound. The Same Approval Rule Applies. Once They Approve The Current Cut, They Check The Review Confirmation And Select **Export Approved Video**. Editing Or Reopening A Storyboard Clears Approval.
+Use This Route Only When Node.js Packages Cannot Be Installed. Give The Owner The Whole Film Folder, And Have Them Open It With **Open Film Folder** So The Timed Storyboard, The Scene Modules, And The Voice Recording Load. For A Quick Storyboard With No Modules, The Saved Storyboard Is Enough. The Owner Selects **Review From Start**, Keeps The Tab Visible, And Watches The Entire Cut With Sound. The Same Approval Rule Applies. Once They Approve The Current Cut, They Check The Review Confirmation And Select **Export Approved Video**. Editing Or Reopening A Storyboard Clears Approval. Motion Studio Keeps Export Off For A Storyboard On Stand-In Voice Timing.
 
-A Desktop Browser With Canvas Stream Capture And WebM Recording Support Records The Approved Cut In Real Time. Keep Its Tab Visible Until The WebM Download Starts. Portrait Output Is 1080 × 1920, Square Is 1080 × 1080, Landscape Is 1920 × 1080, And A Custom Frame Uses Its Own Size. Recording Speed And Frame Delivery Depend On The Device.
+A Desktop Browser With Canvas Stream Capture And WebM Recording Support Records The Approved Cut In Real Time. Keep Its Tab Visible Until The WebM Download Starts. Portrait Output Is 1080 × 1920, Square Is 1080 × 1080, Landscape Is 1920 × 1080, And A Custom Frame Uses Its Own Size. Recording Speed And Frame Delivery Depend On The Device, So Run The Export Check On The Downloaded File.
 
 ## Native 3D Product Scenes
 
@@ -120,7 +145,7 @@ For A Native Editable 3D Product Scene, Open [Pulse Dial](blender/Pulse%20Dial.b
 
 ## Rebuild And Check
 
-The Supplied Editor And Assets Are Ready To Use. For Asset Maintenance, Run These Optional Commands From The Folder Containing This Guide. They Use Node.js And Its Standard Library.
+The Supplied Editor And Assets Are Ready To Use. These Optional Commands Maintain The Kit Itself, So They Are The Only Ones Run From The Folder Containing This Guide. They Use Node.js And Its Standard Library, And They Are The Only Tools That Write Inside The Skill Folder.
 
 ~~~sh
 node tools/build-assets.cjs
@@ -128,9 +153,9 @@ node tools/make-examples.cjs
 node tools/check.cjs
 ~~~
 
-The Node Check Covers The Storyboard Format, The Drawing Kit, Voice Timing, Captions, Events, The Remotion Painter, And The Determinism Of Every Example Code Scene And Part.
+The Node Check Covers The Storyboard Format, The Drawing Kit, Voice Timing, Captions, Events, The Remotion Painter, And The Determinism Of Every Example Code Scene And Part. It Also Runs The Tools On A Film In A Temporary Folder To Prove That A Prepared Remotion Project Carries Its Event Sounds, That Stand-In Timing Cannot Be Rendered, And That Nothing Writes Into The Skill Folder. It Measures Loudness Only When FFmpeg Is On PATH. It Writes No Video.
 
-Run The Optional Browser Check With A Local Chromium Executable. It Exercises Scene Editing, Voice Import, Playback, Storyboard Save/Open, Review Invalidation, And Opening A Code Scene Film With Its Module. The Optional Stills Flag Regenerates The Three-Frame PNG Above.
+Run The Optional Browser Check With A Local Chromium Executable. It Exercises Scene Editing, Voice Import, Playback, Storyboard Save/Open, Review Invalidation, The Stand-In Export Refusal, And Opening A Code Scene Film With Its Module. The Optional Stills Flag Regenerates The Three-Frame PNG Above.
 
 ~~~powershell
 node tools/check-browser.cjs "C:/Program Files/Google/Chrome/Application/chrome.exe" --stills

@@ -30,10 +30,18 @@ function status(message, error = false) {
   byId("status").classList.toggle("error", error);
 }
 function serialized(obj) { return JSON.stringify(obj, null, 2); }
+function playbackHelp(name, asset) {
+  const start = "Browser Could Not Play Source " + name + ". ";
+  if (asset.working_copy) return start + "Its Working Copy Did Not Load. Check The File Path, Or Make A Fresh Working Copy.";
+  if (asset.kind !== "video") return start + "Check The Browser Codec And File Path.";
+  return start + "Many Browsers Cannot Decode HEVC Or HDR Phone Footage. Close This Editor, Ask The Owner Once For A Working Copy, " +
+    "Make It With The Working Copy Command, Name It In The Asset's working_copy Field, And Open Review Again. The Original File Is Never Changed.";
+}
 function newLayer(row, type, i) {
   const asset = model.assets[row.asset];
   const kind = type === "audio" ? "audio" : (asset.kind === "image" ? "img" : "video");
   const media = document.createElement(kind);
+  // The Server Sends A Video Asset's Working Copy When The Timeline Names One, And The Original Otherwise.
   media.src = "media/" + encodeURIComponent(row.asset);
   media.setAttribute("aria-hidden", "true");
   media.style.display = "none";
@@ -44,7 +52,7 @@ function newLayer(row, type, i) {
     media.volume = Math.min(1, row.gain ?? 1);
     if (kind === "video") media.style.objectFit = row.fit || "contain";
     media.addEventListener("loadedmetadata", () => draw(true));
-    media.addEventListener("error", () => status("Browser Could Not Play Source " + row.asset + ". Check The Browser Codec And File Path.", true));
+    media.addEventListener("error", () => status(playbackHelp(row.asset, asset), true));
   }
   if (type === "shot") {
     const [x,y,w,h] = row.geometry.browser;
@@ -136,7 +144,9 @@ function draw(force) {
     labels.replaceChildren();
     cues.forEach(c => {
       const div = document.createElement("div"); div.className = "cue " + c.position;
-      if (c.position === "top" || c.position === "bottom") div.style[c.position] = model.caption_style.margin + "%";
+      const look = model.caption_style;
+      if (c.position === "bottom") div.style.bottom = look.margin + "%";
+      if (c.position === "top") div.style.top = (look.top_margin ?? look.margin) + "%";
       div.textContent = c.text; labels.append(div);
     });
     activeCaption = key;

@@ -229,7 +229,8 @@
       try { return action(); } catch (error) { if (!error.timing) throw error; problems.push(error.message); return null; }
     };
     const report = { scenes: [], beats: 0, cues: 0, captions: 0, manualCaptions: 0, mismatches: [], uncaptioned: [], offset, speechStart: round(speechStart), speechEnd: round(speechEnd),
-      words: words.length, standIn: Boolean(source.standIn), approximate: Boolean(source.approximate) };
+      words: words.length, standIn: Boolean(source.standIn) && project.narration !== "None", approximate: Boolean(source.approximate) };
+    if (project.narration === "None") report.narration = "None";
 
     // Scene Cuts.
     const fixed = new Array(count + 1).fill(null);
@@ -349,7 +350,8 @@
 
     // The Film Voice Carries The Words And A Level Track So Scenes Can Follow The Speech.
     const voice = Object.assign({ gain: 1 }, out.voice, { offset: round(offset), words: words.map(word => [round(word.start), round(word.end), word.text]) });
-    if (source.standIn) voice.standIn = true; else delete voice.standIn;
+    // Stand-In Words Mark The Film As Not Ready For Export, Unless The Storyboard Declares That It Has No Narration.
+    if (report.standIn) voice.standIn = true; else delete voice.standIn;
     if (options.levels) voice.levels = { rate: options.levels.rate, values: options.levels.values };
     else voice.levels = { rate: 30, values: levelsFromWords(words, 30), estimated: true };
     out.voice = voice;

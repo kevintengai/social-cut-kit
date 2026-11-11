@@ -11,6 +11,7 @@ async function main() {
   if (!fs.existsSync(path.dirname(target))) throw new Error("Output Folder Does Not Exist.");
   if (!process.stdin.isTTY) throw new Error("Open An Interactive Terminal For Personal Review Confirmation.");
   const cut = JSON.parse(fs.readFileSync(path.join(root, "src", "cut.json"), "utf8"));
+  if (cut.reviewOnly) throw new Error(cut.reviewOnly);
   const packagePath = path.join(root, "node_modules", "@remotion", "cli", "package.json");
   if (!fs.existsSync(packagePath)) throw new Error("Run npm install In This Project First.");
   for (const warning of cut.warnings) console.log("Warning: " + warning);

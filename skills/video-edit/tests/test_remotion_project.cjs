@@ -63,7 +63,8 @@ test("The Bundled Example Becomes A Complete Standalone Project", {skip: unbundl
   }
   assert.deepEqual(cut.audio, [{id: "audio-1", asset: "tap", file: "media/03-button-up.wav", from: 90, frames: 3, start: 0, trim: 0, gain: 0.36, fadeIn: 0, fadeOut: 0}]);
   assert.deepEqual(cut.captions.map(c => [c.from, c.frames, c.position]), [[5, 81, "bottom"], [95, 81, "bottom"], [185, 51, "bottom"]]);
-  assert.deepEqual(cut.captionStyle, {font: "Arial", size: 61, color: "#FFFFFF", outline: "#101010", stroke: 4, margin: 7});
+  // The Bundled Example Sets No Caption Style, So It Takes The Vertical Defaults.
+  assert.deepEqual(cut.captionStyle, {font: "Arial", size: 43, color: "#FFFFFF", outline: "#101010", stroke: 3, margin: 25, top_margin: 12});
   assert.ok(cut.warnings.every(note => /^Captions Are Drawn By Chrome/.test(note)));
   // The Media Is Byte For Byte The Source, And The Timeline Copy Points At It.
   const root = path.dirname(bundled), copy = json(path.join(target, "source-timeline.json"));
@@ -177,4 +178,44 @@ test("The Remotion Entry Is Thin Glue Over The Plan Module", () => {
   assert.match(entry, /captionLayout\(cut\.captionStyle, cut\.width, cut\.height\)/);
   assert.ok(entry.split("\n").length < 80, "Keep The Glue Short");
   assert.doesNotMatch(entry, /Math\.|useCurrentFrame|interpolate/, "Timing And Layout Belong In cut-plan.cjs");
+});
+
+test("A Working Copy Is The File The Project Plays, And The Original Stays Where It Is", () => {
+  const folder = path.join(base, "copy");
+  fs.mkdirSync(folder);
+  // Stand-In Bytes Only. The Probe Below Supplies The Stream Data, And No Video Is Written Or Converted.
+  fs.writeFileSync(path.join(folder, "phone.mov"), "Original Stand-In");
+  fs.writeFileSync(path.join(folder, "phone working.mp4"), "Working Copy Stand-In");
+  const doc = {version: 1, title: "Phone Clip", assets: {Phone: {kind: "video", path: "phone.mov", working_copy: "phone working.mp4"}},
+    shots: [{asset: "Phone", in: 0, out: 1}], audio: [{asset: "Phone", at: 0, end: 1, in: 2}]};
+  const stream = extra => Cut.probeSummary({format: {format_name: "mov,mp4,m4a,3gp,3g2,mj2", duration: "4"}, streams: [
+    {codec_type: "video", nb_frames: "240", avg_frame_rate: "60/1", ...extra}, {codec_type: "audio", codec_name: "aac", channels: 2}]});
+  const seen = [];
+  const probe = file => {
+    seen.push(path.basename(file));
+    return path.basename(file) === "phone.mov"
+      ? stream({codec_name: "hevc", width: 3840, height: 2160, pix_fmt: "yuv420p10le", color_transfer: "arib-std-b67", color_primaries: "bt2020", side_data_list: [{rotation: -90}]})
+      : stream({codec_name: "h264", width: 1080, height: 1920, pix_fmt: "yuv420p"});
+  };
+  const {plan, media, files, workingCopies} = Prepare.build(doc, folder, {probe});
+  assert.deepEqual(seen.sort(), ["phone working.mp4", "phone.mov"]);
+  assert.equal(workingCopies, 1);
+  assert.deepEqual([...media.entries()], [["public/media/01-phone-working.mp4", path.join(folder, "phone working.mp4")]]);
+  assert.deepEqual([plan.shots[0].file, plan.audio[0].file], ["media/01-phone-working.mp4", "media/01-phone-working.mp4"]);
+  assert.deepEqual(plan.shots[0].box, {left: 0, top: 0, width: 1080, height: 1920});
+  assert.ok(plan.warnings.some(note => /Picture Color In Remotion Comes From The Working Copy/.test(note)));
+  assert.ok(!plan.warnings.some(note => /hevc Video|Display Rotation|Has Not Verified HDR/.test(note)));
+  const copy = JSON.parse(files.get("source-timeline.json"));
+  assert.deepEqual(copy.assets.Phone, {kind: "video", path: path.join(folder, "phone.mov").split(path.sep).join("/"),
+    working_copy: "public/media/01-phone-working.mp4"});
+  assert.equal(JSON.parse(files.get("src/cut.json")).shots[0].workingCopy, true);
+  // The Same Timeline Without Its Working Copy Is Still Refused, And A Missing Or Self-Named Copy Is Named.
+  const bare = {...doc, assets: {Phone: {kind: "video", path: "phone.mov"}}};
+  assert.throws(() => Prepare.build(bare, folder, {probe}), /Asset Phone Is HLG HDR.*Ask The Owner Once For A Working Copy/);
+  const lost = {...doc, assets: {Phone: {kind: "video", path: "phone.mov", working_copy: "gone.mp4"}}};
+  assert.throws(() => Prepare.build(lost, folder, {probe}), error => error instanceof Cut.CutError && /Missing Working Copy gone\.mp4\./.test(error.message));
+  const same = {...doc, assets: {Phone: {kind: "video", path: "phone.mov", working_copy: "phone.mov"}}};
+  assert.throws(() => Prepare.build(same, folder, {probe}), /Must Be A Different File From Its Original\./);
+  assert.equal(fs.readFileSync(path.join(folder, "phone.mov"), "utf8"), "Original Stand-In");
+  if (!unbundled) assert.equal(Prepare.build(JSON.parse(fs.readFileSync(bundled, "utf8")), path.dirname(bundled)).workingCopies, 0);
 });

@@ -119,6 +119,17 @@ def captions(words):
 
 
 PHRASE_DEFAULTS = {"max_words": 4, "max_chars": 28, "pause": 0.4, "min_seconds": 0.3}
+# A Vertical Canvas Loses Its Right Edge To The Platform's Buttons, So Its Phrases Are Shorter. At The Default
+# Vertical Caption Size, 20 Characters Stay Inside The Middle 70 Percent Of The Width On One Line.
+VERTICAL_PHRASES = {"max_words": 3, "max_chars": 20}
+
+
+def phrase_defaults(timeline=None):
+    """Phrase Defaults For This Timeline's Canvas. A Missing Canvas Is The Vertical 1080 By 1920 Default."""
+    canvas = (timeline or {}).get("canvas") or {}
+    width, height = canvas.get("width", 1080), canvas.get("height", 1920)
+    tall = timeline is not None and all(type(n) in (int, float) for n in (width, height)) and height > width
+    return dict(PHRASE_DEFAULTS, **VERTICAL_PHRASES) if tall else dict(PHRASE_DEFAULTS)
 ABBREVIATIONS = {"mr", "mrs", "ms", "dr", "st", "vs", "jr", "sr", "prof", "e.g", "i.e", "u.s", "u.k"}
 
 
@@ -427,12 +438,12 @@ def sync(a):
     print(json.dumps(result, indent=2))
 
 
-def phrase_options(a):
-    """Return Phrase Settings When Any Phrase Option Was Supplied, Otherwise None."""
+def phrase_options(a, timeline=None):
+    """Return Phrase Settings When Any Phrase Option Was Supplied, Otherwise None. Explicit Options Override The Canvas Defaults."""
     chosen = (a.max_words, a.max_chars, a.pause, a.min_seconds, a.sentence_breaks, a.join_numbers, a.fix, a.fixes)
     if not a.phrases and all(value is None for value in chosen):
         return None
-    options = dict(PHRASE_DEFAULTS)
+    options = phrase_defaults(timeline)
     for key in PHRASE_DEFAULTS:
         if getattr(a, key) is not None:
             options[key] = getattr(a, key)
@@ -477,8 +488,8 @@ def build_parser():
         action="store_true",
         help="Group Word Timings Into Short On-Screen Phrases. Any Option Below Also Turns This On",
     )
-    mapping.add_argument("--max-words", type=int, help="Most Words In One Phrase. The Phrase Default Is 4")
-    mapping.add_argument("--max-chars", type=int, help="Most Characters In One Phrase. The Phrase Default Is 28")
+    mapping.add_argument("--max-words", type=int, help="Most Words In One Phrase. The Phrase Default Is 3 On A Vertical Canvas And 4 Otherwise")
+    mapping.add_argument("--max-chars", type=int, help="Most Characters In One Phrase. The Phrase Default Is 20 On A Vertical Canvas And 28 Otherwise")
     mapping.add_argument(
         "--pause", type=float, metavar="SECONDS", help="A Silence This Long Forces A New Phrase. The Phrase Default Is 0.4"
     )
@@ -580,7 +591,7 @@ def main(argv=None):
             )
         elif a.cmd == "captions":
             timeline = json.loads(a.timeline.read_text(encoding="utf-8-sig"))
-            options = phrase_options(a)
+            options = phrase_options(a, timeline)
             if a.replace_existing and not a.with_timeline:
                 raise ValueError("Use --replace-existing Together With --with-timeline.")
             if a.srt and a.srt.exists():
@@ -604,6 +615,7 @@ def main(argv=None):
                 cues, short = phrase_captions(pieces, fps, options, a.position or "bottom")
                 report = {
                     "mode": "phrases",
+                    "phrase_limits": {key: options[key] for key in PHRASE_DEFAULTS},
                     "clamped_words": clamped,
                     "dropped_words": dropped,
                     "below_minimum_time": short,
@@ -617,11 +629,15 @@ def main(argv=None):
                 )
             if a.with_timeline:
                 for asset in timeline["assets"].values():
-                    path = (a.timeline.resolve().parent / asset["path"]).resolve()
-                    try:
-                        asset["path"] = os.path.relpath(path, a.output.resolve().parent)
-                    except ValueError:
-                        asset["path"] = str(path)
+                    # A Working Copy Moves With Its Original, So Both Paths Follow The New Timeline's Folder.
+                    for field in ("path", "working_copy"):
+                        if field not in asset:
+                            continue
+                        path = (a.timeline.resolve().parent / asset[field]).resolve()
+                        try:
+                            asset[field] = os.path.relpath(path, a.output.resolve().parent)
+                        except ValueError:
+                            asset[field] = str(path)
                 existing = timeline.get("captions", [])
                 if a.replace_existing:
                     spot = a.position or "bottom"

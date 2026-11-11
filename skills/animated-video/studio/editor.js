@@ -15,9 +15,12 @@
   const canRecord = () => typeof canvas.captureStream === "function" && typeof MediaRecorder !== "undefined" &&
     ["video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"].some(m => MediaRecorder.isTypeSupported(m));
 
+  // Stand-In Voice Timing Is A Guess At A Recording That Does Not Exist Yet. A Storyboard Marked With It Can Be Played And Reviewed, Never Exported.
+  const standIn = () => P.standIn(project);
+  const standInAdvice = "This Storyboard Uses Stand-In Voice Timing. Retime It To The Real Recording First.";
   function reviewControls() {
-    $("approve").disabled = !reviewed || Boolean(running) || preparing;
-    $("export").disabled = !reviewed || !$("approve").checked || Boolean(running) || preparing || !canRecord();
+    $("approve").disabled = !reviewed || Boolean(running) || preparing || standIn();
+    $("export").disabled = !reviewed || !$("approve").checked || Boolean(running) || preparing || !canRecord() || standIn();
   }
   function invalidate() {
     reviewed = false; $("approve").checked = false; reviewControls();
@@ -245,7 +248,8 @@
     const notes = [];
     if (missing.length) notes.push("Not Loaded: " + missing.join(", ") + ". Choose Open Film Folder And Pick The Folder That Holds The Storyboard.");
     else if (absent.length) notes.push("No Loaded Module Registers: " + absent.join(", ") + ".");
-    if (project.voice && project.voice.standIn) notes.push("This Storyboard Uses Stand-In Voice Timing.");
+    if (standIn()) notes.push("This Storyboard Uses Stand-In Voice Timing. It Can Be Reviewed Here, And Export Stays Off Until It Is Retimed To The Real Recording.");
+    if (project.narration === "None") notes.push("This Storyboard Declares No Narration. Its Timings Are The Author's Own.");
     $("filmNote").hidden = !notes.length; $("filmNote").textContent = notes.join(" ");
     say(missing.length || absent.length ? "Storyboard Opened With Missing Files." : "Storyboard Opened." + (boards.length > 1 ? " Chose " + chosen.file.name + "." : ""));
   }
@@ -334,7 +338,7 @@
         if (!completed) say("Export Interrupted. The Partial Recording Was Discarded.");
       }
       if (completed && job.kind === "review") {
-        reviewed = true; say(canRecord() ? "Review Finished. Confirm Your Approval To Enable Export." : "Review Finished. This Browser Does Not Offer WebM Recording.");
+        reviewed = true; say(standIn() ? "Review Finished. Export Stays Off. " + standInAdvice : canRecord() ? "Review Finished. Confirm Your Approval To Enable Export." : "Review Finished. This Browser Does Not Offer WebM Recording.");
       }
       if (completed && job.kind === "play") say("Playback Finished.");
     }
@@ -358,6 +362,7 @@
     job.recorder = recorder;
   }
   async function begin(kind) {
+    if (kind === "export" && standIn()) { say("Export Is Off. " + standInAdvice); return; }
     if (kind === "export" && (!reviewed || !$("approve").checked || !canRecord())) return;
     halt(); const token = attempt, from = kind === "play" && position < P.duration(project) - 0.02 ? position : 0;
     preparing = true; reviewControls();

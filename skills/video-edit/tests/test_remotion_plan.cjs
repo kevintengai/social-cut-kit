@@ -139,11 +139,24 @@ test("Sound Level Follows Gain And Straight Fades Frame By Frame", () => {
 });
 
 test("Caption Style Defaults And Pixel Layout Follow The FFmpeg Route", () => {
-  assert.deepEqual(Cut.captionStyle({}, 720, 1280), {font: "Arial", size: 61, color: "#FFFFFF", outline: "#101010", stroke: 4, margin: 7});
-  assert.deepEqual(Cut.captionStyle({}, 360, 640), {font: "Arial", size: 31, color: "#FFFFFF", outline: "#101010", stroke: 2, margin: 7});
+  // A Vertical Canvas Defaults To A Size Of 6 Percent Of Its Width And Margins That Clear The Platform's Controls.
+  assert.deepEqual(Cut.captionStyle({}, 720, 1280), {font: "Arial", size: 43, color: "#FFFFFF", outline: "#101010", stroke: 3, margin: 25, top_margin: 12});
+  assert.deepEqual(Cut.captionStyle({}, 360, 640), {font: "Arial", size: 22, color: "#FFFFFF", outline: "#101010", stroke: 2, margin: 25, top_margin: 12});
+  assert.deepEqual(Cut.captionStyle({}, 1080, 1920), {font: "Arial", size: 65, color: "#FFFFFF", outline: "#101010", stroke: 5, margin: 25, top_margin: 12});
+  // A Horizontal Or Square Canvas Keeps The Earlier Defaults.
+  assert.deepEqual(Cut.captionStyle({}, 1920, 1080), {font: "Arial", size: 84, color: "#FFFFFF", outline: "#101010", stroke: 6, margin: 7, top_margin: 7});
+  assert.deepEqual(Cut.captionStyle({}, 1080, 1080), {font: "Arial", size: 84, color: "#FFFFFF", outline: "#101010", stroke: 6, margin: 7, top_margin: 7});
+  // An Explicit Margin Applies At Both Edges, As Before, Unless The Top Margin Is Set Too.
+  assert.deepEqual(Cut.captionStyle({caption_style: {size: 61, stroke: 4, margin: 7}}, 720, 1280),
+    {font: "Arial", size: 61, color: "#FFFFFF", outline: "#101010", stroke: 4, margin: 7, top_margin: 7});
+  assert.equal(Cut.captionStyle({caption_style: {margin: 30, top_margin: 9}}, 1080, 1920).top_margin, 9);
+  const tall = Cut.captionLayout(Cut.captionStyle({}, 1080, 1920), 1080, 1920);
+  assert.deepEqual([tall.edge, tall.topEdge, tall.lineHeight], [480, 230, 65]);
+  assert.throws(() => Cut.captionStyle({caption_style: {top_margin: 60}}, 1080, 1920), /Caption Top Margin Must Be A Number/);
   const style = Cut.captionStyle({caption_style: {font: "Georgia", size: 90, stroke: 6, margin: 10, color: "#FFEE00"}}, 1080, 1920);
   const look = Cut.captionLayout(style, 1080, 1920);
   assert.deepEqual([look.side, look.edge, look.lineHeight, look.stroke, look.color], [59, 192, 90, 6, "#FFEE00"]);
+  assert.equal(look.topEdge, 192);
   assert.ok(Math.abs(look.fontSize - 90 * 2048 / 2327) < 1e-9);
   assert.match(look.fontFamily, /^Georgia, /);
   for (const font of Cut.FONTS) assert.ok(Cut.FONT_EM[font] > 0.8 && Cut.FONT_EM[font] < 0.92, font);
@@ -229,4 +242,52 @@ test("Probe Summaries Read Rotation, Depth, And HDR Signalling", () => {
   assert.equal(Cut.rotation({tags: {rotate: "270"}}), 270);
   assert.equal(Cut.rotation({side_data_list: [{rotation: 90}]}), 270);
   assert.equal(Cut.probeSummary({format: {duration: "N/A"}, streams: []}).duration, null);
+});
+
+test("A Working Copy Lets An HDR Source Through And Says Where Picture Color Comes From", () => {
+  const phone = clip({codec_name: "hevc", pix_fmt: "yuv420p10le", color_transfer: "arib-std-b67", color_primaries: "bt2020", width: 3840, height: 2160,
+    avg_frame_rate: "60000/1001", nb_frames: "1199", side_data_list: [{side_data_type: "Display Matrix", rotation: -90}]});
+  const twin = (extra = {}, audio = true, duration = 20) => clip({width: 1080, height: 1920, avg_frame_rate: "60000/1001", nb_frames: "1199", ...extra}, audio, duration);
+  const doc = project({assets: {...project().assets, Cam: {kind: "video", path: "cam.mov", working_copy: "cam-working.mp4"}}});
+  const sources = probes({Cam: phone}), files = {Cam: "media/01-cam-working.mp4"};
+  fails(project(), /Asset Cam Is HLG HDR, Used By Shot 1\..*Ask The Owner Once For A Working Copy/, sources);
+  fails(doc, /Missing Working Copy cam-working\.mp4\./, sources);
+  const plan = Cut.plan(doc, sources, files, {copies: {Cam: twin()}});
+  const notes = plan.warnings.join(" ");
+  assert.match(notes, /Asset Cam, Used By Shot 1, Plays From Its Working Copy In Remotion At 1080 By 1920\. The Original Is HLG HDR\. Picture Color In Remotion Comes From The Working Copy/);
+  assert.match(notes, /Render The Master With FFmpeg From The Original\./);
+  // The Gated Remotion Render Reads This Field And Refuses An HDR Project.
+  assert.match(plan.reviewOnly, /Review Only Because Cam Is HDR Footage\..*FFmpeg Render From The Original Files/);
+  assert.equal(Cut.plan(project(), probes(), {}).reviewOnly, undefined);
+  assert.doesNotMatch(notes, /hevc Video|Display Rotation|Has Not Verified HDR|Fresh Working Copy|Shapes Differ/);
+  assert.match(notes, /Asset Cam Runs At 59\.9401 FPS On A 30 FPS Canvas/);
+  // Layout Still Comes From The Original's Displayed Size. The File Played Is The Working Copy.
+  const shot = plan.shots[0];
+  assert.deepEqual([shot.file, shot.workingCopy], ["media/01-cam-working.mp4", true]);
+  assert.deepEqual(shot.box, {left: 0, top: 0, width: 1080, height: 1920});
+  assert.deepEqual(shot.media, {left: 0, top: 0, width: 1080, height: 1920});
+  assert.equal(shot.sound.gain, 1);
+  assert.equal(Cut.plan(project(), probes()).shots[0].workingCopy, undefined);
+  const has = (copy, pattern, extra = doc) => {
+    const made = Cut.plan(extra, sources, files, {copies: {Cam: copy}});
+    assert.ok(made.warnings.some(note => pattern.test(note)), `${pattern} Not In ${JSON.stringify(made.warnings)}`);
+    return made;
+  };
+  has(twin({}, true, 19), /Working Copy Lasts 19\.000 Seconds And Its Original Lasts 20\.000 Seconds\./);
+  has(twin({nb_frames: "1100"}), /Working Copy Has 1100 Frames And Its Original Has 1199\./);
+  has(twin({width: 1920, height: 1080}), /Working Copy Is 1920 By 1080 And Its Original Displays At 2160 By 3840\. The Shapes Differ/);
+  has(twin({codec_name: "hevc"}), /Asset Cam Is hevc Video/);
+  const silent = has(twin({}, false), /Working Copy Has No Sound, So Its Shots Are Silent In Remotion/);
+  assert.equal(silent.shots[0].sound, null);
+  has(twin(), /Is Used Where tone_map Is false, But Its Working Copy Is Already Converted/, {...doc, canvas: {...doc.canvas, tone_map: false}});
+  // A Working Copy That Is Itself HDR Is Refused Like Any HDR Source.
+  fails(doc, /Asset Cam Is HLG HDR/, sources, {copies: {Cam: twin({pix_fmt: "yuv420p10le", color_transfer: "arib-std-b67", color_primaries: "bt2020"})}});
+  const plain = project({assets: {...project().assets, Cam: {kind: "video", path: "cam.mp4", working_copy: "cam-small.mp4"}}});
+  const easy = Cut.plan(plain, probes(), {}, {copies: {Cam: clip({width: 960, height: 540})}});
+  assert.ok(easy.warnings.some(note => /Plays From Its Working Copy In Remotion At 960 By 540\. A Remotion Render Would Be Made From That Copy/.test(note)));
+  assert.ok(!easy.warnings.some(note => /Picture Color/.test(note)));
+  fails(project({assets: {...project().assets, Card: {kind: "image", path: "card.png", working_copy: "card.mp4"}}}), /Only A Video Asset Can Name A Working Copy\./);
+  fails(project({assets: {...project().assets, Cam: {kind: "video", path: "cam.mp4", working_copy: " "}}}), /Working Copy Path Requires Text\./);
+  fails(plain, /Missing Video Stream In cam-small\.mp4\./, probes(), {copies: {Cam: wav()}});
+  for (const note of [...plan.warnings, ...easy.warnings]) assert.match(note, /\.$/);
 });

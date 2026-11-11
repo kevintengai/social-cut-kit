@@ -1,6 +1,7 @@
 "use strict";
 const fs = require("node:fs"), path = require("node:path"), crypto = require("node:crypto");
 const P = require("../studio/project.js"), Sound = require("../studio/sound.js");
+const Film = require("../tools/lib/film.cjs"), Events = require("../tools/events.cjs");
 const skillRoot = path.resolve(__dirname, "..");
 const studioFiles = ["project.js", "marks.js", "space.js", "kit.js", "timing.js", "scenes.js", "captions.js", "frame.js"];
 const read = file => fs.readFileSync(file, "utf8").replace(/^﻿/, "");
@@ -25,14 +26,19 @@ function audioExtension(bytes, mime) {
   const types = {mpeg: "mp3", mp3: "mp3", mp4: "m4a", "x-m4a": "m4a", webm: "webm", aac: "aac", wav: "wav", "x-wav": "wav", ogg: "ogg", flac: "flac"};
   return types[mime.split("/").pop()] || "bin";
 }
+// The Left And Right Gains Of A Panned Cue: Equal Power, Lifted So A Centered Cue Keeps Close To Its Level.
+function panSides(pan) {
+  const angle = (Math.max(-1, Math.min(1, pan)) + 1) * Math.PI / 4;
+  return [Math.cos(angle) * 1.33, Math.sin(angle) * 1.33];
+}
 // A Stereo Copy Of A Bank Sound Placed Left Or Right With Equal Power.
 function pannedWav(name, pan) {
-  const mono = Sound.make(name), angle = (Math.max(-1, Math.min(1, pan)) + 1) * Math.PI / 4, sides = [Math.cos(angle), Math.sin(angle)];
+  const mono = Sound.make(name), sides = panSides(pan);
   const out = Buffer.alloc(44 + mono.length * 4);
   out.write("RIFF", 0); out.writeUInt32LE(out.length - 8, 4); out.write("WAVEfmt ", 8); out.writeUInt32LE(16, 16); out.writeUInt16LE(1, 20); out.writeUInt16LE(2, 22);
   out.writeUInt32LE(48000, 24); out.writeUInt32LE(48000 * 4, 28); out.writeUInt16LE(4, 32); out.writeUInt16LE(16, 34); out.write("data", 36); out.writeUInt32LE(mono.length * 4, 40);
   for (let i = 0; i < mono.length; i++) for (let side = 0; side < 2; side++) {
-    const v = Math.max(-1, Math.min(1, mono[i] * sides[side] * 1.33));
+    const v = Math.max(-1, Math.min(1, mono[i] * sides[side]));
     out.writeInt16LE(Math.round(v * (v < 0 ? 32768 : 32767)), 44 + i * 4 + side * 2);
   }
   return out;
@@ -50,6 +56,20 @@ function build(raw, options = {}) {
     return at;
   };
   const modules = (project.modules || []).map(name => ({name, source: read(beside(name))}));
+  // Things The Owner Must Know Before Review: Stand-In Timing, A Declared Absence Of Narration, And Event Sounds That Are Not In The Storyboard.
+  const warnings = [];
+  let eventSounds;
+  try {
+    const scope = Film.createScope(); Film.loadModules(scope, modules);
+    const found = Events.status(scope, project);
+    eventSounds = {state: found.state, placed: found.placed, expected: found.expected};
+    if (found.state === "missing" || found.state === "stale") warnings.push(Events.describe(found) + " This Project Would Play Without Them.");
+  } catch (error) {
+    eventSounds = {state: "unknown", placed: project.scenes.reduce((sum, scene) => sum + scene.cues.filter(cue => cue.event).length, 0), expected: null};
+    warnings.push("The Event Sounds Could Not Be Checked: " + error.message);
+  }
+  if (P.standIn(project)) warnings.unshift("This Storyboard Uses Stand-In Voice Timing. It Is Not Ready For Export, And The Reviewed Render Will Refuse It. Retime It To The Real Recording, Then Prepare A Fresh Project.");
+  if (project.narration === "None") warnings.push("This Storyboard Declares No Narration. Its Timings Are The Author's Own. Confirm With The Owner That No Spoken Voice Is Planned.");
   let offset = 0;
   for (let i = 0; i < project.scenes.length; i++) {
     const s = project.scenes[i], end = Math.ceil((offset + s.duration) * fps - 1e-7);
@@ -85,6 +105,10 @@ function build(raw, options = {}) {
     if (voice.offset < 0) entry.trimBefore = Math.round(-voice.offset * fps);
     if (entry.frames > 0) { files.set("public/" + file, bytes); timeline.audio.push(entry); }
   }
+  timeline.eventSounds = eventSounds;
+  if (P.standIn(project)) timeline.standIn = true;
+  if (project.narration === "None") timeline.narration = "None";
+  timeline.warnings = warnings;
   const visuals = {...project, scenes: project.scenes.map(s => ({...s, cues: []}))};
   if (visuals.voice) { visuals.voice = {...visuals.voice}; delete visuals.voice.clip; }
   files.set("src/frame-project.json", pretty(visuals)); files.set("src/timeline.json", pretty(timeline));
@@ -100,10 +124,11 @@ function build(raw, options = {}) {
     scripts: {studio: "remotion studio src/index.jsx", "render-reviewed": "node render-reviewed.cjs"},
     dependencies: {"@remotion/cli": "4.0.535", "@remotion/media": "4.0.535", remotion: "4.0.535", react: "19.2.8", "react-dom": "19.2.8"}
   }));
-  return {files, timeline};
+  return {files, timeline, warnings};
 }
 function prepare(source, target) {
   const dest = path.resolve(target);
+  Film.guardOutput(dest, "The Remotion Project");
   if (fs.existsSync(dest)) throw new Error("Choose A New Output Directory.");
   const {files, timeline} = build(JSON.parse(read(source)), {base: path.dirname(path.resolve(source))});
   fs.mkdirSync(path.dirname(dest), {recursive: true});
@@ -120,11 +145,13 @@ function prepare(source, target) {
   }
   return timeline;
 }
-module.exports = {build, prepare, painterSource, pannedWav};
+module.exports = {build, prepare, painterSource, pannedWav, panSides};
 if (require.main === module) {
   const [source, target] = process.argv.slice(2);
   try {
     if (!source || !target) throw new Error("Usage: node adapter/prepare-remotion.cjs Storyboard.json NewProjectFolder");
-    const t = prepare(source, target); console.log("Prepared " + t.frames + " Frames And " + t.audio.length + " Audio Cues. Open The Project In Remotion Studio For Review.");
+    const t = prepare(source, target), sounds = t.eventSounds;
+    console.log("Prepared " + t.frames + " Frames And " + t.audio.length + " Audio Cues" + (sounds.placed ? ", Including " + sounds.placed + " Event Sound" + (sounds.placed === 1 ? "" : "s") : "") + ". No Video Was Written. The Owner Opens The Project In Remotion Studio For Review.");
+    for (const warning of t.warnings) console.error("WARNING: " + warning);
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }

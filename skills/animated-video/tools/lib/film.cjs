@@ -16,6 +16,38 @@ function partSources() {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter(name => name.endsWith(".js")).sort().map(name => ({ name: "parts/" + name, source: read(path.join(dir, name)) }));
 }
+// True When A Path Is The Skill Folder Or Anything Inside It. Links Are Followed As Far As The Path Exists.
+function insideSkill(target) {
+  let at = path.resolve(target);
+  const rest = [];
+  while (!fs.existsSync(at)) {
+    const up = path.dirname(at);
+    if (up === at) break;
+    rest.unshift(path.basename(at)); at = up;
+  }
+  const real = file => { try { return fs.realpathSync(file); } catch { return file; } };
+  const relative = path.relative(real(skillRoot), path.join(real(at), ...rest));
+  return relative === "" || (relative.split(path.sep)[0] !== ".." && !path.isAbsolute(relative));
+}
+// A Film Lives In The User's Project. The Tools Refuse To Write Into The Installed Skill.
+function guardOutput(target, what = "This Output") {
+  if (insideSkill(target)) throw new Error("Write " + what + " Outside The Skill Folder. A Film Lives In The User's Project, And The Bundled Examples Are Read-Only Starting Points To Copy Out. Refused: " + path.resolve(target));
+}
+// Replace A File In One Step, So A Stopped Run Never Leaves Half A Storyboard Behind.
+function writeSafely(file, content) {
+  const full = path.resolve(file), staging = path.join(path.dirname(full), "." + path.basename(full) + ".writing-" + process.pid);
+  fs.mkdirSync(path.dirname(full), { recursive: true });
+  try { fs.writeFileSync(staging, content); fs.renameSync(staging, full); }
+  finally { if (fs.existsSync(staging)) fs.rmSync(staging, { force: true }); }
+}
+// The Scene Modules A Storyboard Lists, Read From The Folder That Holds It.
+function readModules(project, dir) {
+  return (project.modules || []).map(name => {
+    const at = path.join(dir, ...name.split("/"));
+    if (!fs.existsSync(at)) throw new Error("Scene Module Not Found Beside The Storyboard: " + name);
+    return { name, file: at, source: read(at) };
+  });
+}
 // Read A Storyboard And The Scene Modules It Lists Beside It.
 function loadFilm(file) {
   const full = path.resolve(file), dir = path.dirname(full);
@@ -23,12 +55,7 @@ function loadFilm(file) {
   let raw;
   try { raw = JSON.parse(read(full)); } catch (error) { throw new Error("The Storyboard Is Not Valid JSON: " + error.message); }
   const project = P.cleanProject(raw);
-  const modules = (project.modules || []).map(name => {
-    const at = path.join(dir, ...name.split("/"));
-    if (!fs.existsSync(at)) throw new Error("Scene Module Not Found Beside The Storyboard: " + name);
-    return { name, file: at, source: read(at) };
-  });
-  return { file: full, dir, raw, project, modules };
+  return { file: full, dir, raw, project, modules: readModules(project, dir) };
 }
 
 class StubPath { constructor(d) { this.d = String(d ?? ""); } }
@@ -191,4 +218,4 @@ function determinism(scope, project, times) {
   return [...new Set(failures)];
 }
 
-module.exports = { skillRoot, studioFiles, studioSources, partSources, loadFilm, createScope, loadModules, openFilm, runModule, guards, recorder, drawFrame, codeOnly, impureMentions, sampleTimes, determinism, StubPath, read };
+module.exports = { skillRoot, insideSkill, guardOutput, writeSafely, readModules, studioFiles, studioSources, partSources, loadFilm, createScope, loadModules, openFilm, runModule, guards, recorder, drawFrame, codeOnly, impureMentions, sampleTimes, determinism, StubPath, read };

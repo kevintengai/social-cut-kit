@@ -11,11 +11,12 @@ from pathlib import Path
 # Resolve's Bundled Python May Start With An Isolated Module Search Path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import loudness
+import working_copy
 from example import example
 from handoff import otio
 from media import LAYERS, analyze, missing_tone_filters, mix, process, still
 from review import review
-from timeline import EditError, load, number, prepare, probe, srt, write_new
+from timeline import EditError, browser_playback, canvas_rate_hint, load, number, prepare, probe, srt, write_new
 
 
 WORKFLOWS = {
@@ -36,6 +37,8 @@ def parser():
         command(key, description)
     command("example", "Create A New Self-Contained Example Folder.").add_argument("folder", type=Path)
     command("probe", "Inspect Media Streams.").add_argument("source", type=Path)
+    working_copy.add_arguments(command("working-copy", "Convert One Source Clip Into A Standard H.264 Working Copy "
+                                                       "For Review. Requires The Owner's Agreement."))
     scan = command("analyze", "Locate Silence And Picture Changes.")
     scan.add_argument("source", type=Path)
     scan.add_argument("--silence-db", type=float, default=-40)
@@ -113,6 +116,11 @@ def remotion_project(project, folder, allow_hdr, link_media):
     extra = {key: report[key] for key in wanted}
     extra["next_steps"] = ["npm install", "npm run studio", "Owner Reviews The Whole Cut In Remotion Studio",
                            "npm run render-reviewed -- Approved-Cut.mp4"]
+    if report.get("working_copies"):
+        # Remotion Plays Working Copies. The Master Comes From The Originals Through The FFmpeg Render.
+        extra["working_copies"] = report["working_copies"]
+        extra["next_steps"][-1] = ("After Approval, Render The Master From The Originals With The FFmpeg Render "
+                                   "And --owner-approved")
     return extra, notes
 
 
@@ -138,7 +146,16 @@ def main(argv=None):
         print(example(args.folder))
         return
     if command == "probe":
-        print(json.dumps(probe(args.source.resolve()), indent=2))
+        report = probe(args.source.resolve())
+        # Two Plain Hints Follow The Raw Streams: Whether A Browser Can Play The File, And A Canvas Rate For It.
+        report["browser_playback"] = browser_playback(report)
+        hint = canvas_rate_hint(report)
+        if hint:
+            report["canvas_fps"] = hint
+        print(json.dumps(report, indent=2))
+        return
+    if command == "working-copy":
+        print(json.dumps(working_copy.run(args), indent=2))
         return
     if command == "analyze":
         number(args.silence_db, "Silence Threshold", -120, 0)

@@ -91,3 +91,32 @@ test("Source Notes From Validation Appear Under The Editor Status", () => {
   app.run("setState(state, 'Timeline Saved.')");
   assert.equal(app.nodes.get("notes").children.length, 0);
 });
+
+test("Top And Bottom Captions Sit At Their Own Margins", () => {
+  const app = player();
+  const cues = [{at: 0, end: 2, text: "Low", position: "bottom"}, {at: 0, end: 2, text: "High", position: "top"},
+    {at: 0, end: 2, text: "Middle", position: "center"}];
+  app.ctx.state = model({captions: cues,
+    caption_style: {size: 65, font: "Arial", color: "#FFFFFF", stroke: 5, outline: "#101010", margin: 25, top_margin: 12}});
+  app.run("setState(state, 'Ready.')");
+  app.run("time = 1; draw(true)");
+  const placed = () => app.nodes.get("labels").children.map(node => [node.textContent, node.style.bottom, node.style.top]);
+  assert.deepEqual(placed(), [["Low", "25%", undefined], ["High", undefined, "12%"], ["Middle", undefined, undefined]]);
+  // A Model From A Timeline That Sets One Margin Uses It At Both Edges.
+  app.ctx.state = model({captions: cues});
+  app.run("setState(state, 'Ready.')");
+  app.run("time = 1; draw(true)");
+  assert.deepEqual(placed().slice(0, 2), [["Low", "7%", undefined], ["High", undefined, "7%"]]);
+});
+
+test("A Source The Browser Cannot Play Names The Working Copy Fix", () => {
+  const app = player();
+  const help = app.run("playbackHelp('Phone', {kind: 'video'})");
+  assert.match(help, /^Browser Could Not Play Source Phone\. Many Browsers Cannot Decode HEVC Or HDR Phone Footage\./);
+  assert.match(help, /Ask The Owner Once For A Working Copy/);
+  assert.match(help, /working_copy Field/);
+  assert.match(help, /The Original File Is Never Changed\.$/);
+  assert.match(app.run("playbackHelp('Phone', {kind: 'video', working_copy: 'C:/Cut/Phone Working Copy.mp4'})"), /Its Working Copy Did Not Load\./);
+  assert.equal(app.run("playbackHelp('Tone', {kind: 'audio'})"), "Browser Could Not Play Source Tone. Check The Browser Codec And File Path.");
+  assert.match(html, /media\.addEventListener\("error", \(\) => status\(playbackHelp\(row\.asset, asset\), true\)\)/);
+});

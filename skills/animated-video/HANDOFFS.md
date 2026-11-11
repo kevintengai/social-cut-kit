@@ -27,7 +27,7 @@ Two Cases Where Fresh Animation Has To Fit Into Existing Work. In Both, The Exis
 
 **Archive, Do Not Delete.** Move Each Replaced Scene File, Still, And Render To An Archive Folder With The Date And The Reason. The Owner May Prefer The Earlier Version, And The Earlier Version Is The Reference For Every Seam. Earlier Deliverables Stay Where They Are.
 
-**Review The Whole Film.** Check Each Seam With Stills And Strips, Then Take A Sparse Strip Across The Whole Film To See That The New Sections Sit In. The Owner Reviews The Whole Film In The Editor, Not Only The New Parts, Before Any Video File Is Created. That Includes A Test Or Preview Export.
+**Review The Whole Film.** Check Each Seam With Stills And Strips, Then Take A Sparse Strip Across The Whole Film To See That The New Sections Sit In. The Owner Reviews The Whole Film In Remotion Studio, Not Only The New Parts, Before Any Video File Is Created. That Includes A Test Or Preview Export. Motion Studio Is The Owner's Review Route Only When Node.js Packages Cannot Be Installed.
 
 **Report.** State Which Frame Ranges Changed, Which Files Were Archived And Where, What Each Seam Check Showed, And Anything Listed Under What To Report In [Review](REVIEW.md).
 
@@ -61,7 +61,7 @@ When The Brief Asks For Something That Will Not Read, Such As Text On Screen For
 ### Review And Return
 
 - Show Stills And Strips While The Scene Is Still Editable. The Edit Can Hold The Slot With A Still Of The Key Frame In The Meantime.
-- The Clip Is A Video File. It Is Created Only After The Owner Has Reviewed The Editable Scene In Its Editor And Approved It. That Includes Any Test Render.
+- The Clip Is A Video File. It Is Created Only After The Owner Has Reviewed The Editable Scene In Remotion Studio And Approved It. That Includes Any Test Render. A Blender Scene Is Reviewed In Blender.
 - After Approval, Return The Following.
   - The Clip, Named For Its Slot.
   - Its Sound Events. Give Each A Sound Name, A Frame Counted From The First Frame Of The Clip, And A Suggested Level.
