@@ -39,16 +39,16 @@ To Install Specific Skills, Append Their Folder Names. For Example, `python inst
 
 ## Pick A Starting Point
 
-| Task | Tool | First Result |
+| Task | Skill Name | First Result |
 | --- | --- | --- |
-| Define An Offer And Its Proof | [Campaign Brief](skills/teng-campaign-brief/SKILL.md) | A Structured Brief With Sources, A Viewer Action, And A Measurable Response |
-| Write A Short And Read Its Analytics | [Script Desk](skills/video-script/SKILL.md) | Ideas, A Timed Script With A Checklist, And A Posted-Video Review Backed By Your Own Video Library |
-| Plan Pictures And Sound | [Director’s Desk](skills/director/SKILL.md) | An Offline Shot Board And A Timeline Built From Sourced Beats |
-| Cut Recorded Footage | [Video Edit](skills/video-edit/SKILL.md) | A Local Editable Timeline With Source Sound, Overlays, Captions, And Speed Changes, Reviewed And Rendered In Remotion |
-| Build An Animated Explainer | [Animated Video](skills/animated-video/SKILL.md) | A Reopenable Storyboard Or A Code-Drawn Film Timed From The Voiceover And Reviewed From Stills |
-| Find Or Reuse A Project Asset | [Asset Library](skills/asset-library/SKILL.md) | A Searchable Local Record With Source Rights And Exact Version Pins |
-| Review A Finished Session Or A Cut | [Reflect](skills/reflect/SKILL.md) | Evidence-Based Findings And Proposed Instruction Changes That Wait For Your Approval |
-| Test A Better Skill, Instruction, Or Method | [Workflow Trials](skills/rsi/SKILL.md) | A Bounded Before-And-After Experiment With A Measurable Improvement Threshold |
+| Define An Offer And Its Proof | [`teng-campaign-brief`](skills/teng-campaign-brief/SKILL.md) | A Structured Brief With Sources, A Viewer Action, And A Measurable Response |
+| Write A Short And Read Its Analytics | [`video-script`](skills/video-script/SKILL.md) | Ideas, A Timed Script With A Checklist, And A Posted-Video Review Backed By Your Own Video Library |
+| Plan Pictures And Sound | [`director`](skills/director/SKILL.md) | An Offline Shot Board And A Timeline Built From Sourced Beats |
+| Cut Recorded Footage | [`video-edit`](skills/video-edit/SKILL.md) | A Local Editable Timeline With Source Sound, Overlays, Captions, And Speed Changes, Reviewed And Rendered In Remotion |
+| Build An Animated Explainer | [`animated-video`](skills/animated-video/SKILL.md) | A Reopenable Storyboard Or A Code-Drawn Film Timed From The Voiceover And Reviewed From Stills |
+| Find Or Reuse A Project Asset | [`asset-library`](skills/asset-library/SKILL.md) | A Searchable Local Record With Source Rights And Exact Version Pins |
+| Review A Finished Session Or A Cut | [`reflect`](skills/reflect/SKILL.md) | Evidence-Based Findings And Proposed Instruction Changes That Wait For Your Approval |
+| Test A Better Skill, Instruction, Or Method | [`rsi`](skills/rsi/SKILL.md) | A Bounded Before-And-After Experiment With A Measurable Improvement Threshold |
 
 ## Camera Motion, Resolve, And Publishing
 
