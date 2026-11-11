@@ -532,7 +532,8 @@ def sheet(script, pace, pace_source):
             if opened is False
             else "Source Not Yet Opened"
         )
-        checked = f" Checked: {proof['checked']}." if proof.get("checked") else ""
+        note = str(proof.get("checked") or "").strip().rstrip(".").strip()
+        checked = f" Checked: {note}." if note else ""
         lines.append(
             f"- {proof.get('id', '')}: {proof.get('claim', '')} | Source: "
             f"{proof.get('source') or 'None'} | {state}.{checked}"

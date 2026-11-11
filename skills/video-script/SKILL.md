@@ -14,7 +14,7 @@ This Skill Stops Once A Script Or A Lesson Is Delivered. The Creator Does The Fi
 Use Python 3.9 Or Later. Run Commands From This Skill Folder. Reading A Chart Image Also Needs FFmpeg And FFprobe On PATH.
 
 1. Read `~/.social-cut-kit/video-script.md` First If The File Is There. It Records Where The Video Library And Findings File Live, Plus Platform Notes, Voice, And Speaking Pace. `python scripts/video_log.py defaults` Prints Its Location And Values.
-2. Read The Findings And The Library Index Before Proposing Anything. `python scripts/video_log.py finding list` And `python scripts/video_log.py index` Print Them.
+2. Read The Findings And The Library Index Before Proposing Anything. `python scripts/video_log.py finding list` And `python scripts/video_log.py index` Print Them. With No Library Yet, Both Commands Stop With A Message Asking For One. That Means There Is Nothing To Read. Work From The Videos The Creator Describes And Say That No Findings Exist Yet.
 3. Cite The Past Videos An Idea, Opening, Or Structure Resembles. Give The Title, The Date, And The Number That Matters.
 4. A Measured Finding About This Audience Outranks Every General Default In This Kit, Including The Rules Below. Say Which Finding Changed The Advice.
 
@@ -64,7 +64,7 @@ python scripts/script_desk.py check assets/practice-script.json --pace 2.6 --tar
 
 ### Check Each Claim Against Its Source
 
-Have A Separate Agent Check Each Claim As Worded Against Its Source. Give It Only The Claim Text And The Source. Ask For One Of Three Answers: The Source Says This, The Source Says Something Narrower, Or The Source Could Not Be Opened. Reword A Narrower Claim To Match Its Source. Set `opened` To `false` For A Source That Could Not Be Opened And Tell The Creator That Claim Is Unverified. With No Separate Agent Available, Make The Check In A Pass That Reads Only Claims And Sources, And Say It Was Not Independent.
+Have A Separate Agent Check Each Claim As Worded Against Its Source. Give It Only The Claim Text And The Source. Ask For One Of Three Answers: The Source Says This, The Source Says Something Narrower, Or The Source Could Not Be Opened. Reword A Narrower Claim To Match Its Source. Set `opened` To `false` For A Source That Could Not Be Opened And Tell The Creator That Claim Is Unverified. When A Source Cannot Be Opened, Still Run The Check. Give The Separate Agent Each Claim And The Creator's Own Statement, And Ask Whether The Line Says More Than The Creator Said. Narrow Every Line That Does. Absolute Wording Such As All, Only, Any, And Never Is Where A Line Most Often Overreaches. With No Separate Agent Available, Make The Check In A Pass That Reads Only Claims And Sources, And Say It Was Not Independent.
 
 ### Deliver
 
