@@ -60,4 +60,4 @@ An Eight-Second Example Edit Opens In Your Browser. For Animation, Open `skills/
 
 Each Skill Has Its Own Guide At `skills/NAME/SKILL.md`. The [Product Overview](README.md) Lists What The Download Contains, And [Usage Terms](USAGE.md) Covers What You May Do With It.
 
-If You Use Remotion For Animation, Each Generated Project Needs Its Own `npm install`, And Remotion Has Its Own License Terms. See The [Remotion Adapter Guide](skills/animated-video/adapter/README.md).
+Animated Videos Are Finished In Remotion By Default. Each Generated Project Needs Node.js And Its Own `npm install`, And Remotion Has Its Own License Terms. Motion Studio Can Export Without Any Install When That Is Not Possible. See The [Remotion Adapter Guide](skills/animated-video/adapter/README.md).

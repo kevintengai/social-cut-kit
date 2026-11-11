@@ -18,7 +18,7 @@ An Eight-Second Vertical Edit Opens In Your Browser. Scrub Across The Three-Seco
 
 For Animation, Open [Motion Studio](skills/animated-video/studio/index.html) From The Unzipped Folder. Try A Kinetic Title, A Process Diagram, Or A Lit 3D Turntable. The Browser Opens The Included Scene Without A Package Install. For Reusable Visuals, Open The [Icon And Overlay Gallery](art/index.html).
 
-To Continue In A Production Application, Take A Saved Storyboard Into [Remotion](skills/animated-video/adapter/README.md), Or Open The Included [Pulse Dial Blender Scene](skills/animated-video/blender/Pulse%20Dial.blend) To Edit Its Materials, Lighting, Camera Move, And Animated Controls.
+Finished Animation Is Reviewed And Rendered In [Remotion](skills/animated-video/adapter/README.md) By Default. Take A Saved Storyboard There, Or Open The Included [Pulse Dial Blender Scene](skills/animated-video/blender/Pulse%20Dial.blend) To Edit Its Materials, Lighting, Camera Move, And Animated Controls.
 
 ## Install The Skills
 

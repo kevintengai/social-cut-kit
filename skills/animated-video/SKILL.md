@@ -18,7 +18,7 @@ Before Anything Else, Read The User's Saved Defaults In `~/.social-cut-kit/anima
 5. **Check From Stills And Numbers.** Render Boards And Frame Strips, Measure Motion, Check Determinism, And Place Sounds On Picture Events. No Video Is Written. [Review Tools](REVIEW-TOOLS.md)
 6. **Judge It.** Read Motion From Strips, Use Independent Judges, And Run The Silent Viewing Test. [Review](REVIEW.md)
 7. **Retime To The Real Voice.** When The Recording Arrives, Run The Timing Tool With Its Word Timings And Check The Stills Again. [Voice Timing](VOICE-TIMING.md)
-8. **Hand The Film To The Owner.** The Owner Opens The Film Folder In Motion Studio, Watches The Whole Cut With Sound, And Approves It Before Any Video Is Exported. That Includes Test And Preview Exports. See **Review And Export** Below.
+8. **Hand The Film To The Owner In Remotion.** Prepare A Remotion Project From The Timed Storyboard. The Owner Opens It In Remotion Studio, Watches The Whole Cut With Sound, And Approves It Before Any Video Is Exported. That Includes Test And Preview Exports. See **Review And Export With Remotion** Below.
 
 For A Revision To A Finished Film, Or An Animated Insert For A Camera Edit, Follow [Handoffs](HANDOFFS.md). When A Filmed Presenter Appears Inside The Film, Plan It From The Start With [Presenter](PRESENTER.md).
 
@@ -88,23 +88,35 @@ Use The Six Transparent SVG Marks In The Editor Or Import Their Individual Files
 
 Two Transparent 1080 × 1920 Overlays Are Included For Compositing In An Editor That Imports SVG Artwork. [Edge Register](assets/overlays/edge-register.svg) Adds Corner Brackets And Side Ticks. [Orbit Contour](assets/overlays/orbit-contour.svg) Places Nested Ellipses In The Lower Corner.
 
-## Review And Export
+## Review And Export With Remotion
 
-Give The Editable Storyboard To The Human Project Owner. For A Film In Code, Give The Whole Film Folder, And Have The Owner Open It With **Open Film Folder** So The Scene Modules And Voice Recording Load. A Storyboard Marked As Using Stand-In Voice Timing Is Not Ready For Export. For Personal Review, They Select **Review From Start**, Keep The Tab Visible, And Watch The Entire Cut With Sound. Check Word Boundaries, Readability, Mesh Framing, And The Timing Of Every Cue. Revise The Storyboard And Repeat The Review Whenever An Edit Changes The Cut.
+Remotion Is The Default Route For The Finished Video. Motion Studio Stays The Place To Draw, Time, And Check Stills. Remotion Needs Node.js And A One-Time Package Install Inside Each Generated Project, Which Uses The Network. Remotion Has Its Own License Terms. See The [Remotion Adapter Guide](adapter/README.md).
 
-Wait For The Owner’s Explicit Approval Before Creating Any Video File, Including A Test Render Or Preview Export. Once They Approve The Current Cut, They Can Check The Review Confirmation And Select **Export Approved Video**. Editing Or Reopening A Storyboard Clears Approval.
-
-A Desktop Browser With Canvas Stream Capture And WebM Recording Support Can Record The Approved Cut In Real Time. Keep Its Tab Visible Until The WebM Download Starts. The Recording Mixes The Timed Audio With The Canvas Frames At The Selected Frame Rate. Portrait Output Is 1080 × 1920, Square Is 1080 × 1080, Landscape Is 1920 × 1080, And A Custom Frame Uses Its Own Size. Recording Speed And Frame Delivery Depend On The Device. The Editor Exports WebM In Supported Browsers.
-
-## Optional Remotion Handoff
-
-For A Native Editable 3D Product Scene, Open [Pulse Dial](blender/Pulse%20Dial.blend) In Blender. Use The [Blender Guide](blender/README.md) To Change Its Materials, Camera, And Animated Parts Or Rebuild It From The Included Geometry Generator.
-
-Use The [Remotion Project Adapter](adapter/README.md) To Prepare A Standalone Remotion Composition From A Saved Storyboard. It Reuses The Same 2D And 3D Painter And Transfers Frame Timing, Materials, Camera Motion, Code Scenes With Their Modules, Parts, Captions, Timed Sounds, And Recorded Voice. The Adapter Writes An Editable Project Without Producing A Video.
+1. Prepare A Project From The Saved Storyboard. For A Film In Code, Use The Timed Storyboard So Scene Modules, Captions, Sounds, And The Voice Recording Transfer. The Command Writes An Editable Project And No Video.
+2. Install The Declared Packages Inside The Project And Open Remotion Studio.
+3. The Project Owner Opens **MotionStoryboard**, Watches The Entire Cut With Sound, And Checks Word Boundaries, Readability, Framing, And The Timing Of Every Cue. Revise The Storyboard In Motion Studio, Prepare A Fresh Project, And Repeat The Review Whenever An Edit Changes The Cut.
+4. Wait For The Owner's Explicit Approval Before Creating Any Video File, Including A Test Render Or Preview Export. A Storyboard Marked As Using Stand-In Voice Timing Is Not Ready For Export.
+5. After Approval, The Owner Runs The Reviewed Render. It Asks For Personal Confirmation And Writes An MP4 To A New File.
 
 ~~~sh
 node adapter/prepare-remotion.cjs examples/facet-turntable.json My-Facet-Project
+cd My-Facet-Project
+npm install
+npm run studio
+npm run render-reviewed -- Final-Cut.mp4
 ~~~
+
+The Remotion Picture Comes From The Same Painter As Motion Studio, So Stills Checked There Match The Render.
+
+## Export From Motion Studio Without Installing Anything
+
+Use This Route When Node.js Packages Cannot Be Installed. Give The Owner The Editable Storyboard. For A Film In Code, Give The Whole Film Folder, And Have The Owner Open It With **Open Film Folder** So The Scene Modules And Voice Recording Load. They Select **Review From Start**, Keep The Tab Visible, And Watch The Entire Cut With Sound. The Same Approval Rule Applies. Once They Approve The Current Cut, They Check The Review Confirmation And Select **Export Approved Video**. Editing Or Reopening A Storyboard Clears Approval.
+
+A Desktop Browser With Canvas Stream Capture And WebM Recording Support Records The Approved Cut In Real Time. Keep Its Tab Visible Until The WebM Download Starts. Portrait Output Is 1080 × 1920, Square Is 1080 × 1080, Landscape Is 1920 × 1080, And A Custom Frame Uses Its Own Size. Recording Speed And Frame Delivery Depend On The Device.
+
+## Native 3D Product Scenes
+
+For A Native Editable 3D Product Scene, Open [Pulse Dial](blender/Pulse%20Dial.blend) In Blender. Use The [Blender Guide](blender/README.md) To Change Its Materials, Camera, And Animated Parts Or Rebuild It From The Included Geometry Generator.
 
 ## Rebuild And Check
 
