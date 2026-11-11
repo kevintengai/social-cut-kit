@@ -3,7 +3,7 @@ name: rsi
 description: Run Limited Before-And-After Experiments That Improve How An Agent Works, Through Its Skills, Instructions, Tools, Or Process, While The Model Stays The Same. Use To Test One Proposed Change Against The Current Version On Paired Cases And Finish With Either A Change That Passed Its Test Or A Reasoned Choice To Leave Things As They Are.
 ---
 
-# Workflow Trials
+# RSI
 
 Improve How An Agent Works By Changing Its Skills, Instructions, Tools, Or Working Process While The Underlying Model Stays Fixed. Each Improvement Is A Bounded Before-And-After Experiment. It Ends In One Of Two Results: A Change That Passed Its Test, Or A Reasoned Choice To Leave Things As They Are.
 

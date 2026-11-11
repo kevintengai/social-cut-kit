@@ -3,7 +3,7 @@ name: teng-campaign-brief
 description: Turn A Business Offer Into An Evidence-Based Campaign Decision And An Editable Brief For A Social Video.
 ---
 
-# Social Cut Kit | Campaign Brief
+# TENG Campaign Brief
 
 Ask What Decision A Viewer Can Make After Watching. Document The Exact Action, The Destination That Accepts It, And The Event The Client Can Actually Observe. A Booking Confirmation And A Visit To A Calendar Page Measure Different Things.
 

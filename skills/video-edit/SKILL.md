@@ -3,7 +3,7 @@ name: video-edit
 description: Edit Social Videos From Recorded Footage. Check The Machine, Apply Saved User Defaults And The Brief, Choose A Style, Cut And Caption With Phrase Timing, Convert HDR And Rotated Phone Clips, Make An Owner-Agreed Working Copy For Review, Find Retakes Against A Script, Level Sound Cues And Loudness, Transfer Camera Motion, Build Native DaVinci Resolve Timelines, Prepare A Remotion Project For Owner Review And The Approved Render, And Carry Owner-Approved Media Through Posting Or Scheduling.
 ---
 
-# Social Cut Kit Video Editor
+# Video Edit
 
 Build The Edit In A JSON Timeline. Review It In The Included Browser Editor, Which Plays The Source Files, Or A Working Copy Where A Browser Cannot Decode The Original. Keep The Timeline And Media Together So Another Editor Can Reopen The Project. When The Cut Is Ready, Hand It To Its Owner As A Remotion Project, Which Is The Default Route For Owner Review And The Approved Render.
 

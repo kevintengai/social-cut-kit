@@ -1,4 +1,4 @@
-"""Shared Helpers For The Script Desk Tools."""
+"""Shared Helpers For The Video Script Tools."""
 
 import argparse
 import json

@@ -11,7 +11,7 @@ from pathlib import Path
 def load(path):
     plan = json.loads(path.read_text(encoding="utf-8"))
     if plan["format"] != "school.script/1" or not plan["beats"]:
-        raise ValueError("Supply A Script Desk File With Beats.")
+        raise ValueError("Supply A Video Script File With Beats.")
     seen = set()
     evidence = {p["id"] for p in plan["evidence"]}
     for beat in plan["beats"]:

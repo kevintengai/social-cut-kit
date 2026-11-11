@@ -149,7 +149,7 @@ class CommercialPackage(unittest.TestCase):
             )
             self.assertEqual(len(copies), 1)
             self.assertEqual(copies[0].read_text(), "Local Edits")
-            self.assertIn("Social Cut Kit", entry.read_text(encoding="utf-8"))
+            self.assertIn("# Director", entry.read_text(encoding="utf-8"))
 
     @unittest.skipUnless(
         shutil.which("ffmpeg") and shutil.which("ffprobe"), "FFmpeg Required"

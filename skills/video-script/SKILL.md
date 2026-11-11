@@ -3,9 +3,9 @@ name: video-script
 description: Find Short-Form Video Ideas, Write Hooks And Timed Scripts, And Run Post-Mortems On Posted Videos From The Creator's Own Results. Use For Topic Lists, Openings, Two-Column Scripts, How It Works Explainers, Retention Charts, Analytics Reviews, And The Video Library That Carries Findings From One Video To The Next.
 ---
 
-# Social Cut Kit | Script Desk
+# Video Script
 
-The Script Desk Does Three Tasks: Ideas, A Script, And The Review Of A Posted Video. Each Task Reads What Earlier Videos Taught And Leaves A Record For The Next One.
+The Video Script Skill Does Three Tasks: Ideas, A Script, And The Review Of A Posted Video. Each Task Reads What Earlier Videos Taught And Leaves A Record For The Next One.
 
 This Skill Stops Once A Script Or A Lesson Is Delivered. The Creator Does The Filming. Cutting Belongs To The Video Edit Skill And Animation To The Animated Video Skill. This Skill Never Publishes A Post And Never Exports A Video.
 
@@ -123,7 +123,7 @@ The `assets` Folder Holds Invented Practice Material: A Campaign Brief, A Comple
 
 ## Where The Work Stops
 
-The Script Desk Hands Over A Script With Its Delivery Sheet, A List Of Ideas, Or A Review With Its Library Records. The Creator Films. The Director Skill Plans Shots From The Same Script File. The Video Edit Skill Cuts The Footage, And The Animated Video Skill Builds Animated Inserts. Nothing Here Posts To A Platform, Schedules A Post, Or Exports A Video File.
+The Video Script Skill Hands Over A Script With Its Delivery Sheet, A List Of Ideas, Or A Review With Its Library Records. The Creator Films. The Director Skill Plans Shots From The Same Script File. The Video Edit Skill Cuts The Footage, And The Animated Video Skill Builds Animated Inserts. Nothing Here Posts To A Platform, Schedules A Post, Or Exports A Video File.
 
 ## Verification
 
