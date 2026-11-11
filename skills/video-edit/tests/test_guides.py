@@ -18,7 +18,7 @@ import setup_check
 import speech
 
 GUIDES = ["SKILL.md", "SPEECH.md", "TECHNICAL.md", "TITLES.md", "RECREATION.md", "CAMERA.md", "RESOLVE.md",
-          "PUBLISH.md", "assets/cue-bank/README.md"]
+          "PUBLISH.md", "assets/cue-bank/README.md", "remotion/README.md"]
 # Units And Product Names Keep Their Own Spelling Inside Title Case Prose.
 SPELLED = {"dB", "dBFS", "dBTP", "kHz", "macOS"}
 WORKFLOWS = {"setup": setup_check.parser, "defaults": defaults.parser}
@@ -56,6 +56,9 @@ MESSAGE_FILES = ["scripts/setup_check.py", "scripts/defaults.py", "scripts/loudn
 # Program, Filter, Package, And Literal Value Names That Appear Inside Messages.
 NAMED = SPELLED | {"zscale", "tonemap", "libzimg", "libass", "ebur128", "pip", "ensurepip", "whisper", "faster",
                    "true", "false", "refuse", "cap", "bt2020"}
+SCRIPT_FILES = ["remotion/cut-plan.cjs", "remotion/prepare-remotion.cjs", "remotion/render-reviewed.cjs"]
+# Command Words That Appear Inside Node Messages As Typed.
+TYPED = NAMED | {"node", "npm", "install", "run", "studio", "ffprobe"}
 
 
 class MessageTests(unittest.TestCase):
@@ -84,6 +87,26 @@ class MessageTests(unittest.TestCase):
                         if part and part[0].isalpha() and part not in NAMED:
                             self.assertFalse(part[0].islower(), f"{name} Line {node.lineno}: {part!r} In {text.strip()[:90]!r}")
         self.assertGreater(checked, 150)
+
+    def test_remotion_adapter_messages_are_capitalized(self):
+        checked = 0
+        for name in SCRIPT_FILES:
+            source = (SKILL / name).read_text(encoding="utf-8")
+            source = re.sub(r"^\s*//.*$", "", source, flags=re.M)
+            for quote, body in re.findall(r"""(["`])((?:\\.|(?!\1).)*)\1""", source):
+                text = re.sub(r"\$\{[^}]*\}", " X ", body) if quote == "`" else body
+                # A Font Stack Is A Literal CSS Value, Not A Message.
+                if " " not in text.strip() or not re.search(r"[A-Z][a-z]+ [A-Z]", text) or "serif" in text:
+                    continue
+                checked += 1
+                for token in text.split():
+                    bare = token.strip("\"'()[]{}*.,:;!?|#>+=&%")
+                    if bare.startswith("--") or "_" in bare or re.search(r"\w\.\w", bare):
+                        continue
+                    for part in re.split(r"[-/]", bare):
+                        if part and part[0].isalpha() and part not in TYPED:
+                            self.assertFalse(part[0].islower(), f"{name}: {part!r} In {text.strip()[:90]!r}")
+        self.assertGreater(checked, 60)
 
     def test_every_option_has_capitalized_help(self):
         parsers = [edit_video.parser(), speech.build_parser(), setup_check.parser(), defaults.parser()]
@@ -145,16 +168,21 @@ class GuideTests(unittest.TestCase):
         text = self.read("SKILL.md")
         front = re.match(r"---\nname: video-edit\ndescription: (.+)\n---\n", text)
         self.assertIsNotNone(front)
-        for topic in ("Saved User Defaults", "Brief", "Style", "Phrase", "HDR", "Loudness", "Resolve", "Posting"):
+        for topic in ("Saved User Defaults", "Brief", "Style", "Phrase", "HDR", "Loudness", "Resolve", "Remotion", "Posting"):
             self.assertIn(topic, front[1])
         for guide in ("BRIEF.md", "STYLES.md", "TECHNICAL.md", "SPEECH.md", "TITLES.md", "RECREATION.md", "CAMERA.md",
-                      "RESOLVE.md", "PUBLISH.md", "assets/cue-bank/README.md", "../reflect/SKILL.md"):
+                      "RESOLVE.md", "PUBLISH.md", "assets/cue-bank/README.md", "remotion/README.md", "../reflect/SKILL.md"):
             self.assertIn(f"]({guide}", text)
         for rule in ("~/.social-cut-kit/video-edit.md", "Begin Your First Reply By Listing, In A Single Line, The Saved Defaults In Use",
                      "Current Instructions Always Override Stored Defaults", "Offer To Record It",
                      "Show A Command To The User And Run It Only After They Agree",
                      "Have Its Owner Personally Review This Version In The Editor",
-                     "Including Preview Or Test Files", "--owner-approved", "Stays As Recorded By Default"):
+                     "Including Preview Or Test Files", "--owner-approved", "Stays As Recorded By Default",
+                     "Remotion Is The Default Route For Owner Review And The Finished Video",
+                     "Remain The Way To Verify An Edit Before Approval", "Needs No Node Packages",
+                     "Each Generated Project Needs Node.js And Its Own `npm install`", "Remotion Has Its Own License Terms",
+                     "npm run studio", "npm run render-reviewed", "Neither Asks For Approval",
+                     "Sound In The Remotion Route Has Not Been Verified"):
             self.assertIn(rule, text)
         brief = next(line for line in text.splitlines() if "](BRIEF.md)" in line)
         styles = next(line for line in text.splitlines() if "](STYLES.md)" in line and line.startswith("Read"))
@@ -163,6 +191,32 @@ class GuideTests(unittest.TestCase):
         reflection = text[text.index("## After The Edit"):text.index("## Verification")]
         for place in ("Reflect Skill", "This File", "Style's Guide", "Technical Reference", "Defaults File"):
             self.assertIn(place, reflection)
+
+    def test_remotion_route_is_the_default_and_states_its_limits(self):
+        text = self.read("SKILL.md")
+        delivery = text[text.index("## Approved Delivery"):text.index("## After The Edit")]
+        self.assertLess(delivery.index("edit_video.py remotion"), delivery.index("edit_video.py render"))
+        self.assertLess(delivery.index("Owner Review."), delivery.index("npm run render-reviewed"))
+        for check in ("`validate`", "`check`", "`still`", "`loudness`", "`mix`"):
+            self.assertIn(check, delivery[:delivery.index("1. **Verify The Edit.**")])
+        guide = self.read("remotion/README.md")
+        for heading in ("### HDR Sources", "### Speed Changes And Pitch", "### Caption Fonts", "### Media Formats"):
+            self.assertIn(heading, guide)
+        for rule in ("It Never Writes A Video", "Sound In The Remotion Route Is Unverified", "Preparation Refuses A Timeline",
+                     "Keeps The Pitch", "Falls Back To Another Font Without A Message", "Type APPROVE",
+                     "Refuses To Replace An Existing File", "Neither Asks For Approval",
+                     "Before Any Video Export, Including Test And Preview Exports",
+                     "Each Generated Project Needs Node.js And Its Own `npm install`", "Remotion Has Its Own License Terms"):
+            self.assertIn(rule, guide)
+        # The Product Overview And Start Sheet Sit Above The Skills In The Download. An Installed Skill Has Neither.
+        for name in ("README.md", "START-HERE.md"):
+            sheet = SKILL.parents[1] / name
+            if sheet.is_file() and (SKILL.parents[1] / "install.py").is_file():
+                page = sheet.read_text(encoding="utf-8")
+                with self.subTest(sheet=name):
+                    self.assertIn("](skills/video-edit/remotion/README.md)", page)
+                    self.assertIn("Remotion Has Its Own License Terms", page)
+                    self.assertIn("Its Own `npm install`", page)
 
     def test_counts_in_the_guides_match_the_sound_index(self):
         count = len(json.loads((SKILL / "assets/cue-bank/sounds/index.json").read_text(encoding="utf-8")))

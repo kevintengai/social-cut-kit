@@ -4,7 +4,7 @@ This Sheet Tells You What To Install, Which Skill To Ask For, And What To Say To
 
 ## 1. Install
 
-You Need Python 3.10 Or Later. The Footage Editor Also Needs FFmpeg And FFprobe On Your System Path.
+You Need Python 3.10 Or Later. The Footage Editor Also Needs FFmpeg And FFprobe On Your System Path. Reviewing And Rendering In Remotion Also Needs Node.js.
 
 From The Unzipped Folder, Run One Of These. Then Restart Or Reload Your Agent.
 
@@ -44,7 +44,7 @@ Most Videos Use Three Or Four Skills In This Order. Every Skill Also Works Alone
 
 ## 4. Three Rules The Kit Follows
 
-- **You Approve Before Any Export.** The Agent Saves An Editable Project For You To Review. It Creates No Video File, Including Test Or Preview Files, Until You Say So.
+- **You Approve Before Any Export.** The Agent Saves An Editable Project For You To Review. By Default That Is A Remotion Project You Open In Remotion Studio. It Creates No Video File, Including Test Or Preview Files, Until You Say So. The Render Command Then Asks You To Confirm In Person.
 - **Your Original Audio Stays As Recorded.** Gain And Loudness Changes Happen Only When You Ask.
 - **Use Only Material You Have Rights To.** The Kit Does Not Download Other People's Posts.
 
@@ -60,4 +60,4 @@ An Eight-Second Example Edit Opens In Your Browser. For Animation, Open `skills/
 
 Each Skill Has Its Own Guide At `skills/NAME/SKILL.md`. The [Product Overview](README.md) Lists What The Download Contains, And [Usage Terms](USAGE.md) Covers What You May Do With It.
 
-Animated Videos Are Finished In Remotion By Default. Each Generated Project Needs Node.js And Its Own `npm install`, And Remotion Has Its Own License Terms. Motion Studio Can Export Without Any Install When That Is Not Possible. See The [Remotion Adapter Guide](skills/animated-video/adapter/README.md).
+Camera Edits And Animated Videos Are Both Reviewed And Finished In Remotion By Default. Each Generated Project Needs Node.js And Its Own `npm install`, And Remotion Has Its Own License Terms. When That Is Not Possible, The Video Editor Renders With FFmpeg And Motion Studio Exports Without Any Install. The Same Approval Rule Applies On Every Route. See [Remotion Review And Render](skills/video-edit/remotion/README.md) For Camera Edits And The [Remotion Adapter Guide](skills/animated-video/adapter/README.md) For Animation.

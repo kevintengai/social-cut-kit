@@ -294,7 +294,7 @@ def optional_items(managers):
     else:
         rows.append(item("resolve", False, purpose, "missing", "DaVinci Resolve Was Not Found In Its Usual Location.",
                          install=None, manual=MANUAL["resolve"]))
-    purpose = "Runs The Review Player Identity Tests And The Animated Video Tools."
+    purpose = "Prepares Remotion Review Projects And Runs The Review Player Identity Tests And The Animated Video Tools."
     node = which("node")
     if node:
         label = (tool_output([node, "--version"]) or "").strip() or None

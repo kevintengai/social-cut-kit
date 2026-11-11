@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -48,11 +49,18 @@ def parser():
                        ("still", "Write One Composed Frame As A PNG For Inspection."),
                        ("mix", "Write The Composed Sound As A WAV For Listening Checks."),
                        ("loudness", "Measure The Composed Mix Through A Null Sink."),
+                       ("remotion", "Prepare A Remotion Project For Owner Review Without Writing A Video."),
                        ("render", "Encode An Owner-Approved MP4.")]:
         cmd = command(name, desc)
         cmd.add_argument("project", type=Path)
         if name in ("handoff", "captions", "still", "mix", "render"):
             cmd.add_argument("output", type=Path)
+        if name == "remotion":
+            cmd.add_argument("output", type=Path, metavar="folder", help="A New Folder For The Remotion Project.")
+            cmd.add_argument("--allow-hdr", action="store_true",
+                             help="Prepare HDR Sources Anyway. Remotion Converts Them Its Own Way, Unlike The Checked Stills.")
+            cmd.add_argument("--link-media", action="store_true",
+                             help="Hard Link Media Into The Project Where The Disk Allows, Instead Of Copying It.")
         if name == "review":
             cmd.add_argument("--port", type=int, default=0)
             cmd.add_argument("--no-open", action="store_true", help="Print The Local URL Without Opening A Browser.")
@@ -86,6 +94,26 @@ def parser():
             cmd.add_argument("--if-over-ceiling", choices=("refuse", "cap"),
                              help="Refuse The Render, Or Cap The Gain, When The Target Would Pass The Ceiling. The Default Is refuse.")
     return cli
+
+
+def remotion_project(project, folder, allow_hdr, link_media):
+    """Hand A Validated Timeline To The Node Adapter. It Writes Project Files And Media Copies, Never A Video."""
+    node = shutil.which("node")
+    if not node:
+        raise EditError("Install Node.js And Add It To PATH To Prepare A Remotion Project.")
+    script = Path(__file__).resolve().parents[1] / "remotion" / "prepare-remotion.cjs"
+    flags = (["--allow-hdr"] if allow_hdr else []) + (["--link-media"] if link_media else [])
+    result = subprocess.run([node, str(script), str(project), str(folder), "--json", *flags],
+                            capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if result.returncode:
+        raise EditError(result.stderr.strip()[-4000:] or "Remotion Project Preparation Failed.")
+    report = json.loads(result.stdout)
+    notes = report.pop("warnings", [])
+    wanted = ("composition", "frames", "overlays", "audio_cues", "captions", "media_files")
+    extra = {key: report[key] for key in wanted}
+    extra["next_steps"] = ["npm install", "npm run studio", "Owner Reviews The Whole Cut In Remotion Studio",
+                           "npm run render-reviewed -- Approved-Cut.mp4"]
+    return extra, notes
 
 
 def window(args, model):
@@ -147,6 +175,9 @@ def main(argv=None):
         start, seconds = window(args, model)
         extra = loudness.report(model, args.loudness_target, args.true_peak_ceiling, args.layer, start, seconds,
                                 args.cues, args.cue_window, args.cue_aim)
+    elif command == "remotion":
+        extra, notes = remotion_project(project, args.output.resolve(), args.allow_hdr, args.link_media)
+        warnings += notes
     elif command == "render":
         if args.loudness_target is None:
             if args.true_peak_ceiling is not None or args.if_over_ceiling is not None:

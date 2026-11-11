@@ -1,11 +1,11 @@
 ---
 name: video-edit
-description: Edit Social Videos From Recorded Footage. Check The Machine, Apply Saved User Defaults And The Brief, Choose A Style, Cut And Caption With Phrase Timing, Convert HDR And Rotated Phone Clips, Level Sound Cues And Loudness, Transfer Camera Motion, Build Native DaVinci Resolve Timelines, And Carry Owner-Approved Media Through Posting Or Scheduling.
+description: Edit Social Videos From Recorded Footage. Check The Machine, Apply Saved User Defaults And The Brief, Choose A Style, Cut And Caption With Phrase Timing, Convert HDR And Rotated Phone Clips, Level Sound Cues And Loudness, Transfer Camera Motion, Build Native DaVinci Resolve Timelines, Prepare A Remotion Project For Owner Review And The Approved Render, And Carry Owner-Approved Media Through Posting Or Scheduling.
 ---
 
 # Social Cut Kit Video Editor
 
-Build The Edit In A JSON Timeline. Review It In The Included Browser Editor, Which Plays The Original Source Files. Keep The Timeline And Media Together So Another Editor Can Reopen The Project.
+Build The Edit In A JSON Timeline. Review It In The Included Browser Editor, Which Plays The Original Source Files. Keep The Timeline And Media Together So Another Editor Can Reopen The Project. When The Cut Is Ready, Hand It To Its Owner As A Remotion Project, Which Is The Default Route For Owner Review And The Approved Render.
 
 ## Start Every Session
 
@@ -36,6 +36,7 @@ Read [The Style Index](STYLES.md) Before Planning A Cut. It Chooses Between The 
 | Choosing And Leveling A Sound Cue | [Editorial Cue Bank](assets/cue-bank/README.md) |
 | Repeated Takes Or A Reference Cut Pattern | [Reference And Take Analysis](RECREATION.md) |
 | Giving A Clip The Camera Move Of A Reference | [Camera Motion Transfer](CAMERA.md) |
+| Owner Review Or The Approved Render In Remotion, And What Differs There | [Remotion Review And Render](remotion/README.md) |
 | An Editable Resolve Project As The Deliverable | [Native Resolve Assembly](RESOLVE.md) |
 | Publishing Or Scheduling A Reviewed Master | [Posting And Scheduling](PUBLISH.md) |
 
@@ -61,6 +62,7 @@ Place The Playhead Inside A Shot And Select **Split Shot At Playhead**. Select *
 4. List The Shots In Playback Order. Set Each Source In And Out Point In Seconds. Use Lead And Tail Handles To Preserve Full Word Beginnings, Endings, And Natural Breaths. Keep Source Dialogue At Its Original Speed And Level Unless The Edit Calls For A Change.
 5. Place Overlays, Audio, And Captions Using Time From The Start Of The Assembled Edit. Recheck Their Timing After Moving Or Deleting A Shot.
 6. Run `validate`, Run `check`, And Open `review`. Read Any Warnings That `validate` Prints. Inspect Single Frames With `still`, And Measure Levels Where Cues Overlap Speech With `loudness`. The Full Composition Check Decodes To A Null Sink Without Creating A Movie.
+7. Prepare A Remotion Project For The Owner, As [Approved Delivery](#approved-delivery) Describes. Preparation Writes No Video.
 
 ```sh
 python scripts/edit_video.py probe "Footage/Camera A.mp4"
@@ -97,7 +99,7 @@ All Timeline Cue Times Snap To The Nearest Output Frame. Each Shot Duration Snap
 
 Phone Clips Recorded As HLG, Dolby Vision 8.4, Or HDR10 Look Flat And Desaturated When Their Pixels Are Used Unconverted. `probe` Flags Them, And `validate` Prints A Warning For Each HDR Or Rotated Source In Use. By Default Every HDR Shot Is Tone Mapped To Standard Dynamic Range Exactly Once, So The Check, The Stills, And The Approved Render Agree. Framing, Crop, And Pan Always Use The Displayed, Upright Picture.
 
-The Conversion Needs The `zscale` And `tonemap` Filters. When The FFmpeg Build Lacks One, `check`, `still`, And `render` Stop With A Message That Names It. Install A Fuller Build, Or Set `tone_map` To `false`. The Browser Editor Plays The Original File With The Browser's Own Conversion, So Judge Converted Color On A Still. See [HDR Handling](TECHNICAL.md#hdr-handling).
+The Conversion Needs The `zscale` And `tonemap` Filters. When The FFmpeg Build Lacks One, `check`, `still`, And `render` Stop With A Message That Names It. Install A Fuller Build, Or Set `tone_map` To `false`. The Browser Editor Plays The Original File With The Browser's Own Conversion, So Judge Converted Color On A Still. Remotion Does Not Use The Kit's Conversion, So The `remotion` Command Refuses An HDR Timeline And Points To The FFmpeg Render. See [HDR Handling](TECHNICAL.md#hdr-handling).
 
 ## Captions
 
@@ -132,7 +134,27 @@ The SRT Uses Millisecond Timing. The OpenTimelineIO Handoff Includes Picture Cut
 
 ## Approved Delivery
 
-Save The Editable Project And Have Its Owner Personally Review This Version In The Editor. Wait For Explicit Approval Before Any Video Export, Including Preview Or Test Files. An Agent Running Validation, Viewing Stills, Or Measuring Loudness Does Not Grant Approval. After Approval, Supply A New Output Filename.
+Remotion Is The Default Route For Owner Review And The Finished Video. The Browser Editor And The Non-Exporting Checks `validate`, `check`, `still`, `loudness`, And `mix` Stay Exactly As They Are, And They Remain The Way To Verify An Edit Before Approval. The FFmpeg Render Below Stays Available And Needs No Node Packages.
+
+1. **Verify The Edit.** Run The Checks, Read Every Warning, And Fix The Timeline Until They Pass.
+2. **Prepare The Project.** The `remotion` Command Writes A Standalone Project Folder With The Media, A Copy Of The Timeline, And No Video. Read Its Warnings. Each One Names Something Remotion Reproduces Differently From The Checks, Such As A Retimed Shot, A Very Short Fade, Or A Format The Browser Cannot Play. It Refuses HDR Sources And Points To The FFmpeg Render.
+3. **Install And Open.** Each Generated Project Needs Node.js And Its Own `npm install`, Which Uses The Network. Remotion Has Its Own License Terms. `npm run studio` Opens Remotion Studio.
+4. **Owner Review.** Save The Editable Project And Have Its Owner Personally Review This Version In The Editor. By Default That Editor Is Remotion Studio, Where The Owner Opens **VideoEdit**, Watches The Entire Cut With Sound, And Checks Word Beginnings And Endings At Every Cut. Wait For Explicit Approval Before Any Video Export, Including Preview Or Test Files. An Agent Running Validation, Viewing Stills, Or Measuring Loudness Does Not Grant Approval. After Any Change, Prepare A Fresh Project And Repeat The Review.
+5. **Render.** After Approval, The Owner Runs The Gated Render In An Interactive Terminal. It Asks For Personal Confirmation And Refuses To Replace A File. Never Use Remotion Studio's Own Render Button Or Remotion's `render` Command, Because Neither Asks For Approval.
+
+```sh
+python scripts/edit_video.py remotion "First Cut/timeline.json" "First Cut Remotion"
+cd "First Cut Remotion"
+npm install
+npm run studio
+npm run render-reviewed -- "Approved Cut.mp4"
+```
+
+Sound In The Remotion Route Has Not Been Verified By This Kit, So The Owner's Listening Review Is The Check. Read [Remotion Review And Render](remotion/README.md) For Every Known Difference In HDR, Retimed Sound, Caption Fonts, And Media Formats.
+
+### Render With FFmpeg Without Node Packages
+
+Use This Route When Node Packages Cannot Be Installed, For HDR Sources, For A Loudness Target, For Separate Captions, Or When The Result Must Match The Checks Exactly. The Owner Reviews The Saved Timeline In The Browser Editor, And The Same Approval Rule Applies. After Approval, Supply A New Output Filename.
 
 ```sh
 python scripts/edit_video.py render "First Cut/timeline.json" "First Cut/Approved Cut.mp4" --owner-approved
@@ -164,7 +186,7 @@ When Asked To Reflect On The Session, Follow The Kit's [Reflect Skill](../reflec
 
 ```sh
 python -B -m unittest discover -s tests -v
-node --test tests/test_camera_identity.cjs tests/test_review_player.cjs
+node --test tests/test_camera_identity.cjs tests/test_review_player.cjs tests/test_remotion_plan.cjs tests/test_remotion_project.cjs
 ```
 
-The Tests Exercise Editing, Setup Checks, Saved Defaults, HDR And Rotated Sources, Loudness, Fades, Phrase Captions, The Sound Bank, Camera Tracking, Native Timeline Assembly, And Posting Receipts With Temporary Fixtures. They Decode Into A Null Sink And Write Only Stills And WAV Files. The Node.js Tests Check That The Camera Review Player Opens The Exact Target File And That The Editor Follows Fades And Shows Source Warnings. Install The Optional Dependencies Listed In The Workflow Guides To Run The Vision And Named-Time-Zone Checks.
+The Tests Exercise Editing, Setup Checks, Saved Defaults, HDR And Rotated Sources, Loudness, Fades, Phrase Captions, The Sound Bank, Camera Tracking, Native Timeline Assembly, Remotion Project Preparation, And Posting Receipts With Temporary Fixtures. They Decode Into A Null Sink And Write Only Stills And WAV Files. The Node.js Tests Check That The Camera Review Player Opens The Exact Target File, That The Editor Follows Fades And Shows Source Warnings, And That The Remotion Adapter Snaps Frames, Frames Shots, And Builds A Project As The Timeline Describes. They Do Not Install Remotion. Install The Optional Dependencies Listed In The Workflow Guides To Run The Vision And Named-Time-Zone Checks.

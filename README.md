@@ -18,7 +18,13 @@ An Eight-Second Vertical Edit Opens In Your Browser. Scrub Across The Three-Seco
 
 For Animation, Open [Motion Studio](skills/animated-video/studio/index.html) From The Unzipped Folder. Try A Kinetic Title, A Process Diagram, Or A Lit 3D Turntable. The Browser Opens The Included Scene Without A Package Install. For Reusable Visuals, Open The [Icon And Overlay Gallery](art/index.html).
 
-Finished Animation Is Reviewed And Rendered In [Remotion](skills/animated-video/adapter/README.md) By Default. Take A Saved Storyboard There, Or Open The Included [Pulse Dial Blender Scene](skills/animated-video/blender/Pulse%20Dial.blend) To Edit Its Materials, Lighting, Camera Move, And Animated Controls.
+A Finished Camera Edit Is Reviewed And Rendered In [Remotion](skills/video-edit/remotion/README.md) By Default. One Command Turns The Timeline Into A Standalone Project With Its Media, And Writes No Video. The Owner Reviews It In Remotion Studio, And An Approval-Gated Command Renders The MP4. The Browser Editor And The Checks That Export Nothing Remain The Way To Build And Verify The Edit First. The FFmpeg Render Stays Available And Needs No Node Packages.
+
+```sh
+python skills/video-edit/scripts/edit_video.py remotion examples/repair-desk/timeline.json Repair-Desk-Remotion
+```
+
+Finished Animation Is Reviewed And Rendered In [Remotion](skills/animated-video/adapter/README.md) By Default. Each Generated Remotion Project Needs Node.js And Its Own `npm install`, And Remotion Has Its Own License Terms. Take A Saved Storyboard There, Or Open The Included [Pulse Dial Blender Scene](skills/animated-video/blender/Pulse%20Dial.blend) To Edit Its Materials, Lighting, Camera Move, And Animated Controls.
 
 ## Install The Skills
 
@@ -38,7 +44,7 @@ To Install Specific Skills, Append Their Folder Names. For Example, `python inst
 | Define An Offer And Its Proof | [Campaign Brief](skills/teng-campaign-brief/SKILL.md) | A Structured Brief With Sources, A Viewer Action, And A Measurable Response |
 | Write A Short And Read Its Analytics | [Script Desk](skills/video-script/SKILL.md) | Ideas, A Timed Script With A Checklist, And A Posted-Video Review Backed By Your Own Video Library |
 | Plan Pictures And Sound | [Director’s Desk](skills/director/SKILL.md) | An Offline Shot Board And A Timeline Built From Sourced Beats |
-| Cut Recorded Footage | [Video Edit](skills/video-edit/SKILL.md) | A Local Editable Timeline With Source Sound, Overlays, Captions, And Speed Changes |
+| Cut Recorded Footage | [Video Edit](skills/video-edit/SKILL.md) | A Local Editable Timeline With Source Sound, Overlays, Captions, And Speed Changes, Reviewed And Rendered In Remotion |
 | Build An Animated Explainer | [Animated Video](skills/animated-video/SKILL.md) | A Reopenable Storyboard Or A Code-Drawn Film Timed From The Voiceover And Reviewed From Stills |
 | Find Or Reuse A Project Asset | [Asset Library](skills/asset-library/SKILL.md) | A Searchable Local Record With Source Rights And Exact Version Pins |
 | Review A Finished Session Or A Cut | [Reflect](skills/reflect/SKILL.md) | Evidence-Based Findings And Proposed Instruction Changes That Wait For Your Approval |
@@ -61,7 +67,8 @@ The Video Editor Also Exposes These Workflows As `camera`, `resolve`, And `post`
 - Track A Single Detail To Study A Shot, Or Transfer Its Overall Pan, Zoom, And Rotation To A Second Clip. [Reference And Take Tools](skills/video-edit/RECREATION.md) · [Camera Motion Transfer](skills/video-edit/CAMERA.md)
 - Build A Transparent Title With A Highlighted Keyword, Or Add One Of The 63 Original Sound Cues Across The Footage And Animation Tools. [Title Overlays](skills/video-edit/TITLES.md) · [Editorial Cues](skills/video-edit/assets/cue-bank/README.md)
 - Build Directly In Resolve When That Is The Delivery Editor. For Interchange With Other Editors, The Kit Also Writes OTIO And SRT. [Native Resolve Assembly](skills/video-edit/RESOLVE.md)
-- For School Productions, Let The Owner Personally Review The Saved Edit In Its Editor Before Any Video Export. A Source Check Or Still Image Can Help Diagnose An Issue During Preparation.
+- For School Productions, Let The Owner Personally Review The Saved Edit In Its Editor Before Any Video Export, Including Test And Preview Exports. By Default That Editor Is Remotion Studio. A Source Check Or Still Image Can Help Diagnose An Issue During Preparation.
+- Deliver Through The Approval-Gated Remotion Render By Default, Or Through The Approval-Gated FFmpeg Render For HDR Footage, A Loudness Target, Or A Machine Without Node Packages. [Remotion Review And Render](skills/video-edit/remotion/README.md)
 
 ## What The Download Contains
 
