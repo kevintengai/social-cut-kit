@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Detail Bracket</title>
   <desc id="desc">Frame An Interface Detail Without Covering Its Center.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M20 9H9v13 M44 9h11v13 M55 43v12H43 M21 55H9V43" stroke="#5EE1C7"/>
-    <path d="M27 32h10 M32 27v10"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#5EE1C7" d="M7.5 3.5h-4v5M16.5 3.5h4v5M20.5 16v4.5H16M8 20.5H3.5V16"/>
+    <path d="M10 12h4M12 10v4"/>
   </g>
 </svg>

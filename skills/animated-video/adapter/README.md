@@ -24,16 +24,21 @@ Open **MotionStoryboard**. Scrub Frame By Frame Or Play The Entire Composition W
 | --- | --- |
 | Storyboard And Framing | Original Scene Order, Duration, Aspect Ratio, Resolution, And Frame Rate |
 | 2D Animation | Kinetic Headlines, Supporting Lines, Marks, Colors, And Sequential Diagram Steps |
+| Code Scenes | The Film's Scene Modules, The Drawing Kit, And The Kit's Parts, Compiled Into The Painter. The Modules Are Also Copied Beside The Source Storyboard. |
+| Captions | The Caption Track, Drawn By The Painter On Every Frame |
 | 3D Animation | Mesh Geometry, Camera Yaw, Elevation, Orbit, Distance, Object Spin, Surface, Key Light, And Gloss |
 | Sound Design | Individual Local WAV Assets, Cue Starts Rounded To The Nearest Frame, And Cue Gain |
-| Voice | Original Attached Audio Bytes In Local Media Files, Spoken Lines In The Cue Manifest, And A Scene-End Cutoff |
+| Voice | Original Attached Audio Bytes In Local Media Files, Spoken Lines In The Cue Manifest, And A Scene-End Cutoff. A Film Voice Recording Plays Across Every Scene From Its Offset. |
+| Sound Position | A Panned Sound Cue Becomes A Stereo WAV Made At Preparation Time |
 | Editable Source | The Self-Contained Source Storyboard, The Visual Scene JSON, Cue Manifest, And React Composition |
 
 The Remotion Audio Engine Handles Decoding And Mixing. The Browser Editor’s Master Compressor And Subframe Gain Ramps Are Specific To Its Interactive Playback. Review The Audio Mix In The Destination Runtime. Room Air Is A Single Four-Second Cue. Script-Only Voice Lines Remain Notes.
 
+Prepare A Film With Scene Modules From Its Saved Storyboard File, So The Modules And Voice Recording Listed Beside It Can Be Found. The Painter With Code Scenes Is Checked Against The Studio Painter In Node And In A Browser. This Kit's Checks Do Not Run It Inside An Installed Remotion Project, So Step Through The Composition In Remotion Studio Before Relying On It. A Film Voice That Skips Into The Recording Relies On The Audio Component's `trimBefore` Setting. Confirm The Voice Stays In Step In Remotion Studio.
+
 ## Make Changes
 
-Open The Generated Project’s **source-storyboard.json** In Motion Studio To Edit Cues, Text, Meshes, Camera Motion, And Lighting Together. Save A New Storyboard And Prepare A New Output Directory. This Rebuilds The Remotion Timeline Consistently.
+Open The Generated Project’s Folder In Motion Studio With **Open Film Folder**, Or Its **source-storyboard.json** With **Open Storyboard**, To Edit Cues, Text, Meshes, Camera Motion, And Lighting Together. Save A New Storyboard And Prepare A New Output Directory. This Rebuilds The Remotion Timeline Consistently.
 
 For Direct Composition Work, Edit **src/frame-project.json** For Visual Parameters, **src/timeline.json** For Audio Timing And Composition Dimensions, And **src/index.jsx** For React Composition Changes. The Source Storyboard Remains A Snapshot Of The Handoff. When Changing Scene Lengths, Frame Rate, Or Aspect Ratio, Regenerate From Motion Studio To Recalculate The Related Timeline Values.
 
@@ -46,3 +51,5 @@ npm run render-reviewed -- Final-Cut.mp4
 ~~~
 
 The Preparation And Verification Commands Only Assemble Project Files Or Check Stills. The Remotion Runtime And Its Dependencies Are Installed Separately From This Kit.
+
+Remotion Has Its Own License Terms, Including Paid Company Licenses For Larger Teams. Check The Current Terms On Remotion's Website Before Using It In Your Business.

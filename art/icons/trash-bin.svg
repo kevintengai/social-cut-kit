@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Trash Bin</title>
+  <desc id="desc">Delete A Clip, File, Or Draft.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#5EE1C7" d="M4 6.5h16M9.5 6.5v-2a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/>
+    <path d="m6 6.5.9 12.6a1.5 1.5 0 0 0 1.5 1.4h7.2a1.5 1.5 0 0 0 1.5-1.4L18 6.5M10 10.5v6M14 10.5v6"/>
+  </g>
+</svg>

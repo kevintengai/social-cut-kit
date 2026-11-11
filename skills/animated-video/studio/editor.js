@@ -4,8 +4,9 @@
   const $ = id => document.getElementById(id);
   const canvas = $("frame"), cuesHost = $("cues"), timeline = $("seek");
   const selectOptions = (el, values) => el.replaceChildren(...values.map(v => new Option(v, v)));
-  for (const [id, list] of Object.entries({ mode: P.modes, motion: P.motions, mark: P.marks, shape: P.shapes, aspect: Object.keys(P.aspects) })) selectOptions($(id), list);
-  let project = P.demo(), selected = 0, position = 1.0, reviewed = false;
+  for (const [id, list] of Object.entries({ mode: P.modes, motion: P.motions, mark: P.marks, shape: P.shapes, aspect: P.aspectNames })) selectOptions($(id), list);
+  MotionScenes.seal();
+  let project = P.demo(), selected = 0, position = 1.0, reviewed = false, filmVoice = "";
   let running = null, attempt = 0, preparing = false, audio, master;
   const cached = new Map();
   const getScene = () => project.scenes[selected];
@@ -22,7 +23,7 @@
     reviewed = false; $("approve").checked = false; reviewControls();
   }
   function resize(full = false) {
-    const [w, h] = P.aspects[project.aspect], scale = full ? 1 : Math.min(1, 960 / Math.max(w, h));
+    const [w, h] = P.size(project), scale = full ? 1 : Math.min(1, 960 / Math.max(w, h));
     canvas.width = Math.round(w * scale); canvas.height = Math.round(h * scale);
   }
   function draw() {
@@ -35,7 +36,7 @@
     $("scenes").replaceChildren(...project.scenes.map((s, i) => {
       const b = document.createElement("button"), title = document.createElement("strong"), meta = document.createElement("span");
       title.textContent = s.title || "Untitled Scene";
-      meta.textContent = s.mode + " · " + seconds(P.start(project, i)) + " · " + seconds(s.duration);
+      meta.textContent = (s.mode === "Code Scene" && s.draw ? s.draw : s.mode) + " · " + seconds(P.start(project, i)) + " · " + seconds(s.duration);
       b.className = "scene"; b.setAttribute("aria-current", String(i === selected)); b.append(title, meta);
       b.onclick = () => { halt(); selectScene(i); };
       return b;
@@ -53,11 +54,21 @@
     for (const key of ["mode", "duration", "eyebrow", "title", "body", "motion", "mark", "shape", "material", "light", "lightYaw", "lightElevation", "intensity", "background", "foreground", "accent", "azimuth", "elevation", "orbit", "spin", "distance", "gloss"])
       $(key).value = s[key];
     $("steps").value = s.steps.join("\n");
-    $("spaceFields").hidden = s.mode !== "3D Object"; $("stepsField").hidden = s.mode !== "Process Diagram"; $("bodyField").hidden = s.mode === "Process Diagram";
+    const code = s.mode === "Code Scene";
+    $("spaceFields").hidden = s.mode !== "3D Object"; $("stepsField").hidden = s.mode !== "Process Diagram"; $("bodyField").hidden = s.mode === "Process Diagram" || code;
+    $("codeFields").hidden = !code; $("typeFields").hidden = $("eyebrowField").hidden = code; $("titleLabel").textContent = code ? "Scene Name" : "Headline";
+    if (code) {
+      const names = MotionScenes.names().sort();
+      if (!s.draw && names.length) s.draw = names[0];
+      selectOptions($("drawName"), names.includes(s.draw) ? names : [s.draw, ...names]);
+      $("drawName").value = s.draw || ""; $("params").value = JSON.stringify(s.params || {}, null, 2); $("paramsNote").textContent = "";
+    }
     showCues();
   }
   function showProject() {
     $("projectTitle").value = project.title; $("aspect").value = project.aspect; $("fps").value = project.fps;
+    const size = P.size(project); $("customSize").hidden = project.aspect !== "Custom"; $("customWidth").value = size[0]; $("customHeight").value = size[1];
+    $("captionsField").hidden = !project.captions; $("showCaptions").checked = Boolean(project.captions && project.captions.show);
     resize(); renderList(); inspector(); draw(); reviewControls();
   }
   function changed() {
@@ -71,10 +82,29 @@
   }
   timeline.oninput = () => { halt(); setPosition(Number(timeline.value)); };
   $("projectTitle").oninput = () => { changed(); project.title = $("projectTitle").value; };
-  $("aspect").onchange = () => { changed(); project.aspect = $("aspect").value; resize(); draw(); };
+  $("aspect").onchange = () => {
+    changed(); const size = P.size(project); project.aspect = $("aspect").value;
+    if (project.aspect === "Custom") project.size = size; else delete project.size;
+    showProject();
+  };
+  for (const [id, at] of [["customWidth", 0], ["customHeight", 1]]) $(id).onchange = () => {
+    const value = Math.round($(id).valueAsNumber / 2) * 2;
+    if (project.aspect === "Custom" && value >= 240 && value <= 4096) { changed(); project.size[at] = value; }
+    showProject();
+  };
+  $("showCaptions").onchange = () => { if (project.captions) { changed(); project.captions.show = $("showCaptions").checked; draw(); } };
+  $("drawName").onchange = () => { changed(); getScene().draw = $("drawName").value; renderList(); draw(); };
+  $("params").oninput = () => {
+    let parsed = null;
+    try { parsed = JSON.parse($("params").value); } catch {}
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) { $("paramsNote").textContent = "Parameters Must Be A JSON Object. The Last Valid Version Is Still In Use."; return; }
+    $("paramsNote").textContent = ""; changed(); getScene().params = parsed; draw();
+  };
   $("fps").onchange = () => { changed(); project.fps = Number($("fps").value); };
   for (const key of ["mode", "motion", "mark", "shape"]) $(key).onchange = () => {
-    changed(); getScene()[key] = $(key).value; inspector(); renderList(); draw();
+    changed(); const s = getScene(); s[key] = $(key).value;
+    if (key === "mode" && s.mode === "Code Scene") { s.draw = s.draw || ""; s.params = s.params || {}; }
+    inspector(); renderList(); draw();
   };
   for (const key of ["eyebrow", "title", "body", "background", "foreground", "accent", "material", "light"]) $(key).oninput = () => {
     changed(); getScene()[key] = $(key).value; if (key === "title") renderList(); draw();
@@ -183,14 +213,46 @@
   $("save").onclick = () => {
     download(new Blob([JSON.stringify(project, null, 2)], { type: "application/json" }), ".json"); say("Storyboard Download Requested.");
   };
-  $("openFile").onchange = async e => {
-    const file = e.target.files[0]; if (!file) return;
-    try {
-      if (file.size > 128 * 1024 * 1024) throw new Error("Project Too Large.");
-      const next = P.cleanProject(JSON.parse(await file.text()));
-      changed(); cached.clear(); project = next; selected = 0; position = Math.min(1, getScene().duration * 0.55);
-      showProject(); say("Storyboard Opened.");
-    } catch { say("Could Not Open This Storyboard. Choose A Valid Version One JSON File Under 128 MiB."); }
+  // Open A Storyboard Alone, Or Together With The Scene Modules And Voice Recording It Lists, Or As A Whole Film Folder.
+  // Pages Opened From Disk Cannot Fetch Files, So The Scene Modules Come From The Same File Picker.
+  async function openFiles(list) {
+    const files = [...list], where = f => (f.webkitRelativePath || f.name).replaceAll("\\", "/");
+    const boards = [];
+    for (const f of files.filter(f => /\.json$/i.test(f.name) && f.size <= 128 * 1024 * 1024 && !where(f).includes("node_modules/"))) {
+      try { boards.push({ file: f, project: P.cleanProject(JSON.parse(await f.text())) }); } catch {}
+    }
+    if (!boards.length) throw new Error("No Storyboard");
+    const rank = b => /\.timed\.json$/i.test(b.file.name) ? 0 : /^storyboard\.json$/i.test(b.file.name) ? 1 : /^source-storyboard\.json$/i.test(b.file.name) ? 2 : 3;
+    boards.sort((a, b) => rank(a) - rank(b) || where(a.file).length - where(b.file).length);
+    const chosen = boards[0], next = chosen.project, base = where(chosen.file).slice(0, where(chosen.file).length - chosen.file.name.length);
+    const find = name => files.find(f => where(f) === base + name) || (files.filter(f => f.name === name.split("/").pop()).length === 1 ? files.find(f => f.name === name.split("/").pop()) : null);
+    MotionScenes.reset();
+    const missing = [];
+    for (const name of next.modules || []) {
+      const source = find(name);
+      if (!source) { missing.push(name); continue; }
+      new Function(await source.text() + "\n//# sourceURL=film/" + name.replace(/\s/g, "-"))();
+    }
+    let voice = next.voice && next.voice.clip || "";
+    if (next.voice && next.voice.file && !voice) {
+      const recording = find(next.voice.file);
+      if (recording && recording.size <= 64 * 1024 * 1024) voice = await new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = reject; r.readAsDataURL(recording); });
+      else missing.push(next.voice.file);
+    }
+    changed(); cached.clear(); project = next; filmVoice = voice; selected = 0; position = Math.min(1, getScene().duration * 0.55);
+    showProject();
+    const absent = [...new Set(project.scenes.filter(s => s.mode === "Code Scene" && s.draw && !MotionScenes.has(s.draw)).map(s => s.draw))];
+    const notes = [];
+    if (missing.length) notes.push("Not Loaded: " + missing.join(", ") + ". Choose Open Film Folder And Pick The Folder That Holds The Storyboard.");
+    else if (absent.length) notes.push("No Loaded Module Registers: " + absent.join(", ") + ".");
+    if (project.voice && project.voice.standIn) notes.push("This Storyboard Uses Stand-In Voice Timing.");
+    $("filmNote").hidden = !notes.length; $("filmNote").textContent = notes.join(" ");
+    say(missing.length || absent.length ? "Storyboard Opened With Missing Files." : "Storyboard Opened." + (boards.length > 1 ? " Chose " + chosen.file.name + "." : ""));
+  }
+  for (const id of ["openFile", "openFolder"]) $(id).onchange = async e => {
+    if (!e.target.files.length) return;
+    try { await openFiles(e.target.files); }
+    catch (error) { say(error.message === "No Storyboard" ? "Could Not Open This Storyboard. Choose A Valid Version One JSON File Under 128 MiB." : "A Scene Module Could Not Be Loaded: " + error.message); }
     e.target.value = "";
   };
   $("sheet").onclick = () => {
@@ -241,6 +303,8 @@
       }
       offset += s.duration;
     }
+    const voice = project.voice;
+    if (voice && filmVoice && voice.gain > 0) plan.push({ cue: { type: "Voice", clip: filmVoice, gain: voice.gain }, start: voice.offset || 0, end: P.duration(project) });
     return Promise.all(plan.map(async item => ({ ...item, buffer: await bufferFor(item.cue) })));
   }
   function schedule(plan, job) {
@@ -249,7 +313,9 @@
       const span = Math.min(item.buffer.duration, item.end - item.start) - skip;
       if (span <= 0) continue;
       const src = audio.createBufferSource(), gain = audio.createGain(), when = job.base + wait;
-      const fade = Math.min(span / 2, 0.008); src.buffer = item.buffer; src.connect(gain); gain.connect(master);
+      const fade = Math.min(span / 2, 0.008); src.buffer = item.buffer; src.connect(gain);
+      if (item.cue.pan && audio.createStereoPanner) { const panner = audio.createStereoPanner(); panner.pan.value = item.cue.pan; gain.connect(panner); panner.connect(master); }
+      else gain.connect(master);
       gain.gain.setValueAtTime(0, when); gain.gain.linearRampToValueAtTime(item.cue.gain, when + fade);
       gain.gain.setValueAtTime(item.cue.gain, when + span - fade); gain.gain.linearRampToValueAtTime(0, when + span);
       src.start(when, skip, span); job.sources.push([src, gain]);

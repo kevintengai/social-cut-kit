@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Receipt Slip</title>
+  <desc id="desc">Represent An Order Record Or A Proof Of Purchase.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5.5 2.5h13v19L16.3 20l-2.15 1.5L12 20l-2.15 1.5L7.7 20l-2.2 1.5z"/>
+    <path stroke="#5EE1C7" d="M8.5 7.5h7M8.5 11h7M8.5 14.5h4"/>
+  </g>
+</svg>

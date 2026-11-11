@@ -1,0 +1,25 @@
+{
+  "format": "school.campaign/1",
+  "title": "Your Repair Was Ready Two Days Ago",
+  "viewer": "Repair Shop Owners",
+  "offer": "A Status Filter For The Repair Queue",
+  "action": "Open The Demo And Try It",
+  "channel": "A Vertical Short",
+  "destination": "example.com/repair-queue",
+  "metric": "Demo Opens",
+  "reviewer": "Project Owner",
+  "evidence": [
+    {
+      "id": "P1",
+      "claim": "The Queue Lists Every Job In One Column Whatever Its Status",
+      "source": "Owned Screen Recording queue-walkthrough.mp4 At 00:04",
+      "visual": "Forty Rows With Mixed Statuses In One Column"
+    },
+    {
+      "id": "P2",
+      "claim": "Ready Only Leaves Just The Finished Jobs",
+      "source": "Owned Screen Recording queue-walkthrough.mp4 At 00:19",
+      "visual": "The List Shrinks From Forty Rows To Three"
+    }
+  ]
+}

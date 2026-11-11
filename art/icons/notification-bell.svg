@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Notification Bell</title>
   <desc id="desc">Mark A Reminder Or Subscription Prompt.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M13 43l4-6v-9a15 15 0 0 1 30 0v9l4 6z M25 49a7 7 0 0 0 14 0"/>
-    <path d="M8 26q0-10 8-16 M56 26q0-10-8-16" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m5 16 1.5-2.25v-3.4a5.5 5.5 0 0 1 11 0v3.4L19 16z"/>
+    <path d="M9.5 18.5a2.6 2.6 0 0 0 5 0"/>
+    <path stroke="#5EE1C7" d="M3 9.75q0-3.75 3-6M21 9.75q0-3.75-3-6"/>
   </g>
 </svg>

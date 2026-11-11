@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Captions</title>
   <desc id="desc">Introduce Or Inspect The Caption Layer.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="5" y="13" width="54" height="38" rx="5"/>
-    <path d="M13 28h20 M39 28h11 M13 37h11 M30 37h20" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="5" width="19" height="14" rx="2"/>
+    <path stroke="#5EE1C7" d="M6 11h6M15 11h3"/>
+    <path stroke="#5EE1C7" d="M6 14.5h3M12 14.5h6"/>
   </g>
 </svg>

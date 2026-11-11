@@ -1,0 +1,137 @@
+{
+  "standIn": true,
+  "note": "Stand-In Word Timings Made From Script Text At 150 Words Per Minute. Replace Them With Timings From The Real Recording.",
+  "wpm": 150,
+  "words": [
+    {
+      "start": 0.3,
+      "end": 0.86,
+      "text": "Every"
+    },
+    {
+      "start": 0.895,
+      "end": 1.293,
+      "text": "Idea"
+    },
+    {
+      "start": 1.318,
+      "end": 1.554,
+      "text": "Starts"
+    },
+    {
+      "start": 1.569,
+      "end": 1.804,
+      "text": "Small."
+    },
+    {
+      "start": 2.569,
+      "end": 2.804,
+      "text": "Say"
+    },
+    {
+      "start": 2.819,
+      "end": 3.054,
+      "text": "It"
+    },
+    {
+      "start": 3.069,
+      "end": 3.305,
+      "text": "Out"
+    },
+    {
+      "start": 3.32,
+      "end": 3.555,
+      "text": "Loud,"
+    },
+    {
+      "start": 3.75,
+      "end": 3.985,
+      "text": "And"
+    },
+    {
+      "start": 4,
+      "end": 4.235,
+      "text": "It"
+    },
+    {
+      "start": 4.25,
+      "end": 4.486,
+      "text": "Starts"
+    },
+    {
+      "start": 4.501,
+      "end": 4.736,
+      "text": "To"
+    },
+    {
+      "start": 4.751,
+      "end": 4.986,
+      "text": "Move."
+    },
+    {
+      "start": 5.751,
+      "end": 5.987,
+      "text": "One"
+    },
+    {
+      "start": 6.002,
+      "end": 6.237,
+      "text": "Friend"
+    },
+    {
+      "start": 6.252,
+      "end": 6.487,
+      "text": "Tells"
+    },
+    {
+      "start": 6.502,
+      "end": 6.737,
+      "text": "Three."
+    },
+    {
+      "start": 7.172,
+      "end": 7.408,
+      "text": "Three"
+    },
+    {
+      "start": 7.423,
+      "end": 7.658,
+      "text": "Tell"
+    },
+    {
+      "start": 7.673,
+      "end": 7.908,
+      "text": "Nine."
+    },
+    {
+      "start": 8.673,
+      "end": 8.908,
+      "text": "By"
+    },
+    {
+      "start": 8.923,
+      "end": 9.321,
+      "text": "Friday,"
+    },
+    {
+      "start": 9.526,
+      "end": 9.762,
+      "text": "The"
+    },
+    {
+      "start": 9.777,
+      "end": 10.174,
+      "text": "Whole"
+    },
+    {
+      "start": 10.199,
+      "end": 10.435,
+      "text": "Town"
+    },
+    {
+      "start": 10.45,
+      "end": 10.685,
+      "text": "Knows."
+    }
+  ]
+}

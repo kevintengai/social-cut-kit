@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Timer Clock</title>
+  <desc id="desc">Show A Duration, A Countdown, Or A Deadline.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="13.5" r="8"/>
+    <path d="M10 2.5h4M12 2.5v3"/>
+    <path stroke="#5EE1C7" d="M12 13.5V9"/>
+  </g>
+</svg>

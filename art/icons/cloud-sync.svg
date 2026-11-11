@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Cloud Sync</title>
+  <desc id="desc">Show Files Moving To And From Online Storage.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 18.5h10.5a3.75 3.75 0 0 0 .5-7.47A6 6 0 0 0 6.4 9.55a4.5 4.5 0 0 0 .6 8.95z"/>
+    <path stroke="#5EE1C7" d="M10 16v-4.5M8.5 13l1.5-1.5 1.5 1.5"/>
+    <path stroke="#5EE1C7" d="M14 11.5V16M12.5 14.5 14 16l1.5-1.5"/>
+  </g>
+</svg>

@@ -1,0 +1,43 @@
+1
+00:00:00,000 --> 00:00:02,400
+Your Repair Was Ready Two Days Ago.
+
+2
+00:00:03,000 --> 00:00:05,400
+The Shop Just Could Not See It.
+
+3
+00:00:06,000 --> 00:00:08,300
+Forty Jobs Share One List,
+
+4
+00:00:08,300 --> 00:00:10,700
+So A Finished One Hides Between Two Broken Ones.
+
+5
+00:00:11,000 --> 00:00:12,000
+Here Is The Fix.
+
+6
+00:00:12,000 --> 00:00:14,300
+Filter The Queue By One Status.
+
+7
+00:00:15,000 --> 00:00:17,300
+Select Ready Only,
+
+8
+00:00:17,300 --> 00:00:19,700
+And The List Drops To The Jobs That Can Leave Today.
+
+9
+00:00:20,000 --> 00:00:22,300
+Call Those Three First,
+
+10
+00:00:22,300 --> 00:00:24,700
+And Nobody Waits On A Repair That Is Already Done.
+
+11
+00:00:25,000 --> 00:00:27,000
+Open The Demo And Try It.

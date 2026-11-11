@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Crossfade</title>
   <desc id="desc">Show Two Audio Levels Crossing In A Transition.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M7 13v39h50 M11 19c16 0 17 24 41 25"/>
-    <path d="M11 44c19 0 20-25 41-25" stroke="#5EE1C7"/>
-    <circle cx="32" cy="32" r="3" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 5v15h18"/>
+    <path pathLength="1" d="M5 7.5c6 0 6.5 9 14.5 9"/>
+    <path stroke="#5EE1C7" pathLength="1" d="M5 16.5c7 0 7.5-9 14.5-9"/>
   </g>
 </svg>

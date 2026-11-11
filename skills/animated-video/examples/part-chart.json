@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "title": "Chart Part",
+  "aspect": "Portrait",
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "chart-1",
+      "mode": "Code Scene",
+      "duration": 5,
+      "eyebrow": "",
+      "title": "Bars",
+      "body": "",
+      "background": "#f3efe6",
+      "foreground": "#1d2730",
+      "accent": "#e2603c",
+      "motion": "Word Rise",
+      "mark": "Spark",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [],
+      "draw": "Chart",
+      "params": {
+        "kind": "Bars",
+        "title": "Orders Per Week",
+        "highlight": 3,
+        "data": [
+          {
+            "label": "Week One",
+            "value": 120
+          },
+          {
+            "label": "Week Two",
+            "value": 190
+          },
+          {
+            "label": "Week Three",
+            "value": 260
+          },
+          {
+            "label": "Week Four",
+            "value": 415
+          },
+          {
+            "label": "Week Five",
+            "value": 330
+          }
+        ]
+      }
+    },
+    {
+      "id": "chart-2",
+      "mode": "Code Scene",
+      "duration": 5,
+      "eyebrow": "",
+      "title": "Line",
+      "body": "",
+      "background": "#101925",
+      "foreground": "#f4f6f9",
+      "accent": "#8fefa8",
+      "motion": "Word Rise",
+      "mark": "Spark",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [],
+      "draw": "Chart",
+      "params": {
+        "kind": "Line",
+        "title": "Daily Visitors",
+        "suffix": "K",
+        "decimals": 1,
+        "data": [
+          {
+            "label": "Mon",
+            "value": 1.2
+          },
+          {
+            "label": "Tue",
+            "value": 1.9
+          },
+          {
+            "label": "Wed",
+            "value": 1.6
+          },
+          {
+            "label": "Thu",
+            "value": 2.8
+          },
+          {
+            "label": "Fri",
+            "value": 3.4
+          },
+          {
+            "label": "Sat",
+            "value": 4.6
+          }
+        ]
+      }
+    },
+    {
+      "id": "chart-3",
+      "mode": "Code Scene",
+      "duration": 4.5,
+      "eyebrow": "",
+      "title": "Counter",
+      "body": "",
+      "background": "#f3efe6",
+      "foreground": "#1d2730",
+      "accent": "#2f7de1",
+      "motion": "Word Rise",
+      "mark": "Spark",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [],
+      "draw": "Chart",
+      "params": {
+        "kind": "Counter",
+        "title": "People Reached",
+        "from": 0,
+        "to": 4812,
+        "label": "By Friday Evening",
+        "duration": 2
+      }
+    }
+  ]
+}

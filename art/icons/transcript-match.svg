@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Transcript Match</title>
   <desc id="desc">Mark Confirmed Agreement Between Speech And Text.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 8h27l9 9v14 M38 9v9h9 M12 8v47h22 M19 25h18 M19 32h13"/>
-    <path d="M34 44l6 7 15-18" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 3h9.5L18 6.5V11M14.25 3.25v3.5h3.5M5 3v17.5h6.5M7.5 9.5H14M7.5 12.5H12"/>
+    <path stroke="#5EE1C7" pathLength="1" d="m13 16.5 2.5 2.75L21 12.5"/>
   </g>
 </svg>

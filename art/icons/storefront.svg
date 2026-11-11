@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Storefront</title>
+  <desc id="desc">Represent A Shop, A Brand Page, Or A Seller.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m3.5 9 1.5-5h14l1.5 5"/>
+    <path stroke="#5EE1C7" d="M3.5 9a2.83 2.83 0 0 0 5.67 0 2.83 2.83 0 0 0 5.66 0 2.83 2.83 0 0 0 5.67 0"/>
+    <path d="M5 13v7.5h14V13"/>
+    <path d="M10 20.5V16h4v4.5"/>
+  </g>
+</svg>

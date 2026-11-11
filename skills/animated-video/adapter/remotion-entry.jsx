@@ -21,6 +21,7 @@ function Storyboard() {
       durationInFrames={cue.frames}
       premountFor={fps}
       volume={cue.gain}
+      {...(cue.trimBefore ? {trimBefore: cue.trimBefore} : {})}
     />)}
   </AbsoluteFill>;
 }

@@ -1,0 +1,168 @@
+{
+  "version": 1,
+  "title": "Globe Part",
+  "aspect": "Portrait",
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "part-globe-1",
+      "mode": "Code Scene",
+      "duration": 7,
+      "eyebrow": "",
+      "title": "Graticule Globe",
+      "body": "",
+      "background": "#0f1b26",
+      "foreground": "#eef3f6",
+      "accent": "#ffb45c",
+      "motion": "Word Rise",
+      "mark": "Spark",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [],
+      "draw": "Globe",
+      "params": {
+        "style": "Graticule",
+        "latitude": 24,
+        "longitude": -40,
+        "spin": 5,
+        "markers": [
+          {
+            "id": "west",
+            "lat": 40,
+            "lon": -74,
+            "label": "West Office",
+            "at": 0.6
+          },
+          {
+            "id": "east",
+            "lat": 51,
+            "lon": 0,
+            "label": "East Office",
+            "at": 1.3
+          },
+          {
+            "id": "south",
+            "lat": -23,
+            "lon": -46,
+            "label": "South Studio",
+            "at": 4.6
+          }
+        ],
+        "arcs": [
+          {
+            "from": "west",
+            "to": "east",
+            "at": 2,
+            "duration": 1.4
+          },
+          {
+            "from": "east",
+            "to": "south",
+            "at": 5.1,
+            "duration": 1.3
+          }
+        ],
+        "views": [
+          {
+            "at": 3.4,
+            "duration": 1.4,
+            "latitude": 5,
+            "longitude": -30
+          }
+        ]
+      }
+    },
+    {
+      "id": "part-globe-2",
+      "mode": "Code Scene",
+      "duration": 6,
+      "eyebrow": "",
+      "title": "Dot Globe",
+      "body": "",
+      "background": "#14122a",
+      "foreground": "#e9e6ff",
+      "accent": "#7df0c8",
+      "motion": "Word Rise",
+      "mark": "Spark",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [],
+      "draw": "Globe",
+      "params": {
+        "style": "Dots",
+        "latitude": 12,
+        "longitude": 60,
+        "spin": 8,
+        "seed": 4,
+        "markers": [
+          {
+            "id": "a",
+            "lat": 35,
+            "lon": 100,
+            "label": "Hub One",
+            "at": 0.5
+          },
+          {
+            "id": "b",
+            "lat": -10,
+            "lon": 40,
+            "label": "Hub Two",
+            "at": 1
+          },
+          {
+            "id": "c",
+            "lat": 48,
+            "lon": 20,
+            "label": "Hub Three",
+            "at": 1.5
+          }
+        ],
+        "arcs": [
+          {
+            "from": "a",
+            "to": "b",
+            "at": 2,
+            "duration": 1.3,
+            "lift": 0.22
+          },
+          {
+            "from": "b",
+            "to": "c",
+            "at": 3.4,
+            "duration": 1.3
+          }
+        ]
+      }
+    }
+  ]
+}

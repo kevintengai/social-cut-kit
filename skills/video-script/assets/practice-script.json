@@ -1,0 +1,121 @@
+{
+  "format": "school.script/1",
+  "title": "Your Repair Was Ready Two Days Ago",
+  "reviewer": "Project Owner",
+  "goal": "Reach",
+  "idea": "One Status Filter Shows Which Finished Repairs Can Go Home Today.",
+  "pace": 3,
+  "target_seconds": 30,
+  "caption": "A Finished Repair Should Not Sit On A Shelf. One Status Filter Shows What Can Go Home Today.\n\nFilmed In A Demo Queue With Sample Jobs. Your Software May Name The Filter Differently.\n\nDemo: example.com/repair-queue",
+  "openings": [
+    {
+      "angle": "The Owner's Morning",
+      "first_frame": "A Phone On The Bench Showing Three Missed Calls",
+      "first_sentence": "Three Customers Called Before Nine.",
+      "second_sentence": "All Three Repairs Were Already Done."
+    },
+    {
+      "angle": "Result First",
+      "first_frame": "A Queue Showing Only Three Ready Jobs",
+      "first_sentence": "This List Is Every Repair Ready Today.",
+      "second_sentence": "Ten Seconds Ago It Showed Forty."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "P1",
+      "claim": "The Queue Lists Every Job In One Column Whatever Its Status",
+      "source": "Owned Screen Recording queue-walkthrough.mp4 At 00:04",
+      "visual": "Forty Rows With Mixed Statuses In One Column",
+      "opened": true,
+      "checked": "Watched Against The Wording On 2026-11-10"
+    },
+    {
+      "id": "P2",
+      "claim": "Ready Only Leaves Just The Finished Jobs",
+      "source": "Owned Screen Recording queue-walkthrough.mp4 At 00:19",
+      "visual": "The List Shrinks From Forty Rows To Three",
+      "opened": true,
+      "checked": "Watched Against The Wording On 2026-11-10"
+    }
+  ],
+  "beats": [
+    {
+      "id": "B01",
+      "purpose": "Opening",
+      "seconds": 3,
+      "voice": "Your Repair Was Ready Two Days Ago.",
+      "picture": "A Finished Phone On A Shelf With A Dated Ticket",
+      "capture": "Close Shot Of The Shelf Ticket With Its Finish Date In Focus",
+      "proof": "",
+      "media": "",
+      "source_in": 0
+    },
+    {
+      "id": "B02",
+      "purpose": "Stakes",
+      "seconds": 3,
+      "voice": "The Shop Just Could Not See It.",
+      "picture": "A Queue Screen Listing Every Job In One Long Column",
+      "capture": "Screen Recording Of The Unfiltered Queue, Scrolled Once",
+      "proof": "P1",
+      "media": "",
+      "source_in": 0
+    },
+    {
+      "id": "B03",
+      "purpose": "Problem",
+      "seconds": 5,
+      "voice": "Forty Jobs Share One List, So A Finished One Hides Between Two Broken Ones.",
+      "picture": "One Ready Row Circled Between Two Waiting Rows",
+      "capture": "The Same Recording Paused On The Ready Row",
+      "proof": "",
+      "media": "",
+      "source_in": 0
+    },
+    {
+      "id": "B04",
+      "purpose": "Turn",
+      "seconds": 4,
+      "voice": "Here Is The Fix. Filter The Queue By One Status.",
+      "picture": "The Cursor Opens The Status Menu And Rests On Ready Only",
+      "capture": "Screen Recording Of The Menu Opening",
+      "proof": "",
+      "media": "",
+      "source_in": 0
+    },
+    {
+      "id": "B05",
+      "purpose": "Demonstration",
+      "seconds": 5,
+      "voice": "Select Ready Only, And The List Drops To The Jobs That Can Leave Today.",
+      "picture": "The Queue Shrinks From Forty Rows To Three",
+      "capture": "One Unbroken Screen Recording Across The Click",
+      "proof": "P2",
+      "media": "",
+      "source_in": 0
+    },
+    {
+      "id": "B06",
+      "purpose": "Payoff",
+      "seconds": 5,
+      "voice": "Call Those Three First, And Nobody Waits On A Repair That Is Already Done.",
+      "picture": "The Owner Dials The First Number With The Short List Beside The Phone",
+      "capture": "Over-The-Shoulder Shot Of The Call Being Placed",
+      "proof": "",
+      "media": "",
+      "source_in": 0
+    },
+    {
+      "id": "B07",
+      "purpose": "Invitation",
+      "seconds": 3,
+      "voice": "Open The Demo And Try It.",
+      "picture": "Hold On The Filter Control With The Demo Address Below It",
+      "capture": "A Still Of The Filter Control",
+      "proof": "",
+      "media": "",
+      "source_in": 0
+    }
+  ]
+}

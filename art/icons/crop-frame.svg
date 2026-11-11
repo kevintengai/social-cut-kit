@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Crop Frame</title>
+  <desc id="desc">Trim The Edges Of A Picture Or Frame.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 2.5v13a2 2 0 0 0 2 2h13"/>
+    <path stroke="#5EE1C7" d="M2.5 6.5h13a2 2 0 0 1 2 2v13"/>
+  </g>
+</svg>

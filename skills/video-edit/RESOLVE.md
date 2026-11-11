@@ -33,6 +33,7 @@ The New Timeline Opens At Its First Frame. The JSON Receipt Identifies The Proje
 - **Stills And Framing.** The Builder Sets The Frame Rate And In/Out Marks On Its Private Media Pool Copies Of Stills. Fit, Cover, Zoom, And Position Are Editable In The Inspector. Overlapping Overlays Follow Their Order In The Project File.
 - **Color.** A Shot With Color Adjustments Has A Fusion Custom Tool With Brightness, Contrast, And Saturation Controls. Its RGB Expressions Apply The Kit's Operations In Order. Source Interpretation And Project Color Management Affect The Viewed Result.
 - **Captions.** Open A Caption's Text+ Inspector To Change Text, Font, Outline, Or Position. An Additional Overlapping Caption Uses A Native Compound Clip. Right-Click That Clip, Choose Open In Timeline, Then Select Its Text+ Title. Text+ Uses The Installed Font And Its Own Shaping And Line Wrapping. Review Long Lines In Resolve. Image Overlays Remain Image Assets.
+- **HDR And Fades.** The Builder Imports Original Files. An HDR Clip Follows Resolve's Color Management, And The Kit's Tone Mapping Is Not Applied. Sound Fades Set With `fade_in` And `fade_out` Are Not Created. Add Them In Resolve.
 - **Sound Sources With A Different Timebase.** Resolve Uses The Project Frame Rate For Standalone Audio. When It Differs From The Cut, The Builder Creates A Full-Source Audio Compound At The Cut's Frame Rate. Choose Open In Timeline To Reach The Original Audio Inside. The Main Timeline Exposes Each Cue's Timing And Gain.
 
 ## Revisions And Partial Builds

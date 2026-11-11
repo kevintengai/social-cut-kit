@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Save Bookmark</title>
   <desc id="desc">Point To The Save Action For A Reference Clip.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M15 9h34v47L32 44 15 56z"/>
-    <path d="M24 22h16 M32 15v14" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 3.5h12V21l-6-4.5L6 21z"/>
+    <path stroke="#5EE1C7" d="M9 8.5h6M12 5.5v6"/>
   </g>
 </svg>

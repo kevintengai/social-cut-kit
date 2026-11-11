@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Podium Speaker</title>
+  <desc id="desc">Mark A Talk, A Lesson, Or A Presenter Segment.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="5.5" r="2.75"/>
+    <path stroke="#5EE1C7" d="M4.5 11.5h15M7 11.5l1 9h8l1-9M10.5 15h3"/>
+  </g>
+</svg>

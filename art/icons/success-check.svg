@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Success Check</title>
+  <desc id="desc">Confirm That A Step Finished Correctly.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9.5"/>
+    <path stroke="#5EE1C7" pathLength="1" d="m7.5 12.25 3 3.25 6-6.75"/>
+  </g>
+</svg>

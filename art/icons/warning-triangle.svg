@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Warning Triangle</title>
+  <desc id="desc">Flag A Risk That Needs Attention Before Continuing.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.7 4.25 2.9 18a1.5 1.5 0 0 0 1.3 2.25h15.6A1.5 1.5 0 0 0 21.1 18L13.3 4.25a1.5 1.5 0 0 0-2.6 0z"/>
+    <path stroke="#5EE1C7" d="M12 9.5V14M12 17h.01"/>
+  </g>
+</svg>

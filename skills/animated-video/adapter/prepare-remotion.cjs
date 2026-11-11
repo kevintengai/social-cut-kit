@@ -2,9 +2,18 @@
 const fs = require("node:fs"), path = require("node:path"), crypto = require("node:crypto");
 const P = require("../studio/project.js"), Sound = require("../studio/sound.js");
 const skillRoot = path.resolve(__dirname, "..");
-function painterSource() {
-  const sources = ["project.js", "marks.js", "space.js", "frame.js"].map(name => fs.readFileSync(path.join(skillRoot, "studio", name), "utf8"));
-  return "const sceneScope = {};\nfunction loadPainter(globalThis, module) {\n" + sources.join("\n") + "\n}\nloadPainter(sceneScope, undefined);\nexport const MotionFrame = sceneScope.MotionFrame;\n";
+const studioFiles = ["project.js", "marks.js", "space.js", "kit.js", "timing.js", "scenes.js", "captions.js", "frame.js"];
+const read = file => fs.readFileSync(file, "utf8").replace(/^﻿/, "");
+// The Painter As One Module: The Studio Sources, The Kit's Parts, Then The Film's Own Scene Modules.
+// Each Part And Module Runs In Its Own Function And Sees MotionScenes And MotionKit By Name, As It Does In Motion Studio.
+function painterSource(modules = []) {
+  const sources = studioFiles.map(name => read(path.join(skillRoot, "studio", name)));
+  const partsDir = path.join(skillRoot, "parts");
+  const parts = fs.existsSync(partsDir) ? fs.readdirSync(partsDir).filter(name => name.endsWith(".js")).sort().map(name => read(path.join(partsDir, name))) : [];
+  const wrap = source => "(function () {\n" + source + "\n})();";
+  return "const sceneScope = {};\nfunction loadPainter(globalThis, module) {\n" + sources.join("\n") +
+    "\nconst MotionScenes = globalThis.MotionScenes, MotionKit = globalThis.MotionKit;\n" + parts.map(wrap).join("\n") + "\nMotionScenes.seal();\n" + modules.map(item => wrap(item.source)).join("\n") +
+    "\n}\nloadPainter(sceneScope, undefined);\nexport const MotionFrame = sceneScope.MotionFrame;\n";
 }
 function audioExtension(bytes, mime) {
   const header = bytes.subarray(0, 4).toString("ascii");
@@ -16,11 +25,31 @@ function audioExtension(bytes, mime) {
   const types = {mpeg: "mp3", mp3: "mp3", mp4: "m4a", "x-m4a": "m4a", webm: "webm", aac: "aac", wav: "wav", "x-wav": "wav", ogg: "ogg", flac: "flac"};
   return types[mime.split("/").pop()] || "bin";
 }
-function build(raw) {
+// A Stereo Copy Of A Bank Sound Placed Left Or Right With Equal Power.
+function pannedWav(name, pan) {
+  const mono = Sound.make(name), angle = (Math.max(-1, Math.min(1, pan)) + 1) * Math.PI / 4, sides = [Math.cos(angle), Math.sin(angle)];
+  const out = Buffer.alloc(44 + mono.length * 4);
+  out.write("RIFF", 0); out.writeUInt32LE(out.length - 8, 4); out.write("WAVEfmt ", 8); out.writeUInt32LE(16, 16); out.writeUInt16LE(1, 20); out.writeUInt16LE(2, 22);
+  out.writeUInt32LE(48000, 24); out.writeUInt32LE(48000 * 4, 28); out.writeUInt16LE(4, 32); out.writeUInt16LE(16, 34); out.write("data", 36); out.writeUInt32LE(mono.length * 4, 40);
+  for (let i = 0; i < mono.length; i++) for (let side = 0; side < 2; side++) {
+    const v = Math.max(-1, Math.min(1, mono[i] * sides[side] * 1.33));
+    out.writeInt16LE(Math.round(v * (v < 0 ? 32768 : 32767)), 44 + i * 4 + side * 2);
+  }
+  return out;
+}
+// options.base Is The Storyboard's Folder. It Is Needed When The Storyboard Lists Scene Modules Or A Voice File.
+function build(raw, options = {}) {
   const project = P.cleanProject(raw), files = new Map();
-  const [width, height] = P.aspects[project.aspect], fps = project.fps;
+  const [width, height] = P.size(project), fps = project.fps;
   const timeline = {width, height, fps, frames: Math.ceil(P.duration(project) * fps - 1e-7), audio: [], notes: []};
   const pretty = v => JSON.stringify(v, null, 2) + "\n";
+  const beside = name => {
+    if (!options.base) throw new Error("This Storyboard Lists Files Beside It. Prepare It From Its Saved File So They Can Be Found.");
+    const at = path.join(options.base, ...name.split("/"));
+    if (!fs.existsSync(at)) throw new Error("File Not Found Beside The Storyboard: " + name);
+    return at;
+  };
+  const modules = (project.modules || []).map(name => ({name, source: read(beside(name))}));
   let offset = 0;
   for (let i = 0; i < project.scenes.length; i++) {
     const s = project.scenes[i], end = Math.ceil((offset + s.duration) * fps - 1e-7);
@@ -31,8 +60,9 @@ function build(raw) {
       if ((cue.type === "Voice" && !cue.clip) || cue.gain === 0 || from >= end) return;
       let file, bytes, frames = end - from;
       if (cue.type === "Sound") {
-        const name = cue.sound.toLowerCase().replaceAll(" ", "-") + ".wav";
-        bytes = fs.readFileSync(path.join(skillRoot, "assets/sounds", name)); file = "audio/" + name;
+        const slug = cue.sound.toLowerCase().replaceAll(" ", "-");
+        if (cue.pan) { file = "audio/" + slug + "-pan-" + (cue.pan < 0 ? "left-" : "right-") + Math.round(Math.abs(cue.pan) * 100) + ".wav"; bytes = pannedWav(cue.sound, cue.pan); }
+        else { file = "audio/" + slug + ".wav"; bytes = fs.readFileSync(path.join(skillRoot, "assets/sounds", slug + ".wav")); }
         frames = Math.min(frames, Math.ceil(Sound.lengths[cue.sound] * fps));
       } else {
         const comma = cue.clip.indexOf(",");
@@ -44,12 +74,27 @@ function build(raw) {
     });
     offset += s.duration;
   }
+  // The Film Voice Runs Across Every Scene. A Negative Offset Starts Partway Into The Recording.
+  const voice = project.voice;
+  if (voice && (voice.clip || voice.file) && voice.gain > 0) {
+    let bytes, mime;
+    if (voice.clip) { bytes = Buffer.from(voice.clip.slice(voice.clip.indexOf(",") + 1), "base64"); mime = voice.clip.slice(5, voice.clip.indexOf(";")); }
+    else { bytes = fs.readFileSync(beside(voice.file)); mime = "audio/" + path.extname(voice.file).slice(1).toLowerCase(); }
+    const file = "audio/film-voice-" + crypto.createHash("sha256").update(bytes).digest("hex").slice(0, 20) + "." + audioExtension(bytes, mime);
+    const from = Math.max(0, Math.round(voice.offset * fps)), entry = {id: "film-voice", file, from, frames: timeline.frames - from, gain: voice.gain};
+    if (voice.offset < 0) entry.trimBefore = Math.round(-voice.offset * fps);
+    if (entry.frames > 0) { files.set("public/" + file, bytes); timeline.audio.push(entry); }
+  }
   const visuals = {...project, scenes: project.scenes.map(s => ({...s, cues: []}))};
+  if (visuals.voice) { visuals.voice = {...visuals.voice}; delete visuals.voice.clip; }
   files.set("src/frame-project.json", pretty(visuals)); files.set("src/timeline.json", pretty(timeline));
-  files.set("src/painter.mjs", painterSource());
+  files.set("src/painter.mjs", painterSource(modules));
   files.set("src/index.jsx", fs.readFileSync(path.join(__dirname, "remotion-entry.jsx")));
   files.set("render-reviewed.cjs", fs.readFileSync(path.join(__dirname, "render-reviewed.cjs")));
   files.set("source-storyboard.json", pretty(project));
+  // Scene Modules And A Voice File Travel Beside The Source Storyboard So Motion Studio Can Reopen It.
+  for (const item of modules) files.set(item.name, item.source);
+  if (voice && voice.file) files.set(voice.file, fs.readFileSync(beside(voice.file)));
   files.set("package.json", pretty({
     name: "motion-storyboard", private: true, version: "1.0.0",
     scripts: {studio: "remotion studio src/index.jsx", "render-reviewed": "node render-reviewed.cjs"},
@@ -60,7 +105,7 @@ function build(raw) {
 function prepare(source, target) {
   const dest = path.resolve(target);
   if (fs.existsSync(dest)) throw new Error("Choose A New Output Directory.");
-  const {files, timeline} = build(JSON.parse(fs.readFileSync(source, "utf8")));
+  const {files, timeline} = build(JSON.parse(read(source)), {base: path.dirname(path.resolve(source))});
   fs.mkdirSync(path.dirname(dest), {recursive: true});
   const staging = fs.mkdtempSync(path.join(path.dirname(dest), ".motion-prepare-"));
   try {
@@ -75,7 +120,7 @@ function prepare(source, target) {
   }
   return timeline;
 }
-module.exports = {build, prepare, painterSource};
+module.exports = {build, prepare, painterSource, pannedWav};
 if (require.main === module) {
   const [source, target] = process.argv.slice(2);
   try {

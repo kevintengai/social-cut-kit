@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Gift Box</title>
+  <desc id="desc">Mark A Bonus, A Giveaway, Or A Free Resource.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 12v7.5A1.5 1.5 0 0 0 6 21h12a1.5 1.5 0 0 0 1.5-1.5V12M12 12v9"/>
+    <path d="M4 8h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1zM12 8v4"/>
+    <path stroke="#5EE1C7" d="M12 8S10.5 3.5 8 3.5A2.25 2.25 0 0 0 8 8zM12 8s1.5-4.5 4-4.5A2.25 2.25 0 0 1 16 8z"/>
+  </g>
+</svg>

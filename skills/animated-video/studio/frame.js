@@ -52,9 +52,16 @@
     }
   }
 
-  function draw(canvas, project, time) {
-    const { scene: s, local: t } = P.locate(project, time);
-    const c = canvas.getContext("2d", { alpha: false });
+  // Options: { captions: false } Hides The Caption Track. { strict: true } Rethrows A Code Scene Error.
+  function draw(canvas, project, time, options) {
+    const located = P.locate(project, time), c = canvas.getContext("2d", { alpha: false });
+    if (located.scene.mode === "Code Scene") root.MotionScenes.paint(c, canvas, project, located, time, options);
+    else builtIn(c, canvas, located.scene, located.local);
+    if (project.captions && !(options && options.captions === false))
+      root.MotionCaptions.draw(c, canvas, project, P.clamp(time, 0, P.duration(project)));
+  }
+
+  function builtIn(c, canvas, s, t) {
     const w = 1000, h = canvas.height / canvas.width * w, landscape = h < 720, square = !landscape && h < 1200, margin = landscape ? 52 : 70;
     const u = Math.min(1, t / s.duration), width = w - 2 * margin;
     c.setTransform(canvas.width / w, 0, 0, canvas.height / h, 0, 0);

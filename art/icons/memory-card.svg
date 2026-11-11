@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Memory Card</title>
+  <desc id="desc">Represent Camera Media Or An Import Source.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 2.5H15L18.5 6v14a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 20V3.5a1 1 0 0 1 1-1z"/>
+    <path stroke="#5EE1C7" d="M9 6v2.5M12 6v2.5"/>
+    <path d="M9 17.5h6"/>
+  </g>
+</svg>

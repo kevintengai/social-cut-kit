@@ -9,9 +9,10 @@ from pathlib import Path
 
 # Resolve's Bundled Python May Start With An Isolated Module Search Path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import loudness
 from example import example
 from handoff import otio
-from media import analyze, process
+from media import LAYERS, analyze, missing_tone_filters, mix, process, still
 from review import review
 from timeline import EditError, load, number, prepare, probe, srt, write_new
 
@@ -20,6 +21,8 @@ WORKFLOWS = {
     "camera": ("camera_transfer.py", "Transfer Pan, Zoom, And Rotation Between Clips."),
     "resolve": ("resolve_native.py", "Build An Editable Timeline Directly In DaVinci Resolve."),
     "post": ("posting.py", "Prepare And Verify A Post Or Scheduled Release."),
+    "setup": ("setup_check.py", "Check This Machine For The Tools The Kit Uses."),
+    "defaults": ("defaults.py", "Show Or Update The Saved Editing Defaults File."),
 }
 
 
@@ -42,19 +45,56 @@ def parser():
                        ("review", "Open The Local Editable Source Player."),
                        ("handoff", "Write An OpenTimelineIO Cut List."),
                        ("captions", "Write Timed SubRip Captions."),
+                       ("still", "Write One Composed Frame As A PNG For Inspection."),
+                       ("mix", "Write The Composed Sound As A WAV For Listening Checks."),
+                       ("loudness", "Measure The Composed Mix Through A Null Sink."),
                        ("render", "Encode An Owner-Approved MP4.")]:
         cmd = command(name, desc)
         cmd.add_argument("project", type=Path)
-        if name in ("handoff", "captions", "render"):
+        if name in ("handoff", "captions", "still", "mix", "render"):
             cmd.add_argument("output", type=Path)
         if name == "review":
             cmd.add_argument("--port", type=int, default=0)
             cmd.add_argument("--no-open", action="store_true", help="Print The Local URL Without Opening A Browser.")
-        if name in ("check", "render"):
+        if name in ("check", "still", "render"):
             cmd.add_argument("--no-burn", action="store_true", help="Omit Burned Captions From The Composition.")
+        if name == "still":
+            cmd.add_argument("--at", type=float, required=True, metavar="SECONDS",
+                             help="Edit Time Of The Frame, Snapped To The Nearest Output Frame.")
+        if name in ("mix", "loudness"):
+            cmd.add_argument("--layer", choices=LAYERS, default="mix",
+                             help="The Whole Mix, The Shot Audio Alone, Or The Added Cues Alone.")
+            cmd.add_argument("--start", type=float, metavar="SECONDS", help="Start Of A Window In Edit Time.")
+            cmd.add_argument("--seconds", type=float, help="Length Of The Window.")
+        if name == "loudness":
+            cmd.add_argument("--loudness-target", type=float, default=loudness.TARGET_LUFS, metavar="LUFS",
+                             help="Integrated Loudness To Plan A Gain Toward. The Default Is -14.")
+            cmd.add_argument("--true-peak-ceiling", type=float, default=loudness.CEILING_DBTP, metavar="DBTP",
+                             help="Highest True Peak The Planned Gain May Produce. The Default Is -1.5.")
+            cmd.add_argument("--cues", action="store_true",
+                             help="Compare Each Added Cue With The Speech Under It In A Short Window.")
+            cmd.add_argument("--cue-window", type=float, default=3.0, metavar="SECONDS",
+                             help="Longest Window Measured At Each Cue. The Default Is 3.")
+            cmd.add_argument("--cue-aim", type=float, metavar="DB",
+                             help="Also Suggest The Cue Gain That Places It This Many dB From Speech.")
         if name == "render":
             cmd.add_argument("--owner-approved", action="store_true", help="Use After The Owner Reviews This Edit And Approves Export.")
+            cmd.add_argument("--loudness-target", type=float, metavar="LUFS",
+                             help="Opt In To One Constant Gain On The Whole Mix Toward This Integrated Loudness.")
+            cmd.add_argument("--true-peak-ceiling", type=float, metavar="DBTP",
+                             help="Highest True Peak The Gain May Produce. The Default Is -1.5.")
+            cmd.add_argument("--if-over-ceiling", choices=("refuse", "cap"),
+                             help="Refuse The Render, Or Cap The Gain, When The Target Would Pass The Ceiling. The Default Is refuse.")
     return cli
+
+
+def window(args, model):
+    if (args.start is None) != (args.seconds is None):
+        raise EditError("Supply Both --start And --seconds For A Window.")
+    if args.start is not None:
+        number(args.start, "Window Start", 0, model["duration"])
+        number(args.seconds, "Window Length", .001, model["duration"])
+    return args.start, args.seconds
 
 
 def main(argv=None):
@@ -85,17 +125,43 @@ def main(argv=None):
         review(project, args.port, not args.no_open)
         return
     model = prepare(load(project), project.parent)
-    if command == "handoff":
+    extra, warnings = {}, list(model["warnings"])
+    if command == "validate":
+        missing = missing_tone_filters(model)
+        if missing:
+            warnings.append(f"This FFmpeg Build Lacks {' And '.join(missing)}. Check, Still, And Render Stop On The "
+                            "Tone Mapped Shots Until A Build With zscale And tonemap Is Installed Or tone_map Is "
+                            "Set To false.")
+    elif command == "handoff":
         write_new(args.output, json.dumps(otio(model), ensure_ascii=False, indent=2) + "\n")
     elif command == "captions":
         write_new(args.output, srt(model))
     elif command == "check":
         process(model, burn=not args.no_burn)
+    elif command == "still":
+        number(args.at, "Still Time", 0, model["duration"])
+        extra = still(model, args.at, args.output, not args.no_burn)
+    elif command == "mix":
+        extra = mix(model, args.output, args.layer, *window(args, model))
+    elif command == "loudness":
+        start, seconds = window(args, model)
+        extra = loudness.report(model, args.loudness_target, args.true_peak_ceiling, args.layer, start, seconds,
+                                args.cues, args.cue_window, args.cue_aim)
     elif command == "render":
-        process(model, args.output, not args.no_burn)
-    print(json.dumps({"command": command, "title": model["title"], "duration_seconds": model["duration"],
-                      "fps": model["fps"], "shots": len(model["shots"]),
-                      **({"output": str(args.output.resolve())} if hasattr(args, "output") else {})}, indent=2))
+        if args.loudness_target is None:
+            if args.true_peak_ceiling is not None or args.if_over_ceiling is not None:
+                raise EditError("Add --loudness-target To Use The Ceiling Options.")
+            process(model, args.output, not args.no_burn)
+        else:
+            ceiling = loudness.CEILING_DBTP if args.true_peak_ceiling is None else args.true_peak_ceiling
+            extra = {"loudness": loudness.render(model, args.output, not args.no_burn, args.loudness_target,
+                                                 ceiling, args.if_over_ceiling or "refuse")}
+    summary = {"command": command, "title": model["title"], "duration_seconds": model["duration"],
+               "fps": model["fps"], "shots": len(model["shots"]),
+               **({"output": str(args.output.resolve())} if hasattr(args, "output") else {}), **extra}
+    if warnings:
+        summary["warnings"] = warnings
+    print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":

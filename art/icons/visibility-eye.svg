@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Visibility Eye</title>
+  <desc id="desc">Show Or Hide A Layer, Field, Or Preview.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 12s3.75-6.5 10-6.5S22 12 22 12s-3.75 6.5-10 6.5S2 12 2 12z"/>
+    <circle stroke="#5EE1C7" cx="12" cy="12" r="2.75"/>
+  </g>
+</svg>

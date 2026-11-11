@@ -9,18 +9,29 @@
   <script defer src="sound.js"></script>
   <script defer src="marks.js"></script>
   <script defer src="space.js"></script>
+  <script defer src="kit.js"></script>
+  <script defer src="timing.js"></script>
+  <script defer src="scenes.js"></script>
+  <script defer src="captions.js"></script>
   <script defer src="frame.js"></script>
+  <script defer src="../parts/character.js"></script>
+  <script defer src="../parts/chart.js"></script>
+  <script defer src="../parts/globe.js"></script>
+  <script defer src="../parts/phone.js"></script>
   <script defer src="editor.js"></script>
 </head>
 <body>
   <header class="mast"><div class="identity"><span class="brand">TENG AI SCHOOL</span><h1>Motion Studio</h1></div>
-    <nav aria-label="Project Files"><label class="fileButton">Open Storyboard<input id="openFile" type="file" accept=".json,application/json"></label><button id="save">Save Storyboard</button></nav>
+    <nav aria-label="Project Files"><label class="fileButton">Open Storyboard<input id="openFile" type="file" multiple accept=".json,application/json,.js,audio/*,.wav,.mp3,.m4a"></label><label class="fileButton">Open Film Folder<input id="openFolder" type="file" webkitdirectory></label><button id="save">Save Storyboard</button></nav>
   </header>
   <main>
     <aside class="board panel">
       <h2>Storyboard</h2>
       <label>Project Title<input id="projectTitle" maxlength="100"></label>
       <div class="pair"><label>Frame<select id="aspect"></select></label><label>Frame Rate<select id="fps"><option>24</option><option>30</option><option>60</option></select></label></div>
+      <div id="customSize" class="pair" hidden><label>Width<input id="customWidth" type="number" min="240" max="4096" step="2"></label><label>Height<input id="customHeight" type="number" min="240" max="4096" step="2"></label></div>
+      <label id="captionsField" class="check" hidden><input id="showCaptions" type="checkbox">Show Captions</label>
+      <p id="filmNote" class="note" hidden></p>
       <div id="scenes" class="scenes" aria-label="Select A Scene"></div>
       <button id="addScene" class="full">Add Scene</button>
       <div class="order"><button id="up">Move Up</button><button id="down">Move Down</button></div>
@@ -44,12 +55,17 @@
 
     <aside class="inspector panel">
       <h2>Scene Editor</h2>
-      <div class="pair"><label>Scene Type<select id="mode"></select></label><label>Seconds<input id="duration" type="number" step="0.1" min="1" max="60"></label></div>
-      <label>Eyebrow<input id="eyebrow" maxlength="110"></label>
-      <label>Headline<textarea id="title" rows="2" maxlength="110"></textarea></label>
+      <div class="pair"><label>Scene Type<select id="mode"></select></label><label>Seconds<input id="duration" type="number" step="0.1" min="0.25" max="600"></label></div>
+      <label id="eyebrowField">Eyebrow<input id="eyebrow" maxlength="110"></label>
+      <label><span id="titleLabel">Headline</span><textarea id="title" rows="2" maxlength="110"></textarea></label>
       <label id="bodyField">Supporting Line<textarea id="body" rows="2" maxlength="320"></textarea></label>
       <label id="stepsField" hidden>Steps, One Per Line<textarea id="steps" rows="4" maxlength="365"></textarea></label>
-      <div class="pair"><label>Text Motion<select id="motion"></select></label><label>Mark<select id="mark"></select></label></div>
+      <fieldset id="codeFields" hidden><legend>Code Scene</legend>
+        <label>Draw Function<select id="drawName"></select></label>
+        <label>Parameters As JSON<textarea id="params" rows="7" spellcheck="false"></textarea></label>
+        <small id="paramsNote"></small>
+      </fieldset>
+      <div id="typeFields" class="pair"><label>Text Motion<select id="motion"></select></label><label>Mark<select id="mark"></select></label></div>
       <div class="colors"><label>Backdrop<input type="color" id="background"></label><label>Type<input type="color" id="foreground"></label><label>Accent<input type="color" id="accent"></label></div>
       <fieldset id="spaceFields" hidden><legend>3D Scene</legend>
         <label>Mesh<select id="shape"></select></label>

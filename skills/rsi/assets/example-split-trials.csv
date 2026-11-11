@@ -1,0 +1,9 @@
+pair,input_ref,split,order,baseline,candidate,baseline_guard,candidate_guard,baseline_evidence,candidate_evidence
+D01,Fixture-Tutorial-V1,develop,AB,14,9,1,1,Fixture-Log-11#A,Fixture-Log-11#B
+D02,Fixture-Recap-V1,develop,BA,11,8,0,0,Fixture-Log-12#A,Fixture-Log-12#B
+S01,Fixture-Promo-V1,select,AB,13,10,1,0,Fixture-Log-13#A,Fixture-Log-13#B
+S02,Fixture-Panel-V1,select,BA,15,12,2,2,Fixture-Log-14#A,Fixture-Log-14#B
+F01,Fixture-Launch-V1,final,AB,12,10,1,1,Fixture-Log-15#A,Fixture-Log-15#B
+F02,Fixture-Walkthrough-V1,final,BA,17,14,2,2,Fixture-Log-16#A,Fixture-Log-16#B
+F03,Fixture-Teardown-V1,final,AB,9,8,0,0,Fixture-Log-17#A,Fixture-Log-17#B
+F04,Fixture-Voiceover-V1,final,BA,13,11,1,1,Fixture-Log-18#A,Fixture-Log-18#B

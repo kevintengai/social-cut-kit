@@ -1,8 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Keyboard Shortcut</title>
   <desc id="desc">Cue A Keyboard Command In A Walkthrough.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="4" y="17" width="56" height="32" rx="4"/>
-    <path d="M10 24h3 M19 24h3 M28 24h3 M37 24h3 M46 24h5 M10 31h4 M20 31h4 M30 31h4 M40 31h12 M16 40h32" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="6" width="20" height="12" rx="1.5"/>
+    <path stroke="#5EE1C7" d="M5.5 9.5h1M9.5 9.5h1M13.5 9.5h1M17.5 9.5h1M10 12.25h1.5M14.5 12.25h4"/>
+    <path stroke="#5EE1C7" d="M5.5 12.25H7"/>
+    <path stroke="#5EE1C7" d="M7.5 15h9"/>
   </g>
 </svg>

@@ -1,8 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Stereo Balance</title>
   <desc id="desc">Compare Left And Right Channel Levels.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M7 27h6l9-8v26l-9-8H7z M57 27h-6l-9-8v26l9-8h6z"/>
-    <path d="M27 26q5 6 0 12 M37 26q-5 6 0 12" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 10h2l3-2.5v9L4 14H2z"/>
+    <path d="M22 10h-2l-3-2.5v9l3-2.5h2z"/>
+    <path stroke="#5EE1C7" d="M9.5 9.5q2 2.5 0 5"/>
+    <path stroke="#5EE1C7" d="M14.5 9.5q-2 2.5 0 5"/>
   </g>
 </svg>

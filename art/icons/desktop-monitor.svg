@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Desktop Monitor</title>
+  <desc id="desc">Represent A Desktop Display Or A Playback Screen.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="3.5" width="19" height="13" rx="1.5"/>
+    <path d="M12 16.5v4M8 20.5h8"/>
+    <path stroke="#5EE1C7" d="m10.5 7.75 4 2.25-4 2.25z"/>
+  </g>
+</svg>

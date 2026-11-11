@@ -18,7 +18,7 @@ input[type=range]{width:100%;accent-color:#9be8c6}textarea{width:100%;min-height
 </section><section><h2><label for="document">Editable Timeline</label></h2>
 <p class="hint">Adjust Source Cuts, Overlays, Captions, And Audio Cues Here. Save To Apply Edits To Playback.</p>
 <textarea id="document" spellcheck="false"></textarea><div class="bar"><button id="save" class="primary">Save Timeline</button><button id="reset">Reset Unsaved Changes</button></div>
-<div id="status" class="status" role="status"></div></section></main>
+<div id="status" class="status" role="status"></div><div id="notes" class="hint" aria-label="Source Notes"></div></section></main>
 <script>
 "use strict";
 const byId = id => document.getElementById(id);
@@ -92,6 +92,17 @@ function setState(next, message) {
   labels.replaceChildren(); activeCaption = "";
   seek(Math.min(time,model.duration));
   status(message);
+  byId("notes").replaceChildren(...(model.warnings || []).map(text => {
+    const note = document.createElement("p"); note.textContent = text; return note;
+  }));
+}
+function level(l, position) {
+  // Sound Fades Follow The Same Straight Ramps The FFmpeg Graph Applies.
+  const row = l.row, end = l.type === "shot" ? row.at + row.duration : row.end;
+  let gain = row.gain ?? 1;
+  if (row.fade_in) gain *= Math.min(1, Math.max(0, (position - row.at) / row.fade_in));
+  if (row.fade_out) gain *= Math.min(1, Math.max(0, (end - position) / row.fade_out));
+  return gain;
 }
 function draw(force) {
   if (!model) return;
@@ -111,6 +122,10 @@ function draw(force) {
         media.playbackRate = speed;
         if (playing && media.paused) media.play().catch(() => {});
         if (!playing && !media.paused) media.pause();
+        if (type !== "overlay" && (row.fade_in || row.fade_out)) {
+          const faded = level(l, position);
+          if (l.gainNode) l.gainNode.gain.value = faded; else media.volume = Math.min(1, faded);
+        }
       } else if (!media.paused) media.pause();
     }
     l.live = live;
@@ -184,7 +199,10 @@ byId("split").onclick = () => change(draft => {
   const i = model.shots.findIndex(s => t > s.at+.000001 && t < s.at+s.duration-.000001);
   if (i < 0) throw Error("Place The Playhead Inside A Shot.");
   const shot = draft.shots[i], s = model.shots[i], split = s.start+(t-s.at)*s.speed;
-  draft.shots.splice(i,1,{...shot,in:s.start,out:split,lead:0,tail:0},{...shot,in:split,out:s.end,lead:0,tail:0});
+  const first = {...shot,in:s.start,out:split,lead:0,tail:0}, second = {...shot,in:split,out:s.end,lead:0,tail:0};
+  // A Sound Fade Belongs To The Outer Edge It Was Set On, Not To The New Join.
+  delete first.fade_out; delete second.fade_in;
+  draft.shots.splice(i,1,first,second);
 });
 byId("caption").onclick = () => change(draft => {
   const at = Math.min((Math.round(model.duration*model.fps)-1)/model.fps,Math.round(time*model.fps)/model.fps);

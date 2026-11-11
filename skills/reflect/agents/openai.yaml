@@ -1,0 +1,3 @@
+# Codex Setting: Run This Skill Only When Asked.
+policy:
+  allow_implicit_invocation: false

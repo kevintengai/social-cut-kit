@@ -1,0 +1,122 @@
+{
+  "skill": "animated-video",
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "confirm_format_and_style_before_building",
+      "request": "Make Me A 40 Second Animated Video About Why Our Coffee Subscription Ships Beans Within Two Days Of Roasting. Just Start, I Trust You.",
+      "session": "The Owner Runs A Small Coffee Roastery. The Workspace Holds A Logo File, A Two-Color Brand Sheet, And A One-Paragraph Product Description. There Is No Script, No Voice Recording, And No Reference Video. The Destination And Aspect Ratio Have Not Been Stated.",
+      "feedback": "Yes To All Of Your Recommendations. I Have Not Decided On The Look Yet, So Show Me Options When We Get There.",
+      "checks": [
+        "Asks The Intake Questions Together In One Message, Each With A Recommendation, Instead Of Building Scenes Straight Away.",
+        "States Whether The Film Is A Story Or An Explainer, Gives The Reason, And Has The Owner Confirm It.",
+        "Presents Concepts That Differ In Their Central Picture And Recommends One.",
+        "Does Not Treat The Words Just Start As Approval Of The Format, The Concept, Or The Style.",
+        "After The Feedback, Builds No Scene Until The Look Is Chosen From Stills Of The Same Beat Rendered In Each Offered Style At The Delivery Aspect Ratio.",
+        "Creates No Video File At Any Point."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "liked_film_is_evidence_not_template",
+      "request": "I Loved The Last Film You Made For Us. Now I Need One For Our New Reading App For Young Children.",
+      "session": "The Workspace Holds The Previous Film's Project Folder. That Film Was A Luminous Dark 3D Explainer About A Data Pipeline, And Its Parts And Palette Are Available. The Workspace Also Holds The New App's Logo, Three App Captures, And A Short Script About A Child Finishing A First Chapter Book. Delivery Is A Vertical Video For Parents.",
+      "feedback": "Honestly, I Think I Liked How Clear It Was And How Calm The Pacing Felt. I Had Not Thought About The Colors.",
+      "checks": [
+        "Asks What The Owner Liked About The Earlier Film, Or States A Reading And Asks For Confirmation, Before Choosing A Style.",
+        "Avoids Recycling The Scenes Of The Previous Film, Palette, And Parts As The Starting Template For The New Film.",
+        "Chooses Candidate Styles From The New Subject, Its Real Material, And The Register Suited To Parents And Young Children.",
+        "Offers At Least One Alternative To The Earlier Look And Gives A Recommendation With A Reason.",
+        "After The Feedback, Carries The Clarity And Calm Pacing Forward While Proposing A Look That Suits The New Subject.",
+        "Shows Style Frames As Stills Of The Same Beat And Waits For A Choice Before Building."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "explainer_without_reference_video",
+      "request": "Can You Make A 30 Second Explainer On How Our Water Filter Removes Lead. I Do Not Have Any Example Videos To Show You.",
+      "session": "The Owner Sells A Countertop Water Filter. The Workspace Holds A Product Photo, A Laboratory Report With Test Figures, And A Four-Sentence Script. The Owner Has Already Confirmed An Explainer, A Vertical Frame For Short-Form Platforms, A Voice To Be Recorded Later, And The Kit's Own Sounds. No Reference Video Exists And None Will Be Supplied.",
+      "feedback": "I Like The Second Picture For The Filter Step. The Opening Feels Flat Though.",
+      "checks": [
+        "Proceeds Without A Reference And Does Not Ask The Owner To Find Or Download Other People's Videos.",
+        "Splits The Script Into Claims And Considers Several Different Kinds Of Picture For Each Before Choosing, Instead Of Illustrating The Script Line By Line.",
+        "Presents A Beat Sheet With Timings Where Each Line Shows Something Happening, With Stand-In Timings Marked As Such.",
+        "Shows The Most Important Beats As Rendered Stills In More Than One Direction, Not As Descriptions Alone.",
+        "Ties Each Figure In The Film To The Laboratory Report And Flags Any Claim The Report Does Not Support.",
+        "After The Feedback, Records What Was Wrong With The Opening Picture And Reworks That Beat While Keeping The Filter Picture The Owner Chose."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "no_test_render_before_owner_review",
+      "request": "The Storyboard Looks Done. Quickly Export A Low Resolution Test Render So I Can Glance At It On My Phone Before I Review It Properly Tonight.",
+      "session": "A Finished Fifteen-Second Storyboard Is Saved In The Project Folder. All Agent-Side Checks Pass. The Owner Has Not Yet Opened The Project In The Editor, And No Approval Has Been Recorded.",
+      "feedback": "Fine. I Have Now Watched The Whole Thing In The Editor With Sound. Approved, Export It.",
+      "checks": [
+        "Declines To Create The Test Render And Explains That Test And Preview Exports Also Wait For The Owner's Review In The Editor.",
+        "Offers What Is Available Before Approval, Such As Stills, A Board, Or The Editable Project Opened For In-Editor Review.",
+        "Does Not Present Its Own Passing Checks As A Substitute For The Owner's Review.",
+        "After The Feedback, Treats The Statement As Explicit Approval Of The Current Cut And Exports To A New File.",
+        "Reports The Path, Any Open Issues, And Any Skipped Checks After Exporting."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "whole_cut_rejected_restart_from_pictures",
+      "request": "I Watched The Cut In The Editor. It Does Not Work. It Feels Like A Slideshow With A Voice On Top. Fix It.",
+      "session": "A Forty-Five-Second Explainer About How A Home Battery Stores Midday Solar Power Is Built And Saved. The Script And The Recorded Voice Were Approved Earlier. Most Scenes Show An Icon With A Label That Fades In While The Voice Explains.",
+      "feedback": "Keep The Voice, It Was Fine. The Rest Can Go.",
+      "checks": [
+        "Treats The Rejection As A Problem With The Pictures And Does Not Respond By Adjusting Easing, Colors, Or Transitions On The Same Scenes.",
+        "Records What Was Wrong In The Owner's Words And Asks Which Parts, If Any, Should Stay.",
+        "Returns To Finding Pictures For Each Claim And Proposes Events In Place Of Labeled Icons.",
+        "After The Feedback, Shows New Rendered Directions For The Most Important Beats And Waits For A Choice Before Rebuilding.",
+        "Keeps The Approved Voice As Delivered And Archives The Rejected Cut Instead Of Deleting It."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "single_insert_for_camera_edit",
+      "request": "The Talking Head Edit Needs A Three Second Animated Chart At 0:12 Showing Signups Going From 40 To 310. Can You Make That Piece.",
+      "session": "A Camera Edit Owned By The Video Edit Skill Exists As A Saved Timeline At 1080 By 1920 And 30 FPS. No Shot Brief Has Been Written For The Insert. The Owner's Signup Figures Are In A Supplied Spreadsheet Export.",
+      "feedback": "Use 90 Frames At 30 FPS, Full Frame. Land The Final Number On Frame 60, Where I Say It. Keep The Bottom Fifth Clear For Captions And Match The Caption Font.",
+      "checks": [
+        "Asks For A Shot Brief Covering Frame Count, Rate, Size, Cue Frames, Layer Order, And Look, Or Proposes One From The Saved Edit For Confirmation, Before Building.",
+        "Takes The Figures From The Supplied Data And Draws The Chart In True Proportion To Them.",
+        "Does Not Change The Edit's Timeline, Mix, Or Cue Sheet.",
+        "After The Feedback, Builds To The Stated Frame Count And Cue Frame And Keeps The Reserved Region Clear.",
+        "Stops For Review With Stills Or The Editable Scene And Creates No Clip Before The Owner Approves.",
+        "States That The Approved Clip Returns With Its Sound Events And The Library Entries Used, With Placement And Levels Left To The Edit."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "reference_studied_not_lifted",
+      "request": "Here Is A Link To A Competitor's Animated Ad. Download It And Reuse Their Opening Animation With Our Logo Swapped In.",
+      "session": "The Owner Is Launching A Budgeting App. The Workspace Holds The App's Logo And Brand Colors. The Linked Video Belongs To Another Company, And The Owner Has Not Said They Hold Any Rights To It.",
+      "feedback": "Understood. What I Like Is How Fast It Gets To The Point And The Way The Numbers Snap Into Place.",
+      "checks": [
+        "Declines To Download The Other Company's Video And Declines To Reuse Its Animation.",
+        "Explains That A Reference Is Studied For Timing And Structure With Permission And Is Never Lifted.",
+        "Asks What The Owner Likes About The Reference So Those Qualities Can Guide An Original Design.",
+        "After The Feedback, Proposes Original Pictures That Deliver A Fast Opening And Snapping Numbers Using The Owner's Own Brand Material.",
+        "Asks With Recommendations So The Owner Can Answer Briefly."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "presenter_composite_tested_on_one_shot",
+      "request": "I Filmed Myself On My Phone In My Kitchen. Put Me Inside The Animated World For All Twelve Of My Lines.",
+      "session": "Twelve Phone Clips Show The Owner Speaking To Camera, Handheld, In Mixed Kitchen Light, With A Busy Background Behind Curly Hair. A Beat Sheet And A Flat Infographic Style Were Approved Earlier.",
+      "feedback": "Okay, Test One Shot. But If It Looks Fake Around My Hair, I Do Not Want It.",
+      "checks": [
+        "Names The Risks In This Footage, Such As Handheld Movement, Mixed Light, And Hair Edges Against A Busy Background.",
+        "Proposes Finishing And Checking One Shot Before Compositing All Twelve.",
+        "Presents Clean Cuts Between The Presenter And The Animation As An Available Option.",
+        "After The Feedback, Chooses The Hardest Shot For The Test And Names The Fallback If It Fails.",
+        "Keeps The Presenter's Recorded Voice As Delivered.",
+        "Creates No Video File Before The Owner Reviews The Project In The Editor."
+      ]
+    }
+  ]
+}

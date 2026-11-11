@@ -1,9 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Comment Thread</title>
   <desc id="desc">Invite A Response Or Mark A Viewer Question.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M7 12h38v24H22L12 44v-8H7z"/>
-    <path d="M28 43h10l12 8v-8h6V24h-5" stroke="#5EE1C7"/>
-    <path d="M14 21h22 M14 27h15"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <g><path d="M3 4.5h13.5v9h-8L5 16.5v-3H3z"/><path d="M5.75 8h8M5.75 10.5h5.5"/></g>
+    <path stroke="#5EE1C7" d="M10.5 16H14l4.5 3v-3H21V9h-2"/>
   </g>
 </svg>

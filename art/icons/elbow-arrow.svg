@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Elbow Arrow</title>
   <desc id="desc">Connect A Side Label To A Specific Screen Control.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M7 15h24q7 0 7 7v22h16" stroke="#5EE1C7"/>
-    <path d="M45 35l10 9-10 9"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#5EE1C7" pathLength="1" d="M3 5.5h8.25Q14 5.5 14 8.25V16.5h6.5"/>
+    <path d="M17 13l3.75 3.5L17 20"/>
   </g>
 </svg>

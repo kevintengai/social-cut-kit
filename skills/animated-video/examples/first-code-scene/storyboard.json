@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "title": "First Code Scene",
+  "aspect": "Portrait",
+  "fps": 30,
+  "modules": ["scenes/pulse.js"],
+  "scenes": [
+    {
+      "id": "first-code-scene-1",
+      "mode": "Code Scene",
+      "draw": "First Pulse",
+      "duration": 4,
+      "title": "First Pulse",
+      "background": "#14202b",
+      "foreground": "#f4f6f9",
+      "accent": "#8fefa8",
+      "params": { "title": "Draw It In Code" }
+    }
+  ]
+}

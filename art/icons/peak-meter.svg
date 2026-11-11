@@ -1,9 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Peak Meter</title>
   <desc id="desc">Point Out A Peak In Recorded Audio.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M7 46a25 25 0 0 1 50 0 M11 35l4 2 M21 22l2 5 M42 22l-2 5 M54 35l-4 2"/>
-    <path d="M32 45l15-17" stroke="#5EE1C7"/>
-    <circle cx="32" cy="45" r="3" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 17a9 9 0 0 1 18 0M4.6 13l1.4.7M8.2 8.6l.8 1.5M15.8 8.6l-.8 1.5M19.4 13l-1.4.7"/>
+    <path stroke="#5EE1C7" d="m12 17 5-6M12 17h.01"/>
   </g>
 </svg>

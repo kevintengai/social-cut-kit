@@ -1,349 +1,1514 @@
 {
-  "version": 1,
+  "version": 2,
   "viewBox": [
+    0,
+    0,
+    24,
+    24
+  ],
+  "overlayViewBox": [
     0,
     0,
     64,
     64
   ],
+  "strokeWidth": 1.5,
+  "groups": [
+    "Timeline",
+    "Sound",
+    "Text",
+    "Product",
+    "Social",
+    "Callouts",
+    "Interface",
+    "Files",
+    "Devices",
+    "People",
+    "Commerce",
+    "Status",
+    "Motion"
+  ],
   "assets": [
     {
+      "name": "split-clip",
       "title": "Split Clip",
       "group": "Timeline",
       "usage": "Mark The Frame Where One Shot Becomes Two.",
+      "motion": "The Blade Drops Between The Clips And The Two Halves Step Apart.",
+      "tags": [
+        "cut",
+        "razor",
+        "blade",
+        "divide"
+      ],
       "file": "icons/split-clip.svg",
       "animated": false
     },
     {
+      "name": "ripple-delete",
       "title": "Ripple Delete",
       "group": "Timeline",
       "usage": "Show A Removed Segment Closing The Timeline Gap.",
+      "motion": "The Arrow Presses Down And Both Clips Slide Inward To Close The Gap.",
+      "tags": [
+        "remove",
+        "gap",
+        "close",
+        "trim"
+      ],
       "file": "icons/ripple-delete.svg",
       "animated": false
     },
     {
+      "name": "track-stack",
       "title": "Track Stack",
       "group": "Timeline",
       "usage": "Identify Separate Layers Of An Editable Sequence.",
+      "motion": "Three Tracks Slide Into Their Lanes One After Another.",
+      "tags": [
+        "layers",
+        "tracks",
+        "lanes"
+      ],
       "file": "icons/track-stack.svg",
       "animated": false
     },
     {
+      "name": "cutaway",
       "title": "Cutaway",
       "group": "Timeline",
       "usage": "Introduce Supporting Footage Over The Main Shot.",
+      "motion": "The Supporting Shot Drops Over The Main Shot From The Upper Corner.",
+      "tags": [
+        "b-roll",
+        "insert",
+        "overlay",
+        "picture"
+      ],
       "file": "icons/cutaway.svg",
       "animated": false
     },
     {
+      "name": "loop-region",
       "title": "Loop Region",
       "group": "Timeline",
       "usage": "Mark A Short Section To Replay In The Editor.",
+      "motion": "The Two Arrows Travel Half A Lap Around The Play Mark.",
+      "tags": [
+        "repeat",
+        "cycle",
+        "replay"
+      ],
       "file": "icons/loop-region.svg",
       "animated": false
     },
     {
+      "name": "keyframe-pair",
       "title": "Keyframe Pair",
       "group": "Timeline",
       "usage": "Highlight A Change Between Two Animation Keys.",
+      "motion": "The Ease Curve Draws From The First Key And The Second Key Pops In.",
+      "tags": [
+        "ease",
+        "curve",
+        "interpolate",
+        "animation"
+      ],
       "file": "icons/keyframe-pair.svg",
       "animated": false
     },
     {
+      "name": "vertical-crop",
       "title": "Vertical Crop",
       "group": "Timeline",
       "usage": "Mark A Portrait Reframe Inside Landscape Footage.",
+      "motion": "The Portrait Frame Scans Left And Right Across The Wide Shot And Centers.",
+      "tags": [
+        "portrait",
+        "reframe",
+        "aspect",
+        "nine",
+        "sixteen"
+      ],
       "file": "icons/vertical-crop.svg",
       "animated": false
     },
     {
+      "name": "clip-handle",
       "title": "Clip Handle",
       "group": "Timeline",
       "usage": "Show The Available Source Before Or After A Trim.",
+      "motion": "The Clip Stretches Outward While The Handles Pull Back To Make Room.",
+      "tags": [
+        "trim",
+        "extend",
+        "head",
+        "tail"
+      ],
       "file": "icons/clip-handle.svg",
       "animated": false
     },
     {
+      "name": "voice-track",
       "title": "Voice Track",
       "group": "Sound",
       "usage": "Identify The Spoken Performance On A Track.",
+      "motion": "The Microphone Capsule Pulses Twice As If Picking Up A Spoken Phrase.",
+      "tags": [
+        "microphone",
+        "mic",
+        "speech",
+        "record"
+      ],
       "file": "icons/voice-track.svg",
       "animated": false
     },
     {
+      "name": "room-tone",
       "title": "Room Tone",
       "group": "Sound",
       "usage": "Mark A Room Tone Sample Between Dialogue Takes.",
+      "motion": "The Quiet Waveform Flutters Inside The Room And Settles.",
+      "tags": [
+        "ambience",
+        "noise",
+        "floor",
+        "silence"
+      ],
       "file": "icons/room-tone.svg",
       "animated": false
     },
     {
+      "name": "stereo-balance",
       "title": "Stereo Balance",
       "group": "Sound",
       "usage": "Compare Left And Right Channel Levels.",
+      "motion": "Sound Leaves The Left Speaker First And Then The Right Speaker.",
+      "tags": [
+        "pan",
+        "left",
+        "right",
+        "channels",
+        "speakers"
+      ],
       "file": "icons/stereo-balance.svg",
       "animated": false
     },
     {
+      "name": "crossfade",
       "title": "Crossfade",
       "group": "Sound",
       "usage": "Show Two Audio Levels Crossing In A Transition.",
+      "motion": "The Outgoing Level Draws Downward While The Incoming Level Draws Upward Across It.",
+      "tags": [
+        "fade",
+        "transition",
+        "blend",
+        "dissolve"
+      ],
       "file": "icons/crossfade.svg",
       "animated": false
     },
     {
+      "name": "peak-meter",
       "title": "Peak Meter",
       "group": "Sound",
       "usage": "Point Out A Peak In Recorded Audio.",
+      "motion": "The Needle Sweeps Up From Silence, Overshoots The Peak, And Settles.",
+      "tags": [
+        "level",
+        "gauge",
+        "loudness",
+        "volume"
+      ],
       "file": "icons/peak-meter.svg",
       "animated": false
     },
     {
+      "name": "beat-marker",
       "title": "Beat Marker",
       "group": "Sound",
       "usage": "Mark The Beat That Anchors A Visual Cut.",
+      "motion": "The Metronome Arm Swings Across To The Other Side And Back Onto The Beat.",
+      "tags": [
+        "metronome",
+        "tempo",
+        "rhythm"
+      ],
       "file": "icons/beat-marker.svg",
       "animated": false
     },
     {
+      "name": "headphone-check",
       "title": "Headphone Check",
       "group": "Sound",
       "usage": "Cue A Close Listen At An Edit Boundary.",
+      "motion": "The Left Cup Thumps And Then The Right Cup Answers.",
+      "tags": [
+        "listen",
+        "monitor",
+        "headset",
+        "audio"
+      ],
       "file": "icons/headphone-check.svg",
       "animated": false
     },
     {
+      "name": "music-bed",
       "title": "Music Bed",
       "group": "Sound",
       "usage": "Identify A Music Layer Under Spoken Audio.",
+      "motion": "The Notes Bounce Twice Above The Bed Line.",
+      "tags": [
+        "song",
+        "notes",
+        "score",
+        "soundtrack"
+      ],
       "file": "icons/music-bed.svg",
       "animated": false
     },
     {
+      "name": "captions",
       "title": "Captions",
       "group": "Text",
       "usage": "Introduce Or Inspect The Caption Layer.",
+      "motion": "The Two Caption Lines Type Across The Frame In Turn.",
+      "tags": [
+        "subtitles",
+        "cc",
+        "closed",
+        "text"
+      ],
       "file": "icons/captions.svg",
       "animated": false
     },
     {
+      "name": "safe-margins",
       "title": "Safe Margins",
       "group": "Text",
       "usage": "Check Caption And Headline Placement On Screen.",
+      "motion": "The Corner Guides Close In Toward The Text Block And Release.",
+      "tags": [
+        "title",
+        "safe",
+        "guides",
+        "frame",
+        "bounds"
+      ],
       "file": "icons/safe-margins.svg",
       "animated": false
     },
     {
+      "name": "lower-third",
       "title": "Lower Third",
       "group": "Text",
       "usage": "Mark A Speaker Name Or Role Plate.",
+      "motion": "The Name Plate Slides In From The Left Edge Of The Frame.",
+      "tags": [
+        "name",
+        "plate",
+        "title",
+        "chyron"
+      ],
       "file": "icons/lower-third.svg",
       "animated": false
     },
     {
+      "name": "word-highlight",
       "title": "Word Highlight",
       "group": "Text",
       "usage": "Point Out The Word That Carries Emphasis.",
+      "motion": "The Highlight Box Sweeps Across The Chosen Word From Its First Letter.",
+      "tags": [
+        "emphasis",
+        "keyword",
+        "marker"
+      ],
       "file": "icons/word-highlight.svg",
       "animated": false
     },
     {
+      "name": "text-baseline",
       "title": "Text Baseline",
       "group": "Text",
       "usage": "Align Two Text Treatments To The Same Baseline.",
+      "motion": "The Second Letter Drops And Lands On The Shared Baseline.",
+      "tags": [
+        "align",
+        "type",
+        "typography",
+        "letters"
+      ],
       "file": "icons/text-baseline.svg",
       "animated": false
     },
     {
+      "name": "speaker-label",
       "title": "Speaker Label",
       "group": "Text",
       "usage": "Identify A Speaker Before Their First Line.",
+      "motion": "The Name Tag Pops Out From Beside The Speaker.",
+      "tags": [
+        "name",
+        "tag",
+        "person",
+        "identify"
+      ],
       "file": "icons/speaker-label.svg",
       "animated": false
     },
     {
+      "name": "transcript-match",
       "title": "Transcript Match",
       "group": "Text",
       "usage": "Mark Confirmed Agreement Between Speech And Text.",
+      "motion": "The Check Mark Draws Itself Across The Corner Of The Page.",
+      "tags": [
+        "verify",
+        "document",
+        "check",
+        "approved"
+      ],
       "file": "icons/transcript-match.svg",
       "animated": false
     },
     {
+      "name": "headline-card",
       "title": "Headline Card",
       "group": "Text",
       "usage": "Introduce The Main Promise At The Opening Frame.",
+      "motion": "The Headline Writes In Line By Line From The Top Of The Card.",
+      "tags": [
+        "title",
+        "hook",
+        "opening",
+        "text"
+      ],
       "file": "icons/headline-card.svg",
       "animated": false
     },
     {
+      "name": "pointer-click",
       "title": "Pointer Click",
       "group": "Product",
       "usage": "Draw Attention To A Control During A Demo.",
+      "motion": "The Pointer Presses Down And Click Sparks Burst From Its Tip.",
+      "tags": [
+        "cursor",
+        "mouse",
+        "arrow",
+        "select"
+      ],
       "file": "icons/pointer-click.svg",
       "animated": false
     },
     {
+      "name": "touch-gesture",
       "title": "Touch Gesture",
       "group": "Product",
       "usage": "Show Where A Viewer Should Tap On A Phone.",
+      "motion": "The Finger Taps Down And A Ripple Spreads From The Fingertip.",
+      "tags": [
+        "tap",
+        "finger",
+        "hand",
+        "press"
+      ],
       "file": "icons/touch-gesture.svg",
       "animated": false
     },
     {
+      "name": "slider-control",
       "title": "Slider Control",
       "group": "Product",
       "usage": "Highlight A Parameter Being Adjusted.",
+      "motion": "Each Knob Nudges Along Its Track In Turn And Returns.",
+      "tags": [
+        "adjust",
+        "settings",
+        "levels",
+        "mixer"
+      ],
       "file": "icons/slider-control.svg",
       "animated": false
     },
     {
+      "name": "feature-zoom",
       "title": "Feature Zoom",
       "group": "Product",
       "usage": "Magnify A Small Product Detail.",
+      "motion": "The Lens Swells Toward The Viewer And The Plus Mark Grows With It.",
+      "tags": [
+        "magnify",
+        "search",
+        "enlarge",
+        "inspect"
+      ],
       "file": "icons/feature-zoom.svg",
       "animated": false
     },
     {
+      "name": "screen-share",
       "title": "Screen Share",
       "group": "Product",
       "usage": "Introduce A Shared Application Window.",
+      "motion": "The Arrow Rises Out Of The Screen To Send It To Viewers.",
+      "tags": [
+        "present",
+        "cast",
+        "monitor",
+        "broadcast"
+      ],
       "file": "icons/screen-share.svg",
       "animated": false
     },
     {
+      "name": "keyboard-shortcut",
       "title": "Keyboard Shortcut",
       "group": "Product",
       "usage": "Cue A Keyboard Command In A Walkthrough.",
+      "motion": "A Modifier Key Goes Down, Then The Long Key, And Both Release Together.",
+      "tags": [
+        "keys",
+        "hotkey",
+        "type",
+        "command"
+      ],
       "file": "icons/keyboard-shortcut.svg",
       "animated": false
     },
     {
+      "name": "version-history",
       "title": "Version History",
       "group": "Product",
       "usage": "Call Out A Previous Product Revision.",
+      "motion": "The Arrow Winds One Full Turn Backward While The Clock Hands Rewind.",
+      "tags": [
+        "undo",
+        "rewind",
+        "clock",
+        "restore",
+        "time"
+      ],
       "file": "icons/version-history.svg",
       "animated": false
     },
     {
+      "name": "settings-dial",
       "title": "Settings Dial",
       "group": "Product",
       "usage": "Identify A Configuration Step.",
+      "motion": "The Gear Turns By One Tooth Around Its Hub.",
+      "tags": [
+        "gear",
+        "cog",
+        "preferences",
+        "options"
+      ],
       "file": "icons/settings-dial.svg",
       "animated": false
     },
     {
+      "name": "comment-thread",
       "title": "Comment Thread",
       "group": "Social",
       "usage": "Invite A Response Or Mark A Viewer Question.",
+      "motion": "A Reply Bubble Pops Up Beneath The First Comment.",
+      "tags": [
+        "chat",
+        "reply",
+        "message",
+        "speech",
+        "bubble"
+      ],
       "file": "icons/comment-thread.svg",
       "animated": false
     },
     {
+      "name": "save-bookmark",
       "title": "Save Bookmark",
       "group": "Social",
       "usage": "Point To The Save Action For A Reference Clip.",
+      "motion": "The Bookmark Drops Into Place And The Plus Mark Confirms The Save.",
+      "tags": [
+        "favorite",
+        "keep",
+        "later",
+        "ribbon"
+      ],
       "file": "icons/save-bookmark.svg",
       "animated": false
     },
     {
+      "name": "share-link",
       "title": "Share Link",
       "group": "Social",
       "usage": "Cue A Resource Link In The Post.",
+      "motion": "The Two Links Pull Apart And Snap Back Together.",
+      "tags": [
+        "chain",
+        "url",
+        "connect",
+        "hyperlink"
+      ],
       "file": "icons/share-link.svg",
       "animated": false
     },
     {
+      "name": "community-group",
       "title": "Community Group",
       "group": "Social",
       "usage": "Identify A Community Invitation.",
+      "motion": "The Two Outer Members Step In Toward The Person At The Center.",
+      "tags": [
+        "people",
+        "members",
+        "team",
+        "audience"
+      ],
       "file": "icons/community-group.svg",
       "animated": false
     },
     {
+      "name": "pinned-reply",
       "title": "Pinned Reply",
       "group": "Social",
       "usage": "Flag A Reply That Should Stay Visible.",
+      "motion": "The Pin Swoops In And Sticks Into The Reply.",
+      "tags": [
+        "pin",
+        "stick",
+        "thumbtack",
+        "keep"
+      ],
       "file": "icons/pinned-reply.svg",
       "animated": false
     },
     {
+      "name": "audience-retention",
       "title": "Audience Retention",
       "group": "Social",
       "usage": "Show Where Viewers Leave A Sequence.",
+      "motion": "The Retention Line Draws Across The Chart And The Drop Marker Appears.",
+      "tags": [
+        "analytics",
+        "graph",
+        "drop",
+        "chart",
+        "viewers"
+      ],
       "file": "icons/audience-retention.svg",
       "animated": false
     },
     {
+      "name": "notification-bell",
       "title": "Notification Bell",
       "group": "Social",
       "usage": "Mark A Reminder Or Subscription Prompt.",
+      "motion": "The Bell Swings From Its Crown While The Ring Lines Flash.",
+      "tags": [
+        "alert",
+        "ring",
+        "remind",
+        "subscribe"
+      ],
       "file": "icons/notification-bell.svg",
       "animated": false
     },
     {
+      "name": "profile-badge",
       "title": "Profile Badge",
       "group": "Social",
       "usage": "Call Attention To A Creator Profile.",
+      "motion": "The Portrait Leans Forward And The Profile Lines Write In Beside It.",
+      "tags": [
+        "id",
+        "card",
+        "account",
+        "creator",
+        "bio"
+      ],
       "file": "icons/profile-badge.svg",
       "animated": false
     },
     {
+      "name": "elbow-arrow",
       "title": "Elbow Arrow",
       "group": "Callouts",
       "usage": "Connect A Side Label To A Specific Screen Control.",
+      "motion": "The Line Runs Around The Corner And The Arrowhead Arrives At The Target.",
+      "tags": [
+        "connector",
+        "pointer",
+        "leader",
+        "line"
+      ],
       "file": "icons/elbow-arrow.svg",
       "animated": false
     },
     {
+      "name": "curved-return",
       "title": "Curved Return",
       "group": "Callouts",
       "usage": "Bring Attention Back To A Prior Detail.",
+      "motion": "The Arc Sweeps Back Over The Top And The Arrowhead Lands On The Earlier Point.",
+      "tags": [
+        "back",
+        "arc",
+        "undo",
+        "revisit",
+        "arrow"
+      ],
       "file": "icons/curved-return.svg",
       "animated": false
     },
     {
+      "name": "measurement-span",
       "title": "Measurement Span",
       "group": "Callouts",
       "usage": "Show The Width Or Duration Of A Selected Region.",
+      "motion": "The Two End Stops Squeeze Inward With The Span And Spread Back To Full Width.",
+      "tags": [
+        "width",
+        "duration",
+        "ruler",
+        "distance",
+        "size"
+      ],
       "file": "icons/measurement-span.svg",
       "animated": false
     },
     {
+      "name": "detail-bracket",
       "title": "Detail Bracket",
       "group": "Callouts",
       "usage": "Frame An Interface Detail Without Covering Its Center.",
+      "motion": "The Four Corners Tighten Around The Center Mark And Ease Back Out.",
+      "tags": [
+        "focus",
+        "frame",
+        "target",
+        "corners",
+        "crop"
+      ],
       "file": "icons/detail-bracket.svg",
       "animated": false
     },
     {
+      "name": "waypoint-route",
       "title": "Waypoint Route",
       "group": "Callouts",
       "usage": "Trace The Order Of Three On-Screen Steps.",
+      "motion": "The Route Draws From Stop To Stop And Each Stop Lights As It Is Reached.",
+      "tags": [
+        "path",
+        "steps",
+        "journey",
+        "sequence",
+        "map"
+      ],
       "file": "icons/waypoint-route.svg",
       "animated": false
     },
     {
+      "name": "spotlight-beam",
       "title": "Spotlight Beam",
       "group": "Callouts",
       "usage": "Direct Attention From A Caption Toward A Detail.",
+      "motion": "The Lamp Tilts And Its Beam Fans Open Across The Stage.",
+      "tags": [
+        "light",
+        "lamp",
+        "focus",
+        "stage",
+        "highlight"
+      ],
       "file": "icons/spotlight-beam.svg",
       "animated": false
     },
     {
+      "name": "step-ladder",
       "title": "Step Ladder",
       "group": "Callouts",
       "usage": "Explain A Sequence With Three Ordered Levels.",
+      "motion": "The Staircase Draws Upward And A Marker Appears Above Each Step In Order.",
+      "tags": [
+        "stairs",
+        "levels",
+        "progress",
+        "stages"
+      ],
       "file": "icons/step-ladder.svg",
       "animated": false
     },
     {
+      "name": "anchor-pin",
       "title": "Anchor Pin",
       "group": "Callouts",
       "usage": "Fix A Note To An Exact Point In A Screen Recording.",
+      "motion": "The Pin Falls Onto Its Point And The Ground Marks Spread On Impact.",
+      "tags": [
+        "location",
+        "marker",
+        "place",
+        "map",
+        "point"
+      ],
       "file": "icons/anchor-pin.svg",
       "animated": false
     },
     {
+      "name": "menu-toggle",
+      "title": "Menu Toggle",
+      "group": "Interface",
+      "usage": "Open Or Close A Navigation Menu.",
+      "motion": "The Outer Bars Fold Into A Cross Over The Hidden Middle Bar And Unfold Again.",
+      "tags": [
+        "hamburger",
+        "navigation",
+        "bars",
+        "drawer"
+      ],
+      "file": "icons/menu-toggle.svg",
+      "animated": false
+    },
+    {
+      "name": "close-cross",
+      "title": "Close Cross",
+      "group": "Interface",
+      "usage": "Dismiss A Panel, Dialog, Or Selection.",
+      "motion": "The Two Strokes Of The Cross Strike Through One After The Other.",
+      "tags": [
+        "x",
+        "cancel",
+        "remove",
+        "exit",
+        "dismiss"
+      ],
+      "file": "icons/close-cross.svg",
+      "animated": false
+    },
+    {
+      "name": "search-lens",
+      "title": "Search Lens",
+      "group": "Interface",
+      "usage": "Start A Search Or Mark A Search Field.",
+      "motion": "The Lens Roams In A Small Loop As If Hunting For A Match.",
+      "tags": [
+        "find",
+        "magnifier",
+        "query",
+        "look"
+      ],
+      "file": "icons/search-lens.svg",
+      "animated": false
+    },
+    {
+      "name": "download-tray",
+      "title": "Download Tray",
+      "group": "Interface",
+      "usage": "Save A File From The Page To The Device.",
+      "motion": "The Arrow Falls From Above And Lands In The Tray, Which Dips Under It.",
+      "tags": [
+        "save",
+        "export",
+        "get",
+        "arrow",
+        "down"
+      ],
+      "file": "icons/download-tray.svg",
+      "animated": false
+    },
+    {
+      "name": "upload-tray",
+      "title": "Upload Tray",
+      "group": "Interface",
+      "usage": "Send A File From The Device To The Page.",
+      "motion": "The Arrow Launches Up Out Of The Tray And A Fresh One Rises Into Place.",
+      "tags": [
+        "import",
+        "send",
+        "publish",
+        "arrow",
+        "up"
+      ],
+      "file": "icons/upload-tray.svg",
+      "animated": false
+    },
+    {
+      "name": "crop-frame",
+      "title": "Crop Frame",
+      "group": "Interface",
+      "usage": "Trim The Edges Of A Picture Or Frame.",
+      "motion": "The Two Crop Corners Slide Toward Each Other To Tighten The Frame.",
+      "tags": [
+        "trim",
+        "resize",
+        "cut",
+        "bounds"
+      ],
+      "file": "icons/crop-frame.svg",
+      "animated": false
+    },
+    {
+      "name": "visibility-eye",
+      "title": "Visibility Eye",
+      "group": "Interface",
+      "usage": "Show Or Hide A Layer, Field, Or Preview.",
+      "motion": "The Eye Blinks Shut And Then Glances To One Side.",
+      "tags": [
+        "view",
+        "watch",
+        "show",
+        "preview",
+        "see"
+      ],
+      "file": "icons/visibility-eye.svg",
+      "animated": false
+    },
+    {
+      "name": "refresh-cycle",
+      "title": "Refresh Cycle",
+      "group": "Interface",
+      "usage": "Reload Content Or Run A Step Again.",
+      "motion": "Both Arrows Chase Each Other Through One Full Turn.",
+      "tags": [
+        "reload",
+        "sync",
+        "retry",
+        "update",
+        "rotate"
+      ],
+      "file": "icons/refresh-cycle.svg",
+      "animated": false
+    },
+    {
+      "name": "file-document",
+      "title": "File Document",
+      "group": "Files",
+      "usage": "Represent A Script, Brief, Or Written File.",
+      "motion": "The Text Lines Scroll Up Into The Page While The Folded Corner Flexes.",
+      "tags": [
+        "page",
+        "paper",
+        "text",
+        "doc",
+        "sheet"
+      ],
+      "file": "icons/file-document.svg",
+      "animated": false
+    },
+    {
+      "name": "folder-open",
+      "title": "Folder Open",
+      "group": "Files",
+      "usage": "Open A Project Folder Or Media Bin.",
+      "motion": "The Front Flap Swings Forward To Open The Folder And Eases Back.",
+      "tags": [
+        "directory",
+        "bin",
+        "project",
+        "browse"
+      ],
+      "file": "icons/folder-open.svg",
+      "animated": false
+    },
+    {
+      "name": "copy-pages",
+      "title": "Copy Pages",
+      "group": "Files",
+      "usage": "Duplicate A Clip, Caption, Or Value.",
+      "motion": "The Copy Slides Out From Behind The Original Sheet.",
+      "tags": [
+        "duplicate",
+        "clone",
+        "clipboard",
+        "paste"
+      ],
+      "file": "icons/copy-pages.svg",
+      "animated": false
+    },
+    {
+      "name": "trash-bin",
+      "title": "Trash Bin",
+      "group": "Files",
+      "usage": "Delete A Clip, File, Or Draft.",
+      "motion": "The Lid Tips Open On Its Hinge, Pauses, And Drops Shut.",
+      "tags": [
+        "delete",
+        "remove",
+        "discard",
+        "garbage"
+      ],
+      "file": "icons/trash-bin.svg",
+      "animated": false
+    },
+    {
+      "name": "archive-box",
+      "title": "Archive Box",
+      "group": "Files",
+      "usage": "Store A Finished Project Out Of The Way.",
+      "motion": "The Lid Lifts Off The Box And Settles Back Down.",
+      "tags": [
+        "storage",
+        "backup",
+        "shelf",
+        "package"
+      ],
+      "file": "icons/archive-box.svg",
+      "animated": false
+    },
+    {
+      "name": "cloud-sync",
+      "title": "Cloud Sync",
+      "group": "Files",
+      "usage": "Show Files Moving To And From Online Storage.",
+      "motion": "One Arrow Rises Into The Cloud And Then The Other Comes Down From It.",
+      "tags": [
+        "backup",
+        "online",
+        "storage",
+        "transfer"
+      ],
+      "file": "icons/cloud-sync.svg",
+      "animated": false
+    },
+    {
+      "name": "attach-clip",
+      "title": "Attach Clip",
+      "group": "Files",
+      "usage": "Attach A File To A Message Or Record.",
+      "motion": "The Paperclip Wire Bends Itself Into Shape From One End To The Other.",
+      "tags": [
+        "paperclip",
+        "attachment",
+        "add",
+        "file"
+      ],
+      "file": "icons/attach-clip.svg",
+      "animated": false
+    },
+    {
+      "name": "image-frame",
+      "title": "Image Frame",
+      "group": "Files",
+      "usage": "Represent A Still, Thumbnail, Or Cover Image.",
+      "motion": "The Sun Rises Over The Hills Inside The Frame.",
+      "tags": [
+        "photo",
+        "picture",
+        "thumbnail",
+        "cover"
+      ],
+      "file": "icons/image-frame.svg",
+      "animated": false
+    },
+    {
+      "name": "phone-portrait",
+      "title": "Phone Portrait",
+      "group": "Devices",
+      "usage": "Represent A Phone Held Upright For Vertical Video.",
+      "motion": "The Phone Buzzes From Side To Side Like An Incoming Alert.",
+      "tags": [
+        "mobile",
+        "smartphone",
+        "handset",
+        "vertical"
+      ],
+      "file": "icons/phone-portrait.svg",
+      "animated": false
+    },
+    {
+      "name": "laptop-open",
+      "title": "Laptop Open",
+      "group": "Devices",
+      "usage": "Represent A Laptop Used For Editing Or Review.",
+      "motion": "The Screen Swings Up From The Keyboard Deck Until The Laptop Is Open.",
+      "tags": [
+        "computer",
+        "notebook",
+        "workstation"
+      ],
+      "file": "icons/laptop-open.svg",
+      "animated": false
+    },
+    {
+      "name": "camera-body",
+      "title": "Camera Body",
+      "group": "Devices",
+      "usage": "Mark A Recording, A Shot, Or A Photo Capture.",
+      "motion": "The Iris Closes Down, The Flash Fires, And The Lens Opens Again.",
+      "tags": [
+        "photo",
+        "shoot",
+        "record",
+        "capture",
+        "lens"
+      ],
+      "file": "icons/camera-body.svg",
+      "animated": false
+    },
+    {
+      "name": "desktop-monitor",
+      "title": "Desktop Monitor",
+      "group": "Devices",
+      "usage": "Represent A Desktop Display Or A Playback Screen.",
+      "motion": "The Screen Wakes And The Play Mark Pops Onto It.",
+      "tags": [
+        "screen",
+        "display",
+        "computer",
+        "playback"
+      ],
+      "file": "icons/desktop-monitor.svg",
+      "animated": false
+    },
+    {
+      "name": "webcam-lens",
+      "title": "Webcam Lens",
+      "group": "Devices",
+      "usage": "Mark A Face Camera Or A Live Recording Source.",
+      "motion": "The Lens Racks Focus In And Out While The Recording Light Blinks.",
+      "tags": [
+        "camera",
+        "live",
+        "stream",
+        "facecam"
+      ],
+      "file": "icons/webcam-lens.svg",
+      "animated": false
+    },
+    {
+      "name": "battery-level",
+      "title": "Battery Level",
+      "group": "Devices",
+      "usage": "Show Remaining Power On A Device.",
+      "motion": "The Three Cells Fill One By One From Empty To Full.",
+      "tags": [
+        "power",
+        "charge",
+        "energy",
+        "cell"
+      ],
+      "file": "icons/battery-level.svg",
+      "animated": false
+    },
+    {
+      "name": "wifi-signal",
+      "title": "Wifi Signal",
+      "group": "Devices",
+      "usage": "Show A Wireless Connection Or Its Strength.",
+      "motion": "The Signal Arcs Light Up Outward From The Source Dot.",
+      "tags": [
+        "wireless",
+        "network",
+        "internet",
+        "connection"
+      ],
+      "file": "icons/wifi-signal.svg",
+      "animated": false
+    },
+    {
+      "name": "memory-card",
+      "title": "Memory Card",
+      "group": "Devices",
+      "usage": "Represent Camera Media Or An Import Source.",
+      "motion": "The Card Pushes Down Into Its Slot And Springs Back Out.",
+      "tags": [
+        "sd",
+        "storage",
+        "media",
+        "import",
+        "footage"
+      ],
+      "file": "icons/memory-card.svg",
+      "animated": false
+    },
+    {
+      "name": "person-circle",
+      "title": "Person Circle",
+      "group": "People",
+      "usage": "Represent An Account, A Viewer, Or A Signed-In User.",
+      "motion": "The Head Dips In A Short Nod Of Greeting.",
+      "tags": [
+        "user",
+        "account",
+        "avatar",
+        "profile",
+        "member"
+      ],
+      "file": "icons/person-circle.svg",
+      "animated": false
+    },
+    {
+      "name": "add-person",
+      "title": "Add Person",
+      "group": "People",
+      "usage": "Invite A Collaborator Or Follow A Creator.",
+      "motion": "The Plus Mark Spins In Beside The Person.",
+      "tags": [
+        "invite",
+        "follow",
+        "user",
+        "plus",
+        "join"
+      ],
+      "file": "icons/add-person.svg",
+      "animated": false
+    },
+    {
+      "name": "team-pair",
+      "title": "Team Pair",
+      "group": "People",
+      "usage": "Represent Two Collaborators Or A Shared Workspace.",
+      "motion": "The Second Person Steps Out From Behind The First.",
+      "tags": [
+        "users",
+        "partners",
+        "duo",
+        "collaborators"
+      ],
+      "file": "icons/team-pair.svg",
+      "animated": false
+    },
+    {
+      "name": "podium-speaker",
+      "title": "Podium Speaker",
+      "group": "People",
+      "usage": "Mark A Talk, A Lesson, Or A Presenter Segment.",
+      "motion": "The Speaker Leans From Side To Side Behind The Podium While Talking.",
+      "tags": [
+        "presenter",
+        "talk",
+        "lecture",
+        "teacher",
+        "host"
+      ],
+      "file": "icons/podium-speaker.svg",
+      "animated": false
+    },
+    {
+      "name": "heart-reaction",
+      "title": "Heart Reaction",
+      "group": "People",
+      "usage": "Mark A Like Or An Appreciative Response.",
+      "motion": "The Heart Beats Twice.",
+      "tags": [
+        "like",
+        "love",
+        "favorite",
+        "appreciate"
+      ],
+      "file": "icons/heart-reaction.svg",
+      "animated": false
+    },
+    {
+      "name": "thumbs-up",
+      "title": "Thumbs Up",
+      "group": "People",
+      "usage": "Mark Approval Or A Positive Review.",
+      "motion": "The Hand Rocks Upward From The Wrist To Give Its Approval.",
+      "tags": [
+        "approve",
+        "like",
+        "agree",
+        "good",
+        "yes"
+      ],
+      "file": "icons/thumbs-up.svg",
+      "animated": false
+    },
+    {
+      "name": "id-lanyard",
+      "title": "ID Lanyard",
+      "group": "People",
+      "usage": "Represent A Pass, A Role, Or Event Access.",
+      "motion": "The Badge Swings From Its Strap And Comes To Rest.",
+      "tags": [
+        "badge",
+        "pass",
+        "access",
+        "credential",
+        "event"
+      ],
+      "file": "icons/id-lanyard.svg",
+      "animated": false
+    },
+    {
+      "name": "person-speaking",
+      "title": "Person Speaking",
+      "group": "People",
+      "usage": "Mark Dialogue, Narration, Or A Speaking Turn.",
+      "motion": "Two Sound Waves Leave The Speaker One After The Other.",
+      "tags": [
+        "talk",
+        "voice",
+        "say",
+        "narrate",
+        "dialogue"
+      ],
+      "file": "icons/person-speaking.svg",
+      "animated": false
+    },
+    {
+      "name": "shopping-cart",
+      "title": "Shopping Cart",
+      "group": "Commerce",
+      "usage": "Point To A Store, A Basket, Or A Checkout Step.",
+      "motion": "The Cart Rolls Forward With A Slight Tip And Rolls Back.",
+      "tags": [
+        "basket",
+        "buy",
+        "store",
+        "checkout",
+        "shop"
+      ],
+      "file": "icons/shopping-cart.svg",
+      "animated": false
+    },
+    {
+      "name": "price-tag",
+      "title": "Price Tag",
+      "group": "Commerce",
+      "usage": "Mark A Price, An Offer, Or A Discount.",
+      "motion": "The Tag Swings From Its String Hole And Hangs Still.",
+      "tags": [
+        "offer",
+        "discount",
+        "sale",
+        "label",
+        "cost"
+      ],
+      "file": "icons/price-tag.svg",
+      "animated": false
+    },
+    {
+      "name": "credit-card",
+      "title": "Credit Card",
+      "group": "Commerce",
+      "usage": "Mark A Payment Step Or A Billing Detail.",
+      "motion": "The Card Swipes Sideways Through A Reader And Returns.",
+      "tags": [
+        "payment",
+        "pay",
+        "billing",
+        "checkout",
+        "bank"
+      ],
+      "file": "icons/credit-card.svg",
+      "animated": false
+    },
+    {
+      "name": "gift-box",
+      "title": "Gift Box",
+      "group": "Commerce",
+      "usage": "Mark A Bonus, A Giveaway, Or A Free Resource.",
+      "motion": "The Lid And Bow Lift Off The Box And Drop Back On.",
+      "tags": [
+        "bonus",
+        "present",
+        "giveaway",
+        "reward",
+        "free"
+      ],
+      "file": "icons/gift-box.svg",
+      "animated": false
+    },
+    {
+      "name": "receipt-slip",
+      "title": "Receipt Slip",
+      "group": "Commerce",
+      "usage": "Represent An Order Record Or A Proof Of Purchase.",
+      "motion": "The Receipt Feeds Downward In Steps Like Paper Leaving A Printer.",
+      "tags": [
+        "invoice",
+        "bill",
+        "order",
+        "proof",
+        "purchase"
+      ],
+      "file": "icons/receipt-slip.svg",
+      "animated": false
+    },
+    {
+      "name": "storefront",
+      "title": "Storefront",
+      "group": "Commerce",
+      "usage": "Represent A Shop, A Brand Page, Or A Seller.",
+      "motion": "The Awning Ripples And The Door Swings Open And Shut.",
+      "tags": [
+        "shop",
+        "store",
+        "seller",
+        "business",
+        "market"
+      ],
+      "file": "icons/storefront.svg",
+      "animated": false
+    },
+    {
+      "name": "wallet-fold",
+      "title": "Wallet Fold",
+      "group": "Commerce",
+      "usage": "Represent A Balance, Earnings, Or A Payout.",
+      "motion": "The Clasp Pulls Open To The Side And Snaps Shut.",
+      "tags": [
+        "money",
+        "balance",
+        "earnings",
+        "payout",
+        "cash"
+      ],
+      "file": "icons/wallet-fold.svg",
+      "animated": false
+    },
+    {
+      "name": "sales-chart",
+      "title": "Sales Chart",
+      "group": "Commerce",
+      "usage": "Show Revenue Or Growth Across A Period.",
+      "motion": "The Bars Grow From The Baseline In Turn And The Trend Line Climbs Over Them.",
+      "tags": [
+        "revenue",
+        "growth",
+        "analytics",
+        "bars",
+        "trend"
+      ],
+      "file": "icons/sales-chart.svg",
+      "animated": false
+    },
+    {
+      "name": "success-check",
+      "title": "Success Check",
+      "group": "Status",
+      "usage": "Confirm That A Step Finished Correctly.",
+      "motion": "The Ring Swells Once And The Check Mark Draws Inside It.",
+      "tags": [
+        "done",
+        "complete",
+        "ok",
+        "passed",
+        "tick"
+      ],
+      "file": "icons/success-check.svg",
+      "animated": false
+    },
+    {
+      "name": "warning-triangle",
+      "title": "Warning Triangle",
+      "group": "Status",
+      "usage": "Flag A Risk That Needs Attention Before Continuing.",
+      "motion": "The Triangle Shakes From Side To Side While The Mark Flashes.",
+      "tags": [
+        "alert",
+        "caution",
+        "danger",
+        "attention",
+        "risk"
+      ],
+      "file": "icons/warning-triangle.svg",
+      "animated": false
+    },
+    {
+      "name": "info-note",
+      "title": "Info Note",
+      "group": "Status",
+      "usage": "Offer Background Or A Helpful Detail.",
+      "motion": "The Dot Hops Off The Stem And Lands Back On It.",
+      "tags": [
+        "information",
+        "help",
+        "about",
+        "details",
+        "hint"
+      ],
+      "file": "icons/info-note.svg",
+      "animated": false
+    },
+    {
+      "name": "loading-spinner",
+      "title": "Loading Spinner",
+      "group": "Status",
+      "usage": "Show That Work Is In Progress.",
+      "motion": "The Open Ring Sweeps Through One Full Turn And Stops Where It Began.",
+      "tags": [
+        "wait",
+        "busy",
+        "progress",
+        "processing",
+        "pending"
+      ],
+      "file": "icons/loading-spinner.svg",
+      "animated": false
+    },
+    {
+      "name": "lock-secure",
+      "title": "Lock Secure",
+      "group": "Status",
+      "usage": "Mark Private, Protected, Or Locked Content.",
+      "motion": "The Shackle Lifts Open And Clicks Back Down Into The Body.",
+      "tags": [
+        "private",
+        "secure",
+        "password",
+        "protected",
+        "padlock"
+      ],
+      "file": "icons/lock-secure.svg",
+      "animated": false
+    },
+    {
+      "name": "shield-verified",
+      "title": "Shield Verified",
+      "group": "Status",
+      "usage": "Mark A Verified Source Or A Passed Safety Check.",
+      "motion": "The Shield Braces Forward And The Check Mark Draws Across It.",
+      "tags": [
+        "security",
+        "trusted",
+        "protection",
+        "verified",
+        "safe"
+      ],
+      "file": "icons/shield-verified.svg",
+      "animated": false
+    },
+    {
+      "name": "timer-clock",
+      "title": "Timer Clock",
+      "group": "Status",
+      "usage": "Show A Duration, A Countdown, Or A Deadline.",
+      "motion": "The Button Presses Down And The Hand Sweeps Once Around The Dial.",
+      "tags": [
+        "stopwatch",
+        "duration",
+        "countdown",
+        "time",
+        "deadline"
+      ],
+      "file": "icons/timer-clock.svg",
+      "animated": false
+    },
+    {
+      "name": "star-favorite",
+      "title": "Star Favorite",
+      "group": "Status",
+      "usage": "Mark A Favorite, A Rating, Or A Featured Item.",
+      "motion": "The Star Swells And Twists Through One Point Of Its Own Shape.",
+      "tags": [
+        "rating",
+        "featured",
+        "best",
+        "favorite",
+        "review"
+      ],
+      "file": "icons/star-favorite.svg",
+      "animated": false
+    },
+    {
+      "name": "tap-ripple",
       "title": "Tap Ripple",
       "group": "Motion",
       "usage": "Mark A Tap Target With Two Outward Ripples.",
@@ -351,6 +1516,7 @@
       "animated": true
     },
     {
+      "name": "focus-lock",
       "title": "Focus Lock",
       "group": "Motion",
       "usage": "Settle Four Focus Corners Around A Detail.",
@@ -358,6 +1524,7 @@
       "animated": true
     },
     {
+      "name": "beat-bars",
       "title": "Beat Bars",
       "group": "Motion",
       "usage": "Cue A Music Beat With A Three-Bar Motion.",
@@ -365,6 +1532,7 @@
       "animated": true
     },
     {
+      "name": "path-trace",
       "title": "Path Trace",
       "group": "Motion",
       "usage": "Lead The Eye From An Origin Toward An Arrowhead.",
@@ -372,6 +1540,7 @@
       "animated": true
     },
     {
+      "name": "word-underline",
       "title": "Word Underline",
       "group": "Motion",
       "usage": "Draw A Short Emphasis Line Beneath A Headline.",
@@ -379,6 +1548,7 @@
       "animated": true
     },
     {
+      "name": "swipe-cue",
       "title": "Swipe Cue",
       "group": "Motion",
       "usage": "Prompt A Horizontal Gesture With A Moving Chevron.",

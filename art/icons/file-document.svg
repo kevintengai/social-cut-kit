@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">File Document</title>
+  <desc id="desc">Represent A Script, Brief, Or Written File.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 2.5h8L18.5 7v13a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 20V4A1.5 1.5 0 0 1 6 2.5z"/>
+    <path d="M14 2.5V7h4.5"/>
+    <path stroke="#5EE1C7" d="M8 11.5h7M8 14.5h7M8 17.5h4"/>
+  </g>
+</svg>

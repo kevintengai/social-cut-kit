@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Audience Retention</title>
   <desc id="desc">Show Where Viewers Leave A Sequence.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M8 10v43h48 M14 19h8l6 6h8l6 11h11"/>
-    <path d="M35 45l6-8 6 4" stroke="#5EE1C7"/>
-    <circle cx="28" cy="25" r="2" fill="#5EE1C7" stroke="none"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 4v16h18"/>
+    <path pathLength="1" d="M5.25 7h3l2.25 2.25h3l2.25 4.25H20"/>
+    <path stroke="#5EE1C7" d="m15.5 16 2 2 2-2"/>
   </g>
 </svg>

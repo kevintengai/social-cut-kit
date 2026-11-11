@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Keyframe Pair</title>
   <desc id="desc">Highlight A Change Between Two Animation Keys.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M5 37l9-10 9 10-9 10z M41 19l9-10 9 10-9 10z"/>
-    <path d="M23 37c12 0 7-18 18-18" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2.5 14.5 6 11l3.5 3.5L6 18z"/>
+    <path stroke="#5EE1C7" pathLength="1" d="M9.5 14.5c4 0 1-7.5 5-7.5"/>
+    <path d="M14.5 7 18 3.5 21.5 7 18 10.5z"/>
   </g>
 </svg>

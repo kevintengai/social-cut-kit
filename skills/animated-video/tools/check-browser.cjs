@@ -111,8 +111,67 @@ async function run() {
   }.toString() + ")(" + JSON.stringify(saved) + ")");
   await waitFor("document.getElementById('status').textContent === 'Storyboard Opened.'");
   assert.equal(await evaluate("document.getElementById('export').disabled"), true);
+  // Open A Code-Scene Film The Way An Owner Does: The Storyboard Together With Its Scene Module.
+  const filmDir = path.join(root, "examples/an-idea-travels");
+  const filmBoard = fs.readFileSync(path.join(filmDir, "storyboard.timed.json"), "utf8"), filmModule = fs.readFileSync(path.join(filmDir, "scenes/idea.js"), "utf8");
+  const openFilm = (board, module) => evaluate("(" + function(board, module) {
+    document.getElementById("status").textContent = "";
+    const d = new DataTransfer(); d.items.add(new File([board], "storyboard.timed.json", {type: "application/json"}));
+    if (module) d.items.add(new File([module], "idea.js", {type: "text/javascript"}));
+    const target = document.getElementById("openFile"); target.files = d.files; target.dispatchEvent(new Event("change"));
+  }.toString() + ")(" + JSON.stringify(board) + "," + JSON.stringify(module) + ")");
+  await openFilm(filmBoard, "");
+  await waitFor("document.getElementById('status').textContent === 'Storyboard Opened With Missing Files.'");
+  assert(await evaluate("document.getElementById('filmNote').textContent.includes('scenes/idea.js')"));
+  assert.equal(await evaluate("MotionScenes.problems().some(p => p.kind === 'missing')"), true);
+  await openFilm(filmBoard, filmModule);
+  await waitFor("document.getElementById('status').textContent === 'Storyboard Opened.'");
+  assert.equal(await evaluate("document.querySelectorAll('.scene').length"), 4);
+  assert(await evaluate("document.querySelector('.scene span').textContent.startsWith('Idea Seed')"));
+  assert.equal(await evaluate("document.getElementById('codeFields').hidden"), false);
+  assert.equal(await evaluate("document.getElementById('drawName').value"), "Idea Seed");
+  assert.equal(await evaluate("document.getElementById('captionsField').hidden"), false);
+  assert.equal(await evaluate("document.getElementById('export').disabled"), true);
+  assert(await evaluate("document.getElementById('filmNote').textContent.includes('Stand-In')"));
+  const filmSource = require("../adapter/prepare-remotion.cjs").painterSource([{name: "scenes/idea.js", source: filmModule}]);
+  const film = await evaluate("(" + async function(source, board) {
+    const url = URL.createObjectURL(new Blob([source], {type: "text/javascript"}));
+    const {MotionFrame: externalPainter} = await import(url); URL.revokeObjectURL(url);
+    const project = MotionProject.cleanProject(JSON.parse(board)), a = document.createElement("canvas"), b = document.createElement("canvas");
+    a.width = b.width = 270; a.height = b.height = 480;
+    const out = {same: true, twice: true, distinct: new Set(), captions: false};
+    MotionScenes.clearProblems();
+    for (const time of [0.4, 1.8, 3.6, 4.9, 6.4, 8.1, 9.9, 11.7]) {
+      MotionFrame.draw(a, project, time); const first = a.toDataURL();
+      externalPainter.draw(b, project, time); if (first !== b.toDataURL()) out.same = false;
+      MotionFrame.draw(b, project, 0.1); MotionFrame.draw(b, project, time); if (first !== b.toDataURL()) out.twice = false;
+      out.distinct.add(first);
+      MotionFrame.draw(b, project, time, {captions: false}); if (first !== b.toDataURL()) out.captions = true;
+    }
+    out.distinct = out.distinct.size; out.problems = MotionScenes.problems().length;
+    return out;
+  }.toString() + ")(" + JSON.stringify(filmSource) + "," + JSON.stringify(filmBoard) + ")", true);
+  assert.deepEqual(film, {same: true, twice: true, distinct: 8, captions: true, problems: 0});
+  // Hiding Captions And Editing Parameters Both Change The Picture And Clear Any Review.
+  const shot = () => evaluate("document.getElementById('frame').toDataURL()");
+  await evaluate("changeValue('seek', '1.8', 'input')");
+  const captioned = await shot();
+  await evaluate("document.getElementById('showCaptions').click()");
+  assert.notEqual(await shot(), captioned);
+  await evaluate("document.getElementById('showCaptions').click()");
+  assert.equal(await shot(), captioned);
+  await evaluate("changeValue('params', '{\"line\": 5', 'input')");
+  assert(await evaluate("document.getElementById('paramsNote').textContent.includes('JSON Object')"));
+  assert.equal(await shot(), captioned);
+  await evaluate("document.querySelectorAll('.scene')[3].click(); changeValue('params', '{\"people\": 12, \"block\": \"#3355aa\"}', 'input')");
+  assert.equal(await evaluate("document.getElementById('paramsNote').textContent"), "");
+  await evaluate("changeValue('aspect', 'Custom'); changeValue('customWidth', '1080'); changeValue('customHeight', '1350')");
+  assert.equal(await evaluate("document.getElementById('frame').width + 'x' + document.getElementById('frame').height"), "768x960");
+  assert.equal(await evaluate("MotionScenes.problems().length"), 0);
+  assert.equal(await evaluate("document.getElementById('approve').disabled && document.getElementById('export').disabled"), true);
   assert(!seenError, JSON.stringify(seenError));
   console.log("Passed Browser Playback, Voice Import, Scene Editing, Project Round Trip, And Review Invalidation Checks. No Video Recorded.");
+  console.log("Passed Code Scene Film Opening, Module Loading, Painter Parity, Caption Toggle, Parameter Editing, And Custom Frame Checks. No Video Recorded.");
 }
 run().catch(e => { console.error(e); process.exitCode = 1; }).finally(async () => {
   try { await request("Browser.close", {}, undefined); } catch {}

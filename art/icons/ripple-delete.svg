@@ -1,9 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Ripple Delete</title>
   <desc id="desc">Show A Removed Segment Closing The Timeline Gap.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="5" y="37" width="16" height="11" rx="2"/>
-    <rect x="43" y="37" width="16" height="11" rx="2"/>
-    <path d="M24 26l7 6 8-6 M31 12v18 M18 18h-7v10 M46 18h7v10" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="13" width="6" height="5.5" rx="1"/>
+    <rect x="15.5" y="13" width="6" height="5.5" rx="1"/>
+    <path stroke="#5EE1C7" d="M12 4v7M9.5 8.5 12 11l2.5-2.5"/>
+    <path stroke="#5EE1C7" d="M7 6.5H4.5V10M17 6.5h2.5V10"/>
   </g>
 </svg>

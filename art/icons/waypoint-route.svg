@@ -1,10 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Waypoint Route</title>
   <desc id="desc">Trace The Order Of Three On-Screen Steps.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="10" cy="44" r="4" stroke="#5EE1C7"/>
-    <circle cx="31" cy="20" r="4" stroke="#5EE1C7"/>
-    <circle cx="53" cy="35" r="4" stroke="#5EE1C7"/>
-    <path d="M14 43c10-2 4-21 13-23 M36 20c12 0 3 15 13 15"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle stroke="#5EE1C7" cx="4" cy="16.5" r="1.6"/>
+    <path pathLength="1" d="M5.6 16c3.75-.75 1.5-7.75 4.65-8.4"/>
+    <circle stroke="#5EE1C7" cx="11.75" cy="7.5" r="1.6"/>
+    <path pathLength="1" d="M13.4 7.5c4.5 0 1.1 5.5 5 5.5"/>
+    <circle stroke="#5EE1C7" cx="20" cy="13" r="1.6"/>
   </g>
 </svg>

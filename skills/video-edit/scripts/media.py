@@ -1,11 +1,23 @@
 """Sound, Picture, Subtitles, And Media Diagnostics."""
 
+import math
 import re
 import subprocess
 import tempfile
 from pathlib import Path
 
-from timeline import EditError, binary, framing, probe, publish_file, run, timecode
+from timeline import EditError, binary, framing, picture_info, probe, publish_file, run, timecode
+
+
+# HDR Reference White In Nits. It Lands At Standard Peak White Before The Highlight Roll-Off.
+REFERENCE_WHITE = 203
+TONE_FILTERS = ("zscale", "tonemap")
+ZSCALE_PRIMARIES = {"bt709", "bt470m", "bt470bg", "smpte170m", "smpte240m", "film", "bt2020",
+                    "smpte428", "smpte431", "smpte432", "jedec-p22", "ebu3213"}
+ZSCALE_MATRICES = {"bt709", "fcc", "bt470bg", "smpte170m", "smpte240m", "ycgco", "bt2020nc", "bt2020c",
+                   "chroma-derived-nc", "chroma-derived-c", "ictcp"}
+LAYERS = ("mix", "voice", "cues")
+_filters = None
 
 
 def decimal(value):
@@ -65,7 +77,69 @@ def colour_filters(shot):
     return ",".join(filters) + ","
 
 
-def graph(model, with_captions=True):
+def tone_filters(video):
+    """One Conversion From PQ Or HLG To BT.709 Standard Dynamic Range. The Result Ends In A Comma."""
+    info = picture_info(video)
+    if not info or not info["hdr"]:
+        return ""
+    primaries = info["color_primaries"] if info["color_primaries"] in ZSCALE_PRIMARIES else "bt2020"
+    source = ["transferin=" + info["color_transfer"], "primariesin=" + primaries]
+    layout = str(video.get("pix_fmt") or "").lower()
+    if re.match(r"(gbr|rgb|bgr|argb|abgr|x2)", layout):
+        source.append("rangein=full")
+    else:
+        matrix = info["color_space"] if info["color_space"] in ZSCALE_MATRICES else "bt2020nc"
+        full = info["color_range"] == "pc" or layout.startswith("yuvj")
+        source += ["matrixin=" + matrix, "rangein=" + ("full" if full else "limited")]
+    # HLG Is Nominally A 1000 Nit Signal. PQ Uses Its Own Light Level Metadata When Present.
+    nits = 1000 if info["hdr"] == "hlg" else min(10000, max(400, info["peak_nits"] or 1000))
+    return (f"zscale={':'.join(source)}:transfer=linear:primaries=bt709:npl={REFERENCE_WHITE},format=gbrpf32le,"
+            f"tonemap=tonemap=mobius:param=0.3:desat=0:peak={decimal(nits / REFERENCE_WHITE)},"
+            "zscale=transferin=linear:primariesin=bt709:transfer=bt709:primaries=bt709:matrix=bt709:range=limited:"
+            "dither=error_diffusion,format=yuv420p,")
+
+
+def fade_filters(row, length):
+    """Opt-In Sound Fades For One Shot Or Cue, As A Suffix That Begins With A Comma."""
+    parts = []
+    if row.get("fade_in"):
+        parts.append(f"afade=t=in:st=0:d={decimal(row['fade_in'])}")
+    if row.get("fade_out"):
+        parts.append(f"afade=t=out:st={decimal(max(0, length - row['fade_out']))}:d={decimal(row['fade_out'])}")
+    return "".join("," + part for part in parts)
+
+
+def available_filters():
+    global _filters
+    if _filters is None:
+        listing = run([binary("ffmpeg"), "-hide_banner", "-filters"]).stdout
+        rows = (line.split() for line in listing.splitlines())
+        _filters = {row[1] for row in rows if len(row) > 2 and "->" in row[2]}
+    return _filters
+
+
+def missing_tone_filters(model):
+    if not any(row.get("tone_map") for row in model["shots"] + model["overlays"]):
+        return []
+    return [name for name in TONE_FILTERS if name not in available_filters()]
+
+
+def require_tone_filters(model):
+    missing = missing_tone_filters(model)
+    if missing:
+        names = " And ".join(missing)
+        raise EditError(f"This FFmpeg Build Lacks The {names} Filter{'s' if len(missing) > 1 else ''} Needed To "
+                        "Convert HDR Shots To Standard Dynamic Range. Install A Build That Includes zscale "
+                        "(libzimg) And tonemap, Or Set tone_map To false To Pass The Picture Through Unconverted.")
+
+
+def graph(model, with_captions=True, picture=True, sound="mix", master_gain=None):
+    """Build FFmpeg Inputs And The Composition Graph.
+
+    The Defaults Describe The Complete Edit. The Keyword Options Select A Sound-Only Graph,
+    One Sound Layer (The Whole Mix, The Shot Audio Alone, Or The Added Cues Alone), And One
+    Constant Gain On The Finished Mix.
+    """
     w, h, fps = model["width"], model["height"], model["fps"]
     args, filters = [], []
     count = 0
@@ -89,59 +163,110 @@ def graph(model, with_captions=True):
     shot_pads = []
     for i, shot in enumerate(model["shots"]):
         duration = decimal(shot["duration"])
-        index, a = input_ref(shot["asset"], shot["start"], shot["end"] - shot["start"])
-        geometry = shot.get("geometry") or framing(a["video"],w,h,shot["fit"],1,0,0)
-        crop = ":".join(str(n) for n in geometry["crop"])
-        sw,sh = geometry["scale"]
-        px,py = geometry["pad"]
-        size = f"crop={crop}:exact=1,scale={sw}:{sh},setsar=1,{colour_filters(shot)}pad={w}:{h}:{px}:{py}"
-        video = stream(index, a, "video")
-        filters.append(f"{video}settb=AVTB,setpts=PTS/{decimal(shot['speed'])},fps=fps={fps}:start_time=0,{size},setsar=1,format=yuv420p,"
-                       f"tpad=stop_mode=clone:stop_duration={duration},trim=duration={duration},setpts=PTS-STARTPTS[v{i}]")
-        if a["audio"] and a["kind"] != "image" and shot["gain"]:
+        # A Blank Shot Holds Its Place In Time Without Opening A Source File.
+        a = None if shot.get("blank") else model["assets"][shot["asset"]]
+        voiced = bool(a and a["audio"] and a["kind"] != "image" and shot["gain"] and sound != "cues")
+        if a and (picture or voiced):
+            index, a = input_ref(shot["asset"], shot["start"], shot["end"] - shot["start"])
+        if picture and a:
+            geometry = shot.get("geometry") or framing(a["video"],w,h,shot["fit"],1,0,0)
+            crop = ":".join(str(n) for n in geometry["crop"])
+            sw,sh = geometry["scale"]
+            px,py = geometry["pad"]
+            tone = tone_filters(a["video"]) if shot.get("tone_map") else ""
+            size = f"crop={crop}:exact=1,scale={sw}:{sh},setsar=1,{tone}{colour_filters(shot)}pad={w}:{h}:{px}:{py}"
+            video = stream(index, a, "video")
+            filters.append(f"{video}settb=AVTB,setpts=PTS/{decimal(shot['speed'])},fps=fps={fps}:start_time=0,{size},setsar=1,format=yuv420p,"
+                           f"tpad=stop_mode=clone:stop_duration={duration},trim=duration={duration},setpts=PTS-STARTPTS[v{i}]")
+        elif picture:
+            filters.append(f"color=c=black:s={w}x{h}:r={fps},format=yuv420p,setsar=1,"
+                           f"trim=duration={duration},setpts=PTS-STARTPTS[v{i}]")
+        if voiced:
             audio = stream(index, a, "audio")
             filters.append(f"{audio}{audio_format},{tempo(shot['speed'])},volume={decimal(shot['gain'])},"
-                           f"apad,atrim=duration={duration},asetpts=PTS-STARTPTS[a{i}]")
+                           f"apad,atrim=duration={duration},asetpts=PTS-STARTPTS{fade_filters(shot, shot['duration'])}[a{i}]")
         else:
             filters.append(f"anullsrc=r=48000:cl=stereo,atrim=duration={duration},asetpts=PTS-STARTPTS[a{i}]")
-        shot_pads.append(f"[v{i}][a{i}]")
-    filters.append("".join(shot_pads) + f"concat=n={len(shot_pads)}:v=1:a=1[base][voice]")
-    current = "[base]"
-    for i, obj in enumerate(model["overlays"]):
-        index, a = input_ref(obj["asset"], obj["start"], obj["end"] - obj["at"])
-        video = stream(index, a, "video")
-        at, end = decimal(obj["at"]), decimal(obj["end"])
-        filters.append(f"{video}fps={fps},scale={obj['width']}:-2,setsar=1,format=rgba,setpts=PTS-STARTPTS+{at}/TB[o{i}]")
-        filters.append(f"{current}[o{i}]overlay=x={obj['x']}:y={obj['y']}:eof_action=pass:repeatlast=0:"
-                       f"enable='gte(t,{at})*lt(t,{end})'[ov{i}]")
-        current = f"[ov{i}]"
-    if with_captions and model["captions"]:
-        current += "subtitles=filename=captions.ass,"
-    filters.append(current + "format=yuv420p[picture]")
+        shot_pads.append((f"[v{i}]" if picture else "") + f"[a{i}]")
+    filters.append("".join(shot_pads) + f"concat=n={len(shot_pads)}:v={int(picture)}:a=1"
+                   + ("[base][voice]" if picture else "[voice]"))
+    if picture:
+        current = "[base]"
+        for i, obj in enumerate(model["overlays"]):
+            index, a = input_ref(obj["asset"], obj["start"], obj["end"] - obj["at"])
+            video = stream(index, a, "video")
+            at, end = decimal(obj["at"]), decimal(obj["end"])
+            tone = tone_filters(a["video"]) if obj.get("tone_map") else ""
+            filters.append(f"{video}fps={fps},scale={obj['width']}:-2,setsar=1,{tone}format=rgba,setpts=PTS-STARTPTS+{at}/TB[o{i}]")
+            filters.append(f"{current}[o{i}]overlay=x={obj['x']}:y={obj['y']}:eof_action=pass:repeatlast=0:"
+                           f"enable='gte(t,{at})*lt(t,{end})'[ov{i}]")
+            current = f"[ov{i}]"
+        if with_captions and model["captions"]:
+            current += "subtitles=filename=captions.ass,"
+        filters.append(current + "format=yuv420p[picture]")
     music = ["[voice]"]
-    for i, obj in enumerate(model["audio"]):
+    for i, obj in enumerate(model["audio"] if sound != "voice" else []):
         duration = obj["end"] - obj["at"]
         index, a = input_ref(obj["asset"], obj["start"], duration)
         audio = stream(index, a, "audio")
         delay = round(obj["at"] * 48000)
         filters.append(f"{audio}{audio_format},atrim=duration={decimal(duration)},asetpts=PTS-STARTPTS,"
-                       f"volume={decimal(obj['gain'])},adelay={delay}S:all=1[m{i}]")
+                       f"volume={decimal(obj['gain'])}{fade_filters(obj, duration)},adelay={delay}S:all=1[m{i}]")
         music.append(f"[m{i}]")
+    # One Constant Gain On The Finished Mix Changes Level Only. Balance And Dynamics Stay As Mixed.
+    mixed = "[sound]" if master_gain is None else "[blend]"
     if len(music) > 1:
-        filters.append("".join(music) + f"amix=inputs={len(music)}:duration=first:normalize=0,aformat=channel_layouts=stereo[sound]")
+        filters.append("".join(music) + f"amix=inputs={len(music)}:duration=first:normalize=0,aformat=channel_layouts=stereo{mixed}")
     else:
-        filters.append("[voice]anull[sound]")
+        filters.append(f"[voice]anull{mixed}")
+    if master_gain is not None:
+        filters.append(f"[blend]volume={decimal(master_gain)}[sound]")
     return args, ";\n".join(filters)
 
 
-def process(model, output=None, burn=True):
+def focus(model, start, end):
+    """Keep What Plays Between Two Edit Times. Other Shots Become Blank Segments Of Equal Length."""
+    def live(at, finish):
+        return at < end - 1e-9 and finish > start + 1e-9
+    shots = [shot if live(shot["at"], shot["at"] + shot["duration"]) else
+             {"blank": True, "at": shot["at"], "duration": shot["duration"], "gain": 0}
+             for shot in model["shots"]]
+    return dict(model, shots=shots,
+                overlays=[row for row in model["overlays"] if live(row["at"], row["end"])],
+                audio=[row for row in model["audio"] if live(row["at"], row["end"])])
+
+
+def run_graph(work, inputs, expression, tail, level="error"):
+    # Relative Filter Resource Paths Also Work On Windows Drive Letters.
+    (work / "timeline.ffgraph").write_text(expression, encoding="utf-8")
+    args = [binary("ffmpeg"), "-hide_banner", "-loglevel", level, "-nostdin", "-nostats", "-n", *inputs,
+            "-filter_complex_threads", "1", "-filter_complex_script", "timeline.ffgraph", *tail]
+    result = subprocess.run(args, cwd=work, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if result.returncode:
+        raise EditError(result.stderr[-4000:] or "Media Processing Failed.")
+    return result
+
+
+def new_file(output, suffix, kind):
+    output = output.resolve()
+    if output.suffix.lower() != suffix:
+        raise EditError(f"Choose A {kind} Output Filename.")
+    if output.exists():
+        raise EditError(f"Output Already Exists {output}.")
+    if not output.parent.is_dir():
+        raise EditError(f"Output Folder Does Not Exist {output.parent}.")
+    return output
+
+
+def process(model, output=None, burn=True, master_gain=None):
     if output:
         output = output.resolve()
         if output.suffix.lower() != ".mp4":
             raise EditError("Choose An MP4 Output Filename.")
         if output.exists():
             raise EditError(f"Output Already Exists {output}.")
-    inputs, expression = graph(model, burn)
+    require_tone_filters(model)
+    inputs, expression = graph(model, burn, master_gain=master_gain)
     with tempfile.TemporaryDirectory(prefix="social-cut-", dir=output.parent if output else None) as tmp:
         work = Path(tmp)
         # Relative Filter Resource Paths Also Work On Windows Drive Letters.
@@ -167,6 +292,65 @@ def process(model, output=None, burn=True):
             target = work / "render.mp4"
             verify_encoded(probe(target), model)
             publish_file(target, output)
+
+
+def still(model, at, output, burn=True):
+    """Write One Composed Frame As A PNG For Inspection. A Single Still Is Not A Video Export."""
+    output = new_file(output, ".png", "PNG")
+    fps = model["fps"]
+    total = round(model["duration"] * fps)
+    frame = math.floor(at * fps + 0.5)
+    if not 0 <= frame < total:
+        raise EditError(f"Choose A Time From 0 To {decimal((total - 1) / fps)} Seconds.")
+    # Only The Picture Of The Shot Under The Playhead Is Decoded. Other Shots Hold Their Length As
+    # Blank Frames, And No Sound Is Read.
+    scene = dict(focus(model, frame / fps, (frame + 1) / fps), audio=[])
+    scene["shots"] = [dict(shot, gain=0) for shot in scene["shots"]]
+    require_tone_filters(scene)
+    inputs, expression = graph(scene, burn, sound="voice")
+    expression += f";\n[picture]select='eq(n,{frame})'[frame];\n[sound]anullsink"
+    with tempfile.TemporaryDirectory(prefix="social-cut-", dir=output.parent) as tmp:
+        work = Path(tmp)
+        if burn and model["captions"]:
+            (work / "captions.ass").write_text(ass(model), encoding="utf-8")
+        run_graph(work, inputs, expression, ["-map", "[frame]", "-frames:v", "1", "-update", "1", "-c:v", "png", "still.png"])
+        if not (work / "still.png").is_file():
+            raise EditError("No Frame Was Produced At That Time.")
+        publish_file(work / "still.png", output)
+    shot = next(i for i, row in enumerate(scene["shots"], 1) if not row.get("blank"))
+    return {"output": str(output), "frame": frame, "seconds": frame / fps, "shot": shot}
+
+
+def window_filters(start, seconds):
+    if start is None:
+        return ""
+    return f"atrim=start={decimal(start)}:duration={decimal(seconds)},asetpts=PTS-STARTPTS,"
+
+
+def sound_graph(model, layer="mix", start=None, seconds=None, master_gain=None):
+    """Inputs And A Sound-Only Graph Whose Final Chain Still Needs A Destination Filter."""
+    if layer not in LAYERS:
+        raise EditError(f"Unsupported Layer Value {layer}.")
+    if (start is None) != (seconds is None):
+        raise EditError("Supply Both A Window Start And A Window Length.")
+    if start is not None and (start < 0 or seconds <= 0 or start + seconds > model["duration"] + 1e-6):
+        raise EditError(f"The Window Must Fit Inside The {decimal(model['duration'])} Second Edit.")
+    scene = model if start is None else focus(model, start, start + seconds)
+    inputs, expression = graph(scene, False, picture=False, sound=layer, master_gain=master_gain)
+    return inputs, expression + ";\n[sound]" + window_filters(start, seconds)
+
+
+def mix(model, output, layer="mix", start=None, seconds=None):
+    """Write The Composed Sound As A 48 kHz Stereo WAV For Listening Checks And Transcription."""
+    output = new_file(output, ".wav", "WAV")
+    inputs, expression = sound_graph(model, layer, start, seconds)
+    with tempfile.TemporaryDirectory(prefix="social-cut-", dir=output.parent) as tmp:
+        work = Path(tmp)
+        run_graph(work, inputs, expression + "anull[mixdown]",
+                  ["-map", "[mixdown]", "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", "mix.wav"])
+        publish_file(work / "mix.wav", output)
+    length = model["duration"] if seconds is None else seconds
+    return {"output": str(output), "layer": layer, "seconds": length, "sample_rate": 48000, "channels": 2}
 
 
 def verify_encoded(meta, model):

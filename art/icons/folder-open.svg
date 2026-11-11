@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Folder Open</title>
+  <desc id="desc">Open A Project Folder Or Media Bin.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 18V6a1.5 1.5 0 0 1 1.5-1.5H9L11 7h6.5A1.5 1.5 0 0 1 19 8.5V10"/>
+    <path stroke="#5EE1C7" d="M3.05 18.2 5.5 11a1.5 1.5 0 0 1 1.4-1h13.6a1 1 0 0 1 .95 1.3L19.4 18.4a1.5 1.5 0 0 1-1.4 1.1H4a1 1 0 0 1-.95-1.3z"/>
+  </g>
+</svg>

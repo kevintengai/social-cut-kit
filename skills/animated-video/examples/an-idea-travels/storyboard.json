@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "title": "An Idea Travels",
+  "aspect": "Portrait",
+  "fps": 30,
+  "safe": "Vertical Feed",
+  "modules": ["scenes/idea.js"],
+  "captions": {
+    "style": { "mode": "Word Highlight", "highlight": "#ffd166", "color": "#ffffff", "outline": "#2a2420" },
+    "lines": [
+      { "text": "Every Idea Starts Small." },
+      { "text": "Say It Out Loud," },
+      { "text": "And It Starts To Move." },
+      { "text": "One Friend Tells Three." },
+      { "text": "Three Tell Nine." },
+      { "text": "By Friday, The Whole Town Knows." }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "idea-1", "mode": "Code Scene", "draw": "Idea Seed", "duration": 2.4, "title": "The Idea Appears",
+      "background": "#f4ecdf", "foreground": "#2a2420", "accent": "#e2572b",
+      "beats": { "small": "small" }
+    },
+    {
+      "id": "idea-2", "mode": "Code Scene", "draw": "Idea Spoken", "duration": 3, "title": "The Idea Is Spoken",
+      "background": "#f4ecdf", "foreground": "#2a2420", "accent": "#e2572b",
+      "start": { "phrase": "say it out loud", "offset": -0.15 },
+      "beats": { "move": "move" }
+    },
+    {
+      "id": "idea-3", "mode": "Code Scene", "draw": "Idea Spread", "duration": 3.5, "title": "The Idea Spreads",
+      "background": "#2a2420", "foreground": "#f4ecdf", "accent": "#e2572b",
+      "start": { "phrase": "one friend", "offset": -0.2 },
+      "beats": { "three": { "phrase": "three", "occurrence": 1 }, "nine": "nine" },
+      "sounds": { "second-ring": { "sound": "Paper Tap", "gain": 0.25 } }
+    },
+    {
+      "id": "idea-4", "mode": "Code Scene", "draw": "Idea Town", "duration": 4, "title": "The Town Knows",
+      "background": "#f4ecdf", "foreground": "#2a2420", "accent": "#e2572b",
+      "start": { "phrase": "by friday", "offset": -0.2 },
+      "end": { "phrase": "knows", "offset": 1.6 },
+      "beats": { "town": "whole town" },
+      "sounds": { "count.count-start": "None" }
+    }
+  ]
+}

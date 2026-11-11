@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Spotlight Beam</title>
   <desc id="desc">Direct Attention From A Caption Toward A Detail.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M8 11l15 8-7 12-12-11z M19 32l9 22 28-19-29-10" stroke="#5EE1C7"/>
-    <path d="M14 12l7-6 M24 16l6-3"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#5EE1C7" d="m3.5 3.5 5.5 3-2.75 4.75L2 7z"/>
+    <path stroke="#5EE1C7" d="m7.25 12 3.4 8.25L21 13.1 10.1 9.4"/>
+    <path d="M5.75 3.9 8 2M9.75 5.9 12 4.75"/>
   </g>
 </svg>

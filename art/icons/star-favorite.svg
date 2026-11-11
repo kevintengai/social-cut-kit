@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Star Favorite</title>
+  <desc id="desc">Mark A Favorite, A Rating, Or A Featured Item.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#5EE1C7" d="m12 3 2.35 6.26 6.68.3-5.23 4.18 1.78 6.45L12 16.5l-5.58 3.69 1.78-6.45-5.23-4.18 6.68-.3z"/>
+  </g>
+</svg>

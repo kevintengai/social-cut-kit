@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Credit Card</title>
+  <desc id="desc">Mark A Payment Step Or A Billing Detail.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="5" width="19" height="14" rx="2"/>
+    <path stroke="#5EE1C7" d="M2.5 9.5h19"/>
+    <path d="M6 15h4"/>
+  </g>
+</svg>

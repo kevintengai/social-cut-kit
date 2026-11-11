@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Pinned Reply</title>
   <desc id="desc">Flag A Reply That Should Stay Visible.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M8 16h25 M8 25h18 M8 42v9l11-8h10"/>
-    <path d="M39 14l13 8-5 2-5 9 1 5-16-9 5-2 5-9z M35 34l-7 13" stroke="#5EE1C7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 6h6.5M3 9.5h4.5M3 15.75v3.5l4-3h4"/>
+    <path stroke="#5EE1C7" d="m14.6 5.25 4.9 3-1.9.75-1.9 3.4.4 1.9-6-3.4 1.9-.75 1.9-3.4zM13.1 12.75l-2.6 4.85"/>
   </g>
 </svg>

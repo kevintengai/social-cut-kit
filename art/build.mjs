@@ -1,0 +1,343 @@
+// Social Cut Kit icon build. Node standard library only.
+// Usage: node art/build.mjs          Regenerate every generated file.
+//        node art/build.mjs --check  Exit non-zero when a generated file is stale.
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, unlinkSync, existsSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const GRID = 24;
+const STROKE = 1.5;
+const INK = "#E7F4FF";
+const ACCENT = "#5EE1C7";
+const TRIGGERS = 'a,button,summary,label,[role="button"],[role="link"],[role="tab"],[role="menuitem"],.sck-trigger';
+
+export class SourceError extends Error {}
+
+function fail(message) {
+  throw new SourceError(message);
+}
+
+function isTitleCase(sentence) {
+  if (typeof sentence !== "string" || !/\.$/.test(sentence) || /[!]/.test(sentence)) return false;
+  return sentence.split(/[\s-]+/).filter(Boolean).every(word => {
+    const first = word.replace(/^[^A-Za-z0-9]+/, "")[0];
+    return first === undefined || first === first.toUpperCase();
+  });
+}
+
+function withClass(element, className) {
+  const match = /^<([a-z]+)/.exec(element);
+  if (!match) fail("A Part Must Start With An SVG Element: " + element);
+  return "<" + match[1] + ' class="' + className + '"' + element.slice(match[0].length);
+}
+
+export async function loadSource() {
+  const index = await import(pathToFileURL(join(here, "source", "index.mjs")).href);
+  const groups = [];
+  const list = [];
+  const seen = new Set();
+  const motionSeen = new Map();
+  for (const entry of index.groups) {
+    const names = [];
+    for (const item of entry.icons) {
+      const { name, title, usage, motion, tags = "", parts, anim } = item;
+      if (!/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(name || "")) fail("Icon Names Use Lowercase Words Joined By Hyphens: " + name);
+      if (seen.has(name)) fail("Duplicate Icon Name: " + name);
+      seen.add(name);
+      if (!title || !/^[A-Z0-9]/.test(title)) fail("Missing Title For " + name);
+      if (!isTitleCase(usage)) fail("Usage Sentence Must Be Title Case And End With A Period: " + name);
+      if (!isTitleCase(motion)) fail("Motion Sentence Must Be Title Case And End With A Period: " + name);
+      if (!Array.isArray(parts) || parts.length === 0) fail("Icon Has No Parts: " + name);
+      const keys = new Set();
+      for (const [key, element] of parts) {
+        if (!/^[a-z][a-z0-9]*$/.test(key)) fail("Bad Part Key In " + name + ": " + key);
+        if (keys.has(key)) fail("Duplicate Part Key In " + name + ": " + key);
+        keys.add(key);
+        if (/\b(fill|stroke|style|class|id)=/.test(element)) fail("Parts Carry Geometry Only, Without Paint Or Class Attributes: " + name);
+      }
+      const animKeys = Object.keys(anim || {});
+      if (animKeys.length === 0) fail("Icon Has No Motion: " + name);
+      for (const key of animKeys) {
+        if (!keys.has(key)) fail("Motion Refers To A Missing Part In " + name + ": " + key);
+        const [frames, ms] = anim[key];
+        if (typeof frames !== "string" || !/\{.*\}/.test(frames)) fail("Bad Keyframes In " + name + ": " + key);
+        if (!(ms >= 150 && ms <= 1600)) fail("Motion Duration Must Be 150 To 1600 Milliseconds In " + name);
+        if (/infinite/.test(frames)) fail("Motion Plays Once In " + name);
+      }
+      const signature = JSON.stringify(animKeys.map(key => anim[key]));
+      if (motionSeen.has(signature)) fail("Icons Share An Identical Motion: " + name + " And " + motionSeen.get(signature));
+      motionSeen.set(signature, name);
+      names.push(name);
+      list.push({ name, title, group: entry.name, usage, motion, tags, parts, anim });
+    }
+    groups.push({ name: entry.name, icons: names });
+  }
+  for (const overlay of index.overlays) {
+    if (!isTitleCase(overlay.usage)) fail("Overlay Usage Must Be Title Case: " + overlay.title);
+    if (!existsSync(join(here, overlay.file))) fail("Overlay File Is Missing: " + overlay.file);
+  }
+  return { groups, icons: list, overlays: index.overlays };
+}
+
+function inner(item) {
+  return item.parts
+    .map(([key, element, accent]) => withClass(element, "k-" + key + (accent ? " sck-accent" : "")))
+    .join("");
+}
+
+function standalone(item) {
+  const body = item.parts
+    .map(([, element, accent]) => "    " + (accent ? element.replace(/^<([a-z]+)/, '<$1 stroke="' + ACCENT + '"') : element))
+    .join("\n");
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 ${GRID} ${GRID}" color="${INK}" role="img" aria-labelledby="title desc">`,
+    `  <title id="title">${item.title}</title>`,
+    `  <desc id="desc">${item.usage}</desc>`,
+    `  <g fill="none" stroke="currentColor" stroke-width="${STROKE}" stroke-linecap="round" stroke-linejoin="round">`,
+    body,
+    "  </g>",
+    "</svg>",
+    ""
+  ].join("\n");
+}
+
+function css(source) {
+  const out = [
+    "/* Social Cut Kit Icons. Generated By art/build.mjs. Do Not Edit By Hand. */",
+    ".sck-icon{display:inline-block;flex:none;vertical-align:-.125em;overflow:visible}",
+    ".sck-icon .sck-accent{stroke:var(--sck-accent,currentColor)}",
+    ".sck-icon *{transform-box:view-box}",
+    "@media (prefers-reduced-motion: no-preference){"
+  ];
+  for (const item of source.icons) {
+    for (const key of Object.keys(item.anim)) {
+      const [frames, ms, ease = "ease-in-out", origin = "12px 12px", delay = 0] = item.anim[key];
+      const id = "sck-" + item.name + "-" + key;
+      const target = ".sck-" + item.name + " .k-" + key;
+      out.push("@keyframes " + id + "{" + frames + "}");
+      out.push(
+        ":where(" + TRIGGERS + "):is(:hover,:focus-visible) " + target + ",.sck-play" + target +
+        "{transform-origin:" + origin + ";animation:" + id + " " + ms + "ms " + ease + " " + delay + "ms 1 both}"
+      );
+    }
+  }
+  out.push("}", "");
+  return out.join("\n");
+}
+
+const RUNTIME = String.raw`const SVG_NS = "http://www.w3.org/2000/svg";
+
+function escapeText(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function lengthOf(value, what) {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) return String(value);
+  if (typeof value === "string" && /^\d+(\.\d+)?(px|em|rem|%)?$/.test(value)) return value;
+  throw new TypeError("Icon " + what + " Must Be A Positive Number Or A CSS Length.");
+}
+
+export function icon(name, options = {}) {
+  if (typeof name !== "string" || !Object.prototype.hasOwnProperty.call(icons, name)) {
+    throw new RangeError('Unknown Icon Name "' + String(name) + '".');
+  }
+  const size = lengthOf(options.size ?? 24, "Size");
+  const stroke = lengthOf(options.strokeWidth ?? 1.5, "Stroke Width");
+  const extra = options.class == null ? [] : Array.isArray(options.class) ? options.class : String(options.class).split(/\s+/);
+  const classes = ["sck-icon", "sck-" + name];
+  for (const token of extra) {
+    if (token === "") continue;
+    if (!/^[A-Za-z_][\w-]*$/.test(token)) throw new TypeError("Icon Class Names Use Letters, Digits, Hyphens, And Underscores.");
+    classes.push(token);
+  }
+  const label = options.label == null || options.label === "" ? null : String(options.label);
+  const access = label === null ? 'aria-hidden="true" focusable="false"' : 'role="img" aria-label="' + escapeText(label) + '"';
+  return '<svg xmlns="' + SVG_NS + '" class="' + classes.join(" ") + '" width="' + size + '" height="' + size +
+    '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + stroke +
+    '" stroke-linecap="round" stroke-linejoin="round" ' + access + ">" + icons[name] + "</svg>";
+}
+
+export function hydrate(root) {
+  const scope = root ?? globalThis.document;
+  if (!scope || typeof scope.querySelectorAll !== "function") {
+    throw new TypeError("Hydrate Needs A Document Or An Element.");
+  }
+  let filled = 0;
+  for (const element of scope.querySelectorAll("[data-icon]")) {
+    const read = key => (element.getAttribute(key) === null || element.getAttribute(key) === "" ? undefined : element.getAttribute(key));
+    element.innerHTML = icon(element.getAttribute("data-icon"), {
+      size: read("data-icon-size"),
+      strokeWidth: read("data-icon-stroke"),
+      label: read("data-icon-label"),
+      class: read("data-icon-class")
+    });
+    filled++;
+  }
+  return filled;
+}
+`;
+
+function dataBlock(source) {
+  const icons = {};
+  const motions = {};
+  for (const item of source.icons) {
+    icons[item.name] = inner(item);
+    motions[item.name] = item.motion;
+  }
+  return { icons, motions, groups: source.groups };
+}
+
+function moduleFile(source) {
+  const data = dataBlock(source);
+  return [
+    "// Social Cut Kit Icons. Generated By art/build.mjs. Do Not Edit By Hand.",
+    "export const icons = Object.freeze(" + JSON.stringify(data.icons, null, 2) + ");",
+    "",
+    "export const motions = Object.freeze(" + JSON.stringify(data.motions, null, 2) + ");",
+    "",
+    "export const groups = Object.freeze(" + JSON.stringify(data.groups, null, 2) + ".map(group => Object.freeze({ name: group.name, icons: Object.freeze(group.icons) })));",
+    "",
+    RUNTIME
+  ].join("\n");
+}
+
+function globalFile(source) {
+  const data = dataBlock(source);
+  return [
+    "// Social Cut Kit Icons For Pages Opened From Disk. Generated By art/build.mjs. Do Not Edit By Hand.",
+    "(function (scope) {",
+    '"use strict";',
+    "const icons = Object.freeze(" + JSON.stringify(data.icons) + ");",
+    "const motions = Object.freeze(" + JSON.stringify(data.motions) + ");",
+    "const groups = Object.freeze(" + JSON.stringify(data.groups) + ");",
+    "const catalog = Object.freeze(" + JSON.stringify(catalog(source)) + ");",
+    RUNTIME.replace(/^export /gm, ""),
+    "scope.SocialCutIcons = Object.freeze({ icon, hydrate, icons, motions, groups, catalog });",
+    "})(typeof globalThis !== \"undefined\" ? globalThis : this);",
+    ""
+  ].join("\n");
+}
+
+function types(source) {
+  return [
+    "// Social Cut Kit Icons. Generated By art/build.mjs. Do Not Edit By Hand.",
+    "export type IconName =",
+    source.icons.map(item => '  | "' + item.name + '"').join("\n") + ";",
+    "",
+    "export type IconGroupName = " + source.groups.map(group => '"' + group.name + '"').join(" | ") + ";",
+    "",
+    "export interface IconOptions {",
+    "  /** Width And Height. A Number Is Read As Pixels. Defaults To 24. */",
+    "  size?: number | string;",
+    "  /** Stroke Width In Grid Units. Defaults To 1.5. */",
+    "  strokeWidth?: number | string;",
+    "  /** Accessible Name. When Present The Icon Becomes A Named Image. */",
+    "  label?: string;",
+    "  /** Extra Class Names. */",
+    "  class?: string | readonly string[];",
+    "}",
+    "",
+    "export interface IconGroup {",
+    "  readonly name: IconGroupName;",
+    "  readonly icons: readonly IconName[];",
+    "}",
+    "",
+    "/** Inner SVG Markup For Every Icon. */",
+    "export declare const icons: Readonly<Record<IconName, string>>;",
+    "/** One Sentence Per Icon Describing What Its Motion Shows. */",
+    "export declare const motions: Readonly<Record<IconName, string>>;",
+    "/** Groups In Display Order. */",
+    "export declare const groups: readonly IconGroup[];",
+    "/** Returns SVG Markup. Throws A RangeError For An Unknown Name. */",
+    "export declare function icon(name: IconName, options?: IconOptions): string;",
+    "/** Fills Every Element Carrying A data-icon Attribute And Returns The Count. */",
+    "export declare function hydrate(root?: ParentNode): number;",
+    ""
+  ].join("\n");
+}
+
+function catalog(source) {
+  return {
+    version: 2,
+    viewBox: [0, 0, GRID, GRID],
+    overlayViewBox: [0, 0, 64, 64],
+    strokeWidth: STROKE,
+    groups: [...source.groups.map(group => group.name), "Motion"],
+    assets: [
+      ...source.icons.map(item => ({
+        name: item.name,
+        title: item.title,
+        group: item.group,
+        usage: item.usage,
+        motion: item.motion,
+        tags: item.tags.split(/\s+/).filter(Boolean),
+        file: "icons/" + item.name + ".svg",
+        animated: false
+      })),
+      ...source.overlays.map(overlay => ({
+        name: overlay.file.replace(/^motion\/|\.svg$/g, ""),
+        title: overlay.title,
+        group: "Motion",
+        usage: overlay.usage,
+        file: overlay.file,
+        animated: true
+      }))
+    ]
+  };
+}
+
+export function render(source) {
+  const files = new Map();
+  files.set("icons.js", moduleFile(source));
+  files.set("icons.global.js", globalFile(source));
+  files.set("icons.css", css(source));
+  files.set("icons.d.ts", types(source));
+  files.set("catalog.json", JSON.stringify(catalog(source), null, 2) + "\n");
+  for (const item of source.icons) files.set("icons/" + item.name + ".svg", standalone(item));
+  return files;
+}
+
+const normal = text => text.replace(/\r\n/g, "\n");
+
+export function stale(files) {
+  const problems = [];
+  for (const [path, text] of files) {
+    const full = join(here, path);
+    if (!existsSync(full)) problems.push("Missing: " + path);
+    else if (normal(readFileSync(full, "utf8")) !== text) problems.push("Stale: " + path);
+  }
+  for (const file of readdirSync(join(here, "icons"))) {
+    if (!files.has("icons/" + file)) problems.push("Not In The Source: icons/" + file);
+  }
+  return problems;
+}
+
+async function main() {
+  const check = process.argv.includes("--check");
+  const source = await loadSource();
+  const files = render(source);
+  if (check) {
+    const problems = stale(files);
+    for (const line of problems) console.error(line);
+    if (problems.length) {
+      console.error("Generated Files Are Stale. Run node art/build.mjs To Regenerate Them.");
+      process.exit(1);
+    }
+    console.log("Generated Files Are Current. " + source.icons.length + " Icons In " + source.groups.length + " Groups, " + source.overlays.length + " Overlays.");
+    return;
+  }
+  mkdirSync(join(here, "icons"), { recursive: true });
+  for (const [path, text] of files) writeFileSync(join(here, path), text);
+  for (const file of readdirSync(join(here, "icons"))) {
+    if (!files.has("icons/" + file)) unlinkSync(join(here, "icons", file));
+  }
+  console.log("Wrote " + files.size + " Files. " + source.icons.length + " Icons In " + source.groups.length + " Groups, " + source.overlays.length + " Overlays.");
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch(error => {
+    console.error(error instanceof SourceError ? "Source Error. " + error.message : error);
+    process.exit(1);
+  });
+}

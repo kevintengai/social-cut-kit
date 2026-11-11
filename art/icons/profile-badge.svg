@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
   <title id="title">Profile Badge</title>
   <desc id="desc">Call Attention To A Creator Profile.</desc>
-  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="6" y="12" width="52" height="40" rx="5"/>
-    <circle cx="22" cy="26" r="6"/>
-    <path d="M12 42q1-10 10-10t10 10" stroke="#5EE1C7"/>
-    <path d="M37 25h13 M37 33h10 M37 41h7"/>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="4.5" width="19" height="15" rx="2"/>
+    <circle cx="8.25" cy="9.75" r="2.25"/>
+    <path stroke="#5EE1C7" d="M4.5 15.75q.4-3.25 3.75-3.25t3.75 3.25"/>
+    <path d="M14.5 9.5h4.5M14.5 12.5h3.25M14.5 15.5h2"/>
   </g>
 </svg>

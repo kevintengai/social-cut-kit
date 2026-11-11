@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Refresh Cycle</title>
+  <desc id="desc">Reload Content Or Run A Step Again.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 11A8 8 0 0 0 5.5 7.25M4 4v4h4"/>
+    <path stroke="#5EE1C7" d="M4 13a8 8 0 0 0 14.5 3.75M20 20v-4h-4"/>
+  </g>
+</svg>

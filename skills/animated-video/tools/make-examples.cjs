@@ -21,4 +21,14 @@ const hold = Object.assign(P.scene("3D Object"), {
   cues: [{ type: "Sound", at: 0.1, sound: "Air Sweep", gain: 0.55 }, { type: "Voice", at: 0.5, text: "Hold The Last Angle.", gain: 1, clip: "" }]
 });
 save("facet-turntable", { version: 1, title: "Facet Turntable", aspect: "Landscape", fps: 24, scenes: [turn, hold] });
-console.log("Wrote Two Editable Storyboards.");
+// The Part Examples Are Kept As Cleaned Storyboards. Rewriting Them Here Keeps Their Shape Current.
+const parts = fs.readdirSync(dir).filter(name => /^part-.*\.json$/.test(name));
+for (const name of parts) fs.writeFileSync(path.join(dir, name), JSON.stringify(P.cleanProject(JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"))), null, 2) + "\n");
+// The Voiced Example: Stand-In Words From Its Script, Then The Timed Storyboard From Its Authored One.
+const Timing = require("../studio/timing.js"), film = path.join(dir, "an-idea-travels");
+const words = Timing.standIn(fs.readFileSync(path.join(film, "script.txt"), "utf8"), { wpm: 150, start: 0.3 });
+fs.writeFileSync(path.join(film, "words.json"), JSON.stringify({ standIn: true, note: "Stand-In Word Timings Made From Script Text At 150 Words Per Minute. Replace Them With Timings From The Real Recording.", wpm: 150, words }, null, 2) + "\n");
+const timed = Timing.retime(P.cleanProject(JSON.parse(fs.readFileSync(path.join(film, "storyboard.json"), "utf8"))), Timing.readWords({ standIn: true, words }));
+if (timed.problems.length) throw new Error(timed.problems.join(" "));
+fs.writeFileSync(path.join(film, "storyboard.timed.json"), JSON.stringify(P.cleanProject(timed.project), null, 2) + "\n");
+console.log("Wrote Two Built-In Storyboards, " + parts.length + " Part Examples, And The Timed Storyboard For An Idea Travels.");

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Archive Box</title>
+  <desc id="desc">Store A Finished Project Out Of The Way.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect stroke="#5EE1C7" x="2.5" y="4" width="19" height="5" rx="1"/>
+    <path d="M4.5 9v9.5A1.5 1.5 0 0 0 6 20h12a1.5 1.5 0 0 0 1.5-1.5V9"/>
+    <path d="M10 13h4"/>
+  </g>
+</svg>

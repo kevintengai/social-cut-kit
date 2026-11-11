@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Person Circle</title>
+  <desc id="desc">Represent An Account, A Viewer, Or A Signed-In User.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9.5"/>
+    <circle cx="12" cy="9.5" r="3"/>
+    <path stroke="#5EE1C7" d="M6 18.75a6.5 6.5 0 0 1 12 0"/>
+  </g>
+</svg>

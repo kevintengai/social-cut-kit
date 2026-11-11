@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Lock Secure</title>
+  <desc id="desc">Mark Private, Protected, Or Locked Content.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <g><rect x="4.5" y="10.5" width="15" height="10.5" rx="2"/><path d="M12 14.5V17"/></g>
+    <path stroke="#5EE1C7" d="M8 10.5v-3a4 4 0 0 1 8 0v3"/>
+  </g>
+</svg>

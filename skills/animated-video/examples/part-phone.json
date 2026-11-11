@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "title": "Phone Part",
+  "aspect": "Portrait",
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "part-phone-1",
+      "mode": "Code Scene",
+      "duration": 8,
+      "eyebrow": "",
+      "title": "Chat Exchange",
+      "body": "",
+      "background": "#16212b",
+      "foreground": "#f3f5f7",
+      "accent": "#3d8bff",
+      "motion": "Word Rise",
+      "mark": "Spark",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [],
+      "draw": "Phone",
+      "params": {
+        "contact": "Sam",
+        "steps": [
+          {
+            "at": 0.7,
+            "do": "message",
+            "from": "them",
+            "text": "Are We Still On For Friday?"
+          },
+          {
+            "at": 1.5,
+            "do": "typing",
+            "for": 1.1
+          },
+          {
+            "at": 2.6,
+            "do": "message",
+            "from": "them",
+            "text": "I Can Book The Table If You Tell Me A Time."
+          },
+          {
+            "at": 3.3,
+            "do": "compose",
+            "text": "Yes. Seven Works For Me.",
+            "for": 1.1
+          },
+          {
+            "at": 4.7,
+            "do": "send"
+          },
+          {
+            "at": 5.3,
+            "do": "delivered"
+          },
+          {
+            "at": 6,
+            "do": "notify",
+            "title": "Calendar",
+            "text": "Friday At Seven Saved",
+            "for": 1.6
+          }
+        ]
+      }
+    },
+    {
+      "id": "part-phone-2",
+      "mode": "Code Scene",
+      "duration": 6,
+      "eyebrow": "",
+      "title": "Tilted With A Long Thread",
+      "body": "",
+      "background": "#f1ece2",
+      "foreground": "#1d232b",
+      "accent": "#e2603c",
+      "motion": "Word Rise",
+      "mark": "Spark",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [],
+      "draw": "Phone",
+      "params": {
+        "contact": "Design Team",
+        "tilt": -6,
+        "height": 0.74,
+        "center": [
+          0.5,
+          0.52
+        ],
+        "steps": [
+          {
+            "at": 0.5,
+            "do": "message",
+            "from": "them",
+            "text": "The New Cut Is Ready."
+          },
+          {
+            "at": 1.1,
+            "do": "message",
+            "from": "me",
+            "text": "Send It Over."
+          },
+          {
+            "at": 1.8,
+            "do": "message",
+            "from": "them",
+            "text": "Sharing The Storyboard Now. Check The Second Scene First."
+          },
+          {
+            "at": 2.6,
+            "do": "message",
+            "from": "me",
+            "text": "Looks Good. The Pacing Is Much Better."
+          },
+          {
+            "at": 3.3,
+            "do": "typing",
+            "for": 0.9
+          },
+          {
+            "at": 4.2,
+            "do": "message",
+            "from": "them",
+            "text": "Then We Ship On Monday."
+          },
+          {
+            "at": 4.8,
+            "do": "compose",
+            "text": "Agreed.",
+            "for": 0.4
+          },
+          {
+            "at": 5.4,
+            "do": "send"
+          }
+        ]
+      }
+    }
+  ]
+}

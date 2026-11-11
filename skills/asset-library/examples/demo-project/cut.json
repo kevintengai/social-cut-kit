@@ -1,0 +1,22 @@
+{
+  "project": "School Promo",
+  "cut": "v1",
+  "entries": [
+    {
+      "asset": "title-card",
+      "use": "Opening Card",
+      "path": "media/title-card.png",
+      "modified": false,
+      "cue": "Holds Under The First Line",
+      "time": 0
+    },
+    {
+      "asset": "chime",
+      "use": "Card Reveal",
+      "path": "media/chime.wav",
+      "modified": false,
+      "cue": "Lands On The Card Reveal",
+      "time": 0.4
+    }
+  ]
+}

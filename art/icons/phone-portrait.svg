@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Phone Portrait</title>
+  <desc id="desc">Represent A Phone Held Upright For Vertical Video.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <g><rect x="6.5" y="2.5" width="11" height="19" rx="2.25"/><path d="M10.5 5.25h3"/></g>
+    <path stroke="#5EE1C7" d="M10.5 18.5h3"/>
+  </g>
+</svg>

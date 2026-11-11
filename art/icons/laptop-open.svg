@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" color="#E7F4FF" role="img" aria-labelledby="title desc">
+  <title id="title">Laptop Open</title>
+  <desc id="desc">Represent A Laptop Used For Editing Or Review.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5.5 16V6.5A1.5 1.5 0 0 1 7 5h10a1.5 1.5 0 0 1 1.5 1.5V16"/>
+    <path stroke="#5EE1C7" d="M2.5 16h19l-1 2.4a1 1 0 0 1-.9.6H4.4a1 1 0 0 1-.9-.6z"/>
+  </g>
+</svg>

@@ -3,198 +3,928 @@
     "file": "button-down.wav",
     "family": "tap",
     "seconds": 0.11,
-    "sha256": "0c0ab1b0d6a696d21a0fc35e86b6ba65f63c3cc69d40d8812382cd16c3208382"
+    "sha256": "0c0ab1b0d6a696d21a0fc35e86b6ba65f63c3cc69d40d8812382cd16c3208382",
+    "tags": [
+      "tap",
+      "click",
+      "ui",
+      "button",
+      "press",
+      "low"
+    ],
+    "use": "Mark A Button Press Or A Tap On Screen.",
+    "peak_dbfs": -7.8,
+    "rms_dbfs": -21.3
   },
   {
     "file": "button-up.wav",
     "family": "tap",
     "seconds": 0.12,
-    "sha256": "39db0de6c2d534898afc58ac8ad693a9f1e8686440c78cb4b2a51835109737d0"
+    "sha256": "39db0de6c2d534898afc58ac8ad693a9f1e8686440c78cb4b2a51835109737d0",
+    "tags": [
+      "tap",
+      "click",
+      "ui",
+      "button",
+      "release"
+    ],
+    "use": "Mark A Release, A Toggle, Or A Small Confirmation.",
+    "peak_dbfs": -6.9,
+    "rms_dbfs": -21.1
   },
   {
     "file": "small-switch.wav",
     "family": "tap",
     "seconds": 0.13,
-    "sha256": "3ab8fd874f16144c514c55c804f54f85e4c0f4d6eea4f18191498dc9dc963ba6"
+    "sha256": "3ab8fd874f16144c514c55c804f54f85e4c0f4d6eea4f18191498dc9dc963ba6",
+    "tags": [
+      "tap",
+      "click",
+      "ui",
+      "switch",
+      "toggle"
+    ],
+    "use": "Mark A Toggle Or A Setting Change.",
+    "peak_dbfs": -6.9,
+    "rms_dbfs": -20.8
   },
   {
     "file": "glass-point.wav",
     "family": "bell",
     "seconds": 0.48,
-    "sha256": "49311228e99056671c51cca8c801ee96ea87e44c84ac4b3a378b8f13bdf359bb"
+    "sha256": "49311228e99056671c51cca8c801ee96ea87e44c84ac4b3a378b8f13bdf359bb",
+    "tags": [
+      "bell",
+      "ping",
+      "highlight",
+      "bright",
+      "callout"
+    ],
+    "use": "Point At One Detail Or Land A Highlighted Word.",
+    "peak_dbfs": -4.4,
+    "rms_dbfs": -17.0
   },
   {
     "file": "menu-open.wav",
     "family": "rise",
     "seconds": 0.33,
-    "sha256": "bfdd80c5246c86c7303bbf4ecd7e81ab05ba10e6595970c04ad57cc7d768c99c"
+    "sha256": "bfdd80c5246c86c7303bbf4ecd7e81ab05ba10e6595970c04ad57cc7d768c99c",
+    "tags": [
+      "rise",
+      "ui",
+      "open",
+      "reveal",
+      "tone"
+    ],
+    "use": "Open A Menu, A Panel, Or A New Section.",
+    "peak_dbfs": -7.1,
+    "rms_dbfs": -13.0
   },
   {
     "file": "menu-close.wav",
     "family": "fall",
     "seconds": 0.3,
-    "sha256": "a7c85e0b19fcd72a64668053aad7b7b648940ae4ce986cbefb6caab566c4aa2b"
+    "sha256": "a7c85e0b19fcd72a64668053aad7b7b648940ae4ce986cbefb6caab566c4aa2b",
+    "tags": [
+      "fall",
+      "ui",
+      "close",
+      "dismiss",
+      "tone"
+    ],
+    "use": "Close A Panel Or Dismiss An Element.",
+    "peak_dbfs": -7.0,
+    "rms_dbfs": -13.0
   },
   {
     "file": "success-pair.wav",
     "family": "pair",
     "seconds": 0.57,
-    "sha256": "427a847a5de4afd6ef55c387932903506492b64920689067dc1c46adac3f293d"
+    "sha256": "427a847a5de4afd6ef55c387932903506492b64920689067dc1c46adac3f293d",
+    "tags": [
+      "pair",
+      "success",
+      "confirm",
+      "positive",
+      "notification"
+    ],
+    "use": "Confirm A Result Or A Completed Step.",
+    "peak_dbfs": -6.2,
+    "rms_dbfs": -19.1
   },
   {
     "file": "gentle-alert.wav",
     "family": "pair",
     "seconds": 0.48,
-    "sha256": "3a0925b20fa4e4a6781f49fe128290d78f447bf8f4f113a6e78f0781a0e88820"
+    "sha256": "3a0925b20fa4e4a6781f49fe128290d78f447bf8f4f113a6e78f0781a0e88820",
+    "tags": [
+      "pair",
+      "alert",
+      "caution",
+      "soft",
+      "notification"
+    ],
+    "use": "Flag A Caution Without Alarm.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -19.1
   },
   {
     "file": "enter-confirm.wav",
     "family": "bell",
     "seconds": 0.52,
-    "sha256": "22b2d82e05975a1efb97c5750f24ce2a8c6791c2ac44597fed97dcf4327cdbee"
+    "sha256": "22b2d82e05975a1efb97c5750f24ce2a8c6791c2ac44597fed97dcf4327cdbee",
+    "tags": [
+      "bell",
+      "confirm",
+      "enter",
+      "submit",
+      "ui"
+    ],
+    "use": "Confirm A Submitted Form Or A Sent Message.",
+    "peak_dbfs": -4.5,
+    "rms_dbfs": -17.0
   },
   {
     "file": "counter-step.wav",
     "family": "tap",
     "seconds": 0.12,
-    "sha256": "b11962f81e09ea0ed72007e66efe72caac110ca9845b6ac9c5efcc203933a58f"
+    "sha256": "b11962f81e09ea0ed72007e66efe72caac110ca9845b6ac9c5efcc203933a58f",
+    "tags": [
+      "tap",
+      "count",
+      "step",
+      "list",
+      "tick"
+    ],
+    "use": "Count List Items Or Steps As They Appear.",
+    "peak_dbfs": -6.8,
+    "rms_dbfs": -21.1
   },
   {
     "file": "page-flick.wav",
     "family": "brush",
     "seconds": 0.24,
-    "sha256": "a0a21ff596d3a6f9c393e6ce951ae2721fd5d25b82bb374ab9a77c6674406a0e"
+    "sha256": "a0a21ff596d3a6f9c393e6ce951ae2721fd5d25b82bb374ab9a77c6674406a0e",
+    "tags": [
+      "brush",
+      "swipe",
+      "page",
+      "paper",
+      "transition",
+      "short"
+    ],
+    "use": "Flip A Page Or Swap A Still.",
+    "peak_dbfs": -7.6,
+    "rms_dbfs": -21.1
   },
   {
     "file": "soft-swipe.wav",
     "family": "brush",
     "seconds": 0.42,
-    "sha256": "4a008ecf9483185e4dab8c63a0e0cd058e331d8eb81dba71dd7ac05533c2ed32"
+    "sha256": "4a008ecf9483185e4dab8c63a0e0cd058e331d8eb81dba71dd7ac05533c2ed32",
+    "tags": [
+      "brush",
+      "swipe",
+      "transition",
+      "soft",
+      "whoosh"
+    ],
+    "use": "Carry A Gentle Slide Or A Screen Swipe.",
+    "peak_dbfs": -7.8,
+    "rms_dbfs": -20.9
   },
   {
     "file": "quick-pass.wav",
     "family": "brush",
     "seconds": 0.18,
-    "sha256": "37b38f1e4c84c1623f91f76f87e229dadeb2f6a82fcfc8da1a8e9b0642465425"
+    "sha256": "37b38f1e4c84c1623f91f76f87e229dadeb2f6a82fcfc8da1a8e9b0642465425",
+    "tags": [
+      "brush",
+      "whoosh",
+      "fast",
+      "short",
+      "transition"
+    ],
+    "use": "Accent A Fast Cut Or A Quick Punch-In.",
+    "peak_dbfs": -7.7,
+    "rms_dbfs": -20.9
   },
   {
     "file": "long-sweep.wav",
     "family": "brush",
     "seconds": 0.85,
-    "sha256": "47dbc50ca13e20ec98f37464b4cabc141db8fdb6fb6c16da7f8cd05c58a4665a"
+    "sha256": "47dbc50ca13e20ec98f37464b4cabc141db8fdb6fb6c16da7f8cd05c58a4665a",
+    "tags": [
+      "brush",
+      "sweep",
+      "whoosh",
+      "long",
+      "transition",
+      "build"
+    ],
+    "use": "Bridge Two Scenes Or Lead Into A Reveal.",
+    "peak_dbfs": -7.3,
+    "rms_dbfs": -20.9
   },
   {
     "file": "low-drop.wav",
     "family": "bump",
     "seconds": 0.62,
-    "sha256": "164805093a80b092b70b86ec3179279060822d23d76007a0a8df2d0cbdd1625a"
+    "sha256": "164805093a80b092b70b86ec3179279060822d23d76007a0a8df2d0cbdd1625a",
+    "tags": [
+      "bump",
+      "drop",
+      "low",
+      "impact",
+      "bass"
+    ],
+    "use": "Land A Reveal Or Underline A Heavy Statement.",
+    "peak_dbfs": -6.5,
+    "rms_dbfs": -18.6
   },
   {
     "file": "transition-hit.wav",
     "family": "bump",
     "seconds": 0.28,
-    "sha256": "1edfe04780d52f2d5344bc2b9198b4bb9acf88648180034a5adfae1ae2aafd90"
+    "sha256": "1edfe04780d52f2d5344bc2b9198b4bb9acf88648180034a5adfae1ae2aafd90",
+    "tags": [
+      "bump",
+      "hit",
+      "impact",
+      "cut",
+      "short"
+    ],
+    "use": "Punctuate A Hard Cut.",
+    "peak_dbfs": -6.8,
+    "rms_dbfs": -18.8
   },
   {
     "file": "marker-knock.wav",
     "family": "tap",
     "seconds": 0.2,
-    "sha256": "e08df8b8342e7b5eeaef0c22daf71fd06a6b57a2792756ae88c167deca532306"
+    "sha256": "e08df8b8342e7b5eeaef0c22daf71fd06a6b57a2792756ae88c167deca532306",
+    "tags": [
+      "tap",
+      "knock",
+      "wood",
+      "marker",
+      "low"
+    ],
+    "use": "Mark A Chapter Point Or A Knock On A Surface.",
+    "peak_dbfs": -6.7,
+    "rms_dbfs": -20.7
   },
   {
     "file": "paper-touch.wav",
     "family": "grain",
     "seconds": 0.3,
-    "sha256": "ed3b93f0b7519db55a4d097d0d93179015f224c14635d4a984d31b5c935c899e"
+    "sha256": "ed3b93f0b7519db55a4d097d0d93179015f224c14635d4a984d31b5c935c899e",
+    "tags": [
+      "grain",
+      "paper",
+      "texture",
+      "rustle",
+      "soft"
+    ],
+    "use": "Add Texture To A Document Or A Card Appearing.",
+    "peak_dbfs": -6.3,
+    "rms_dbfs": -21.6
   },
   {
     "file": "countdown-tick.wav",
     "family": "tap",
     "seconds": 0.16,
-    "sha256": "31c1425d30fca6b88c42923ed24f454c5de57cc04cad5e9d68b80127e9d8c5b5"
+    "sha256": "31c1425d30fca6b88c42923ed24f454c5de57cc04cad5e9d68b80127e9d8c5b5",
+    "tags": [
+      "tap",
+      "tick",
+      "countdown",
+      "clock",
+      "count"
+    ],
+    "use": "Tick Each Number Of A Countdown.",
+    "peak_dbfs": -6.6,
+    "rms_dbfs": -20.9
   },
   {
     "file": "countdown-finish.wav",
     "family": "bell",
     "seconds": 0.75,
-    "sha256": "389a5f320104ffc1b41ebb74d652ff4d7b0acafdf1610ac781e985df02399354"
+    "sha256": "389a5f320104ffc1b41ebb74d652ff4d7b0acafdf1610ac781e985df02399354",
+    "tags": [
+      "bell",
+      "finish",
+      "countdown",
+      "end",
+      "chime"
+    ],
+    "use": "Close A Countdown Or Mark Time Up.",
+    "peak_dbfs": -4.4,
+    "rms_dbfs": -16.9
   },
   {
     "file": "soft-key.wav",
     "family": "tap",
     "seconds": 0.085,
-    "sha256": "76c3ed38fbd6d14501dab4e09488c826f7d1eb6a1e0b17e25c0a40ebd6801c5b"
+    "sha256": "76c3ed38fbd6d14501dab4e09488c826f7d1eb6a1e0b17e25c0a40ebd6801c5b",
+    "tags": [
+      "tap",
+      "key",
+      "typing",
+      "keyboard",
+      "short"
+    ],
+    "use": "Place One Key Press Under On-Screen Typing.",
+    "peak_dbfs": -7.6,
+    "rms_dbfs": -21.5
   },
   {
     "file": "three-keys.wav",
     "family": "steps",
     "seconds": 0.49,
-    "sha256": "a6536ca19ebefbb6e4a9923b2b936113eaae88ddaf2ec7946232b7fc9970e058"
+    "sha256": "a6536ca19ebefbb6e4a9923b2b936113eaae88ddaf2ec7946232b7fc9970e058",
+    "tags": [
+      "steps",
+      "keys",
+      "typing",
+      "keyboard",
+      "sequence"
+    ],
+    "use": "Suggest A Short Run Of Typing.",
+    "peak_dbfs": -6.1,
+    "rms_dbfs": -19.2
   },
   {
     "file": "receipt-feed.wav",
     "family": "steps",
     "seconds": 0.78,
-    "sha256": "e95ecf7df2041ec64a54bad92126b2f82e3b6888b1c02346fe4d28e7f33815b3"
+    "sha256": "e95ecf7df2041ec64a54bad92126b2f82e3b6888b1c02346fe4d28e7f33815b3",
+    "tags": [
+      "steps",
+      "printer",
+      "receipt",
+      "mechanical",
+      "feed"
+    ],
+    "use": "Suggest A Printer, A Receipt, Or A Mechanical Feed.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -19.1
   },
   {
     "file": "shutter-snap.wav",
     "family": "grain",
     "seconds": 0.14,
-    "sha256": "c5f79ed3cefd703b0012c00431548132e2ef6f02598796bd2769b412f900f76b"
+    "sha256": "c5f79ed3cefd703b0012c00431548132e2ef6f02598796bd2769b412f900f76b",
+    "tags": [
+      "grain",
+      "camera",
+      "shutter",
+      "photo",
+      "snap"
+    ],
+    "use": "Mark A Photo, A Screenshot, Or A Freeze Frame.",
+    "peak_dbfs": -7.1,
+    "rms_dbfs": -21.9
   },
   {
     "file": "low-pulse.wav",
     "family": "bump",
     "seconds": 0.55,
-    "sha256": "0cc5f3d44d475203768398b84ed7e8904346fde962bb1d4dba523975518f7a26"
+    "sha256": "0cc5f3d44d475203768398b84ed7e8904346fde962bb1d4dba523975518f7a26",
+    "tags": [
+      "bump",
+      "pulse",
+      "low",
+      "bass",
+      "tension"
+    ],
+    "use": "Add A Low Heartbeat Under A Tense Moment.",
+    "peak_dbfs": -6.5,
+    "rms_dbfs": -18.5
   },
   {
     "file": "dial-turn.wav",
     "family": "steps",
     "seconds": 0.6,
-    "sha256": "d81bc8a1bee9120bfc22cc86154adacde06bdbe72e06374e1fe92f2ed3a3e56d"
+    "sha256": "d81bc8a1bee9120bfc22cc86154adacde06bdbe72e06374e1fe92f2ed3a3e56d",
+    "tags": [
+      "steps",
+      "dial",
+      "knob",
+      "ratchet",
+      "adjust"
+    ],
+    "use": "Suggest A Dial Or A Value Being Adjusted.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -19.2
   },
   {
     "file": "spring-reveal.wav",
     "family": "rise",
     "seconds": 0.47,
-    "sha256": "921c659c9b9d83973ce9a780a75a18a4288f6bf23bbb04697ad9c8c72dbb7cb6"
+    "sha256": "921c659c9b9d83973ce9a780a75a18a4288f6bf23bbb04697ad9c8c72dbb7cb6",
+    "tags": [
+      "rise",
+      "reveal",
+      "spring",
+      "playful",
+      "pop"
+    ],
+    "use": "Lift A Playful Reveal Or An Element Popping In.",
+    "peak_dbfs": -7.1,
+    "rms_dbfs": -13.0
   },
   {
     "file": "rubber-stop.wav",
     "family": "fall",
     "seconds": 0.39,
-    "sha256": "53b4e1b3bb47da109481b23e3f4c1b1dd35e6e2d0f79c1eb867e4a49233a3a10"
+    "sha256": "53b4e1b3bb47da109481b23e3f4c1b1dd35e6e2d0f79c1eb867e4a49233a3a10",
+    "tags": [
+      "fall",
+      "stop",
+      "bounce",
+      "playful",
+      "decline"
+    ],
+    "use": "Mark A Playful Stop Or A Number Going Down.",
+    "peak_dbfs": -7.1,
+    "rms_dbfs": -13.0
   },
   {
     "file": "notification-bloom.wav",
     "family": "bell",
     "seconds": 0.88,
-    "sha256": "72adf80b4c1e1ce224593c7169ab3131d9479c9275ec87335ff3066df5b62474"
+    "sha256": "72adf80b4c1e1ce224593c7169ab3131d9479c9275ec87335ff3066df5b62474",
+    "tags": [
+      "bell",
+      "notification",
+      "message",
+      "bloom",
+      "long"
+    ],
+    "use": "Announce A Message With A Long Tail.",
+    "peak_dbfs": -4.4,
+    "rms_dbfs": -16.9
   },
   {
     "file": "focus-shift.wav",
     "family": "brush",
     "seconds": 0.61,
-    "sha256": "0681909e1888cd1f285860cd15cbb6e8536f3c5690df1a2fbb16b97ac845f87d"
+    "sha256": "0681909e1888cd1f285860cd15cbb6e8536f3c5690df1a2fbb16b97ac845f87d",
+    "tags": [
+      "brush",
+      "whoosh",
+      "focus",
+      "settle",
+      "transition"
+    ],
+    "use": "Follow A Rack Focus Or A Slow Reframe.",
+    "peak_dbfs": -7.6,
+    "rms_dbfs": -21.2
   },
   {
     "file": "desk-air.wav",
     "family": "bed",
     "seconds": 4.0,
-    "sha256": "6fc6571995658d79042e7c8139474e994b3c927b7743b7e8ffd8c24f86db6ad9"
+    "sha256": "6fc6571995658d79042e7c8139474e994b3c927b7743b7e8ffd8c24f86db6ad9",
+    "tags": [
+      "bed",
+      "ambience",
+      "room",
+      "air",
+      "quiet",
+      "texture"
+    ],
+    "use": "Fill A Short Gap Between Cuts With Quiet Air.",
+    "peak_dbfs": -14.1,
+    "rms_dbfs": -26.0
   },
   {
     "file": "machine-idle.wav",
     "family": "bed",
     "seconds": 4.0,
-    "sha256": "d0c518a174992864556ef897b62a728da45477c3009920d3ea88ed07838f651d"
+    "sha256": "d0c518a174992864556ef897b62a728da45477c3009920d3ea88ed07838f651d",
+    "tags": [
+      "bed",
+      "ambience",
+      "machine",
+      "hum",
+      "low"
+    ],
+    "use": "Sit Under A Device Or A Workshop Shot.",
+    "peak_dbfs": -13.8,
+    "rms_dbfs": -26.0
   },
   {
     "file": "soft-room.wav",
     "family": "bed",
     "seconds": 5.0,
-    "sha256": "ce7fbea9fa1ef831464ecb72219c1e670c144a712a94ba59f05c9f61719d651f"
+    "sha256": "ce7fbea9fa1ef831464ecb72219c1e670c144a712a94ba59f05c9f61719d651f",
+    "tags": [
+      "bed",
+      "ambience",
+      "room",
+      "tone",
+      "quiet"
+    ],
+    "use": "Hold Room Presence Under A Pause In Speech.",
+    "peak_dbfs": -14.0,
+    "rms_dbfs": -26.0
+  },
+  {
+    "file": "whoosh-light.wav",
+    "family": "whoosh",
+    "seconds": 0.32,
+    "sha256": "cdf793f9aecad6232d52079195084200390590e3e1574a8a12601a562d4158db",
+    "tags": [
+      "whoosh",
+      "transition",
+      "fast",
+      "light",
+      "airy",
+      "swipe"
+    ],
+    "use": "Carry A Quick Swipe, A Text Fly-In, Or A Light Punch-In.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -20.3
+  },
+  {
+    "file": "whoosh-medium.wav",
+    "family": "whoosh",
+    "seconds": 0.55,
+    "sha256": "7a87308b1a1b300293d49e4208b80f1f523fc98721ee8fe3b26ce0f4235d1b69",
+    "tags": [
+      "whoosh",
+      "transition",
+      "pass",
+      "medium",
+      "cut"
+    ],
+    "use": "Bridge A Standard Cut Or A Slide Between Two Shots.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -22.1
+  },
+  {
+    "file": "whoosh-heavy.wav",
+    "family": "whoosh",
+    "seconds": 0.95,
+    "sha256": "58ca12ac117f0cb813e81d87f4dc6e7a090611537c7e3d3902b93ace93f93a0f",
+    "tags": [
+      "whoosh",
+      "transition",
+      "heavy",
+      "low",
+      "long",
+      "weight"
+    ],
+    "use": "Give Weight To A Big Scene Change Or A Slow Push.",
+    "peak_dbfs": -5.0,
+    "rms_dbfs": -20.6
+  },
+  {
+    "file": "whoosh-reverse.wav",
+    "family": "whoosh",
+    "seconds": 0.7,
+    "sha256": "8126295cc945bdfd1a5a2b6d69a249e4c093fc94e326887c052da7a1d9acc335",
+    "tags": [
+      "whoosh",
+      "reverse",
+      "pull",
+      "swell",
+      "cut",
+      "build"
+    ],
+    "use": "Pull Into A Hard Cut. End It On The Cut Frame.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -24.0
+  },
+  {
+    "file": "riser-tension.wav",
+    "family": "riser",
+    "seconds": 2.4,
+    "sha256": "4c50735e72ca5dd25077cc5b0e6db3193b1f6ec41897b94cfc9c1d1cff3f47ce",
+    "tags": [
+      "riser",
+      "build",
+      "tension",
+      "rise",
+      "long",
+      "reveal"
+    ],
+    "use": "Build Toward A Reveal. End It Where The Impact Or The Answer Lands.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -23.2
+  },
+  {
+    "file": "drum-roll-build.wav",
+    "family": "roll",
+    "seconds": 2.45,
+    "sha256": "84001a0a3bd34d572414b57d3df88205da0c0cdd4eddf883d74aea82dded78dd",
+    "tags": [
+      "drum",
+      "roll",
+      "build",
+      "snare",
+      "reveal",
+      "anticipation"
+    ],
+    "use": "Hold Anticipation Before A Result. The Final Hit Lands At 1.8 Seconds.",
+    "peak_dbfs": -4.0,
+    "rms_dbfs": -27.5
+  },
+  {
+    "file": "stinger-bright.wav",
+    "family": "stinger",
+    "seconds": 1.4,
+    "sha256": "dfff275fb1d951bc83ba30ed41971f52fae8756a0e1a07a62d21debfe21852a4",
+    "tags": [
+      "stinger",
+      "hit",
+      "chord",
+      "accent",
+      "bright",
+      "title"
+    ],
+    "use": "Accent A Title Card, A Logo, Or A Punchline.",
+    "peak_dbfs": -4.0,
+    "rms_dbfs": -26.6
+  },
+  {
+    "file": "impact-deep.wav",
+    "family": "impact",
+    "seconds": 1.6,
+    "sha256": "e6fe041f4445fe079ef16d5eb18460af3ba5cddeda3c246d33e574188eb18522",
+    "tags": [
+      "impact",
+      "hit",
+      "deep",
+      "low",
+      "boom",
+      "sub"
+    ],
+    "use": "Land A Big Reveal. Its Mid Layer Keeps It Audible On A Phone.",
+    "peak_dbfs": -4.0,
+    "rms_dbfs": -24.4
+  },
+  {
+    "file": "pop-bubble.wav",
+    "family": "pop",
+    "seconds": 0.13,
+    "sha256": "3f1f848812f661f0ed0060bfe43b6cb1a2fc2807cd683f58c9a459194c9337eb",
+    "tags": [
+      "pop",
+      "bubble",
+      "ui",
+      "short",
+      "playful",
+      "appear"
+    ],
+    "use": "Pop In A Sticker, An Emoji, Or A Caption Word.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -19.2
+  },
+  {
+    "file": "clock-ticks.wav",
+    "family": "ticks",
+    "seconds": 3.0,
+    "sha256": "ac9289574d87cee3deb0280dd4bbdbd153c49f1a7af813d1c5e3df4b18cf806d",
+    "tags": [
+      "clock",
+      "tick",
+      "tock",
+      "time",
+      "loop",
+      "countdown"
+    ],
+    "use": "Show Time Passing. Six Ticks Half A Second Apart Repeat Cleanly Every 3 Seconds.",
+    "peak_dbfs": -9.0,
+    "rms_dbfs": -38.6
+  },
+  {
+    "file": "typing-burst.wav",
+    "family": "keys",
+    "seconds": 1.3,
+    "sha256": "40b5960acd6f960a1cdf5f2448d3b7b92e782e086fe5c971f24bd558ee7d673e",
+    "tags": [
+      "typing",
+      "keys",
+      "keyboard",
+      "burst",
+      "computer"
+    ],
+    "use": "Play Under On-Screen Typing Or A Search Being Entered.",
+    "peak_dbfs": -8.0,
+    "rms_dbfs": -34.3
+  },
+  {
+    "file": "register-chime.wav",
+    "family": "chime",
+    "seconds": 1.6,
+    "sha256": "f46de9232c3375ac216b1af9c1b3247b0620b5b149a2b14f039bf26084ab6d1e",
+    "tags": [
+      "register",
+      "cash",
+      "money",
+      "sale",
+      "chime",
+      "bell"
+    ],
+    "use": "Mark A Sale, A Price, Or A Money Moment.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -22.0
+  },
+  {
+    "file": "coin-ping.wav",
+    "family": "chime",
+    "seconds": 0.6,
+    "sha256": "5de38a0690eaa6ee916e2a4f2f350ea2bc6b336eecbc9749bd42962d3dc854fe",
+    "tags": [
+      "coin",
+      "money",
+      "ping",
+      "metal",
+      "bounce",
+      "reward"
+    ],
+    "use": "Mark A Small Win, A Saving, Or A Point Scored.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -23.8
+  },
+  {
+    "file": "shutter-mechanical.wav",
+    "family": "shutter",
+    "seconds": 0.22,
+    "sha256": "49651d347f01fe69eebf7f49f4eed419c436eaef71e7227c76b5ff3d8d6a6021",
+    "tags": [
+      "camera",
+      "shutter",
+      "photo",
+      "mechanical",
+      "click"
+    ],
+    "use": "Mark A Photo With A Fuller Two-Stage Shutter.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -28.3
+  },
+  {
+    "file": "glitch-stutter.wav",
+    "family": "glitch",
+    "seconds": 0.5,
+    "sha256": "c7709f431f6e7f88088735fcb07a1ce7614734c98b4f640fadcab0d8d6dfbe45",
+    "tags": [
+      "glitch",
+      "digital",
+      "stutter",
+      "error",
+      "transition"
+    ],
+    "use": "Cover A Jump Cut Or Signal A Digital Fault.",
+    "peak_dbfs": -12.0,
+    "rms_dbfs": -14.6
+  },
+  {
+    "file": "error-buzz.wav",
+    "family": "buzz",
+    "seconds": 0.52,
+    "sha256": "f65c6d62c22121a72f68d555df2a613ddd0fbd8242a7227a2cda817286271743",
+    "tags": [
+      "error",
+      "buzz",
+      "wrong",
+      "negative",
+      "alert"
+    ],
+    "use": "Mark A Wrong Answer, A Mistake, Or A Thing To Avoid.",
+    "peak_dbfs": -7.0,
+    "rms_dbfs": -19.1
+  },
+  {
+    "file": "notify-triad.wav",
+    "family": "notify",
+    "seconds": 0.9,
+    "sha256": "4e7ccba6a1ed708362c5f91c083745a5438e371e5831e87ee868c50606b0e070",
+    "tags": [
+      "notification",
+      "message",
+      "chime",
+      "rising",
+      "ui"
+    ],
+    "use": "Announce A Message, A Reply, Or A New Follower.",
+    "peak_dbfs": -6.0,
+    "rms_dbfs": -20.9
+  },
+  {
+    "file": "room-tone-warm.wav",
+    "family": "bed",
+    "seconds": 8.0,
+    "sha256": "39e54a1b0ef6da19c1cad87e71fe7dba9cab3d5171558188798526f880d7a5c5",
+    "tags": [
+      "bed",
+      "ambience",
+      "room",
+      "tone",
+      "warm",
+      "low",
+      "loop"
+    ],
+    "use": "Fill Silence Between Cuts In An Indoor Take.",
+    "peak_dbfs": -14.2,
+    "rms_dbfs": -27.0,
+    "overlap_seconds": 0.25
+  },
+  {
+    "file": "room-tone-bright.wav",
+    "family": "bed",
+    "seconds": 8.0,
+    "sha256": "772cc28e13b0a2e1466c4da74867a33af730867170e7e9fd92308a429a88bb96",
+    "tags": [
+      "bed",
+      "ambience",
+      "room",
+      "tone",
+      "bright",
+      "air",
+      "loop"
+    ],
+    "use": "Fill Silence In A Bright Or Hard-Walled Room.",
+    "peak_dbfs": -14.7,
+    "rms_dbfs": -27.0,
+    "overlap_seconds": 0.25
+  },
+  {
+    "file": "machine-hum.wav",
+    "family": "bed",
+    "seconds": 8.0,
+    "sha256": "4ca1057530d4ff06534bbf2c319a2cdbb8f7abba15abb42b1e399e8d000d14a5",
+    "tags": [
+      "bed",
+      "ambience",
+      "machine",
+      "hum",
+      "electric",
+      "loop"
+    ],
+    "use": "Sit Under Equipment, A Server, Or An Appliance.",
+    "peak_dbfs": -16.2,
+    "rms_dbfs": -27.0,
+    "overlap_seconds": 0.25
+  },
+  {
+    "file": "night-air.wav",
+    "family": "bed",
+    "seconds": 10.0,
+    "sha256": "c17fb211772671ae4b27392a19a2fe85af5409c848dfc4df93727480b67fe7d2",
+    "tags": [
+      "bed",
+      "ambience",
+      "night",
+      "outdoor",
+      "crickets",
+      "wind",
+      "loop"
+    ],
+    "use": "Set A Quiet Outdoor Night.",
+    "peak_dbfs": -12.4,
+    "rms_dbfs": -27.0,
+    "overlap_seconds": 0.25
+  },
+  {
+    "file": "water-stream.wav",
+    "family": "bed",
+    "seconds": 8.0,
+    "sha256": "daae329ed3297b66899fb2e4dd729ef6580244d9cd3449913b6a4adcc3610aad",
+    "tags": [
+      "bed",
+      "ambience",
+      "water",
+      "stream",
+      "brook",
+      "nature",
+      "loop"
+    ],
+    "use": "Set A Stream, A Fountain, Or A Calm Outdoor Scene.",
+    "peak_dbfs": -13.7,
+    "rms_dbfs": -27.0,
+    "overlap_seconds": 0.25
+  },
+  {
+    "file": "radio-static.wav",
+    "family": "bed",
+    "seconds": 6.0,
+    "sha256": "52408ef9ee464f8479f01ee44eca68736c0230b8ad611c2442abbc9cd27db276",
+    "tags": [
+      "bed",
+      "ambience",
+      "radio",
+      "static",
+      "noise",
+      "retro",
+      "loop"
+    ],
+    "use": "Suggest A Radio, An Old Recording, Or A Lost Signal.",
+    "peak_dbfs": -12.7,
+    "rms_dbfs": -27.0,
+    "overlap_seconds": 0.25
   }
 ]
