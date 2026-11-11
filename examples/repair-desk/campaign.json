@@ -1,0 +1,14 @@
+{
+  "format": "school.campaign/1",
+  "title": "Find The Ready Repair",
+  "viewer": "Repair Shop Owners",
+  "offer": "An Interactive Queue Demo",
+  "action": "Open The Demo And Select Ready Only",
+  "channel": "A Vertical Product Reel",
+  "destination": "demo.html",
+  "metric": "Ready Only Filter Activations",
+  "reviewer": "Project Owner",
+  "evidence": [
+    {"id": "P1", "claim": "The Filter Shows Which Repair Is Ready", "source": "demo.html#ready", "visual": "The Queue Changes From Three Jobs To One Ready Job"}
+  ]
+}

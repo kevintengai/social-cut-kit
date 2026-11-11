@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Touch Gesture</title>
+  <desc id="desc">Show Where A Viewer Should Tap On A Phone.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 33V19a4 4 0 0 1 8 0v12-4a4 4 0 0 1 7 0 4 4 0 0 1 7 1 4 4 0 0 1 7 2v11c0 10-6 16-14 16h-4c-5 0-9-3-12-7l-8-12c-2-4 1-7 5-4l5 4"/>
+    <path d="M13 21a11 11 0 0 1 20-8" stroke="#5EE1C7"/>
+  </g>
+</svg>

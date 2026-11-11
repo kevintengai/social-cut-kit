@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Comment Thread</title>
+  <desc id="desc">Invite A Response Or Mark A Viewer Question.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 12h38v24H22L12 44v-8H7z"/>
+    <path d="M28 43h10l12 8v-8h6V24h-5" stroke="#5EE1C7"/>
+    <path d="M14 21h22 M14 27h15"/>
+  </g>
+</svg>

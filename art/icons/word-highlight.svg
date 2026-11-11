@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Word Highlight</title>
+  <desc id="desc">Point Out The Word That Carries Emphasis.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 17h18 M34 17h14 M8 28h41 M8 50h31"/>
+    <rect x="8" y="34" width="23" height="11" rx="2" stroke="#5EE1C7"/>
+    <path d="M36 40h17"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Swipe Cue</title>
+  <desc id="desc">Prompt A Horizontal Gesture With A Moving Chevron.</desc>
+  <style>
+    .swipe{animation:glide 2.6s ease-in-out infinite}@keyframes glide{0%,12%{transform:translateX(0);opacity:.55}60%,82%{transform:translateX(17px);opacity:1}100%{transform:translateX(0);opacity:.55}}
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 43h48" opacity=".45" stroke-dasharray="2 6"/><g class="swipe"><path d="M15 18l9 11-9 11 M25 18l9 11-9 11" stroke="#5EE1C7"/></g>
+  </g>
+</svg>

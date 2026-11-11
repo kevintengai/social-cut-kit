@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Curved Return</title>
+  <desc id="desc">Bring Attention Back To A Prior Detail.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 44c-6-28-36-31-44-10" stroke="#5EE1C7"/>
+    <path d="M9 20l2 16 16-4"/>
+  </g>
+</svg>

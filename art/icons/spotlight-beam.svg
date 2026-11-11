@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Spotlight Beam</title>
+  <desc id="desc">Direct Attention From A Caption Toward A Detail.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 11l15 8-7 12-12-11z M19 32l9 22 28-19-29-10" stroke="#5EE1C7"/>
+    <path d="M14 12l7-6 M24 16l6-3"/>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+{
+  "format": "school.script/1",
+  "title": "Find The Ready Repair",
+  "reviewer": "Project Owner",
+  "openings": [{"angle":"Buyer Question","first_frame":"All Three Jobs In The Queue"}],
+  "evidence": [{"id":"P1","claim":"The Filter Shows Which Repair Is Ready","source":"demo.html#ready","visual":"One Ready Job Remains"}],
+  "beats": [
+    {"id":"B01","purpose":"Opening","seconds":3,"voice":"Which Repair Can Go Back To The Customer Today?","picture":"Show All Three Jobs And Their Statuses","proof":"","media":"all-jobs.png","source_in":0},
+    {"id":"B02","purpose":"Demonstration","seconds":3,"voice":"Select Ready Only. The Studio Light Cable Is Ready For Pickup.","picture":"Show The Active Filter And Single Result","proof":"P1","media":"ready-job.png","source_in":0},
+    {"id":"B03","purpose":"Invitation","seconds":2,"voice":"Try The Filter In The Demo.","picture":"Stay On The Control So The Next Action Is Clear","proof":"","media":"ready-job.png","source_in":0}
+  ]
+}

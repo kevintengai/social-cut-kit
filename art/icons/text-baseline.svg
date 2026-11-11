@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Text Baseline</title>
+  <desc id="desc">Align Two Text Treatments To The Same Baseline.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 42l9-25 9 25 M18 33h10 M37 25h13 M44 25v17"/>
+    <path d="M6 48h52 M10 52v3 M54 52v3" stroke="#5EE1C7"/>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Feature Zoom</title>
+  <desc id="desc">Magnify A Small Product Detail.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="26" cy="25" r="15"/>
+    <path d="M37 36l16 17 M18 25h16 M26 17v16" stroke="#5EE1C7"/>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Voice Track</title>
+  <desc id="desc">Identify The Spoken Performance On A Track.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="24" y="6" width="16" height="34" rx="8"/>
+    <path d="M16 29v3a16 16 0 0 0 32 0v-3 M32 48v8 M23 56h18" stroke="#5EE1C7"/>
+    <path d="M25 20h5 M25 26h5"/>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Version History</title>
+  <desc id="desc">Call Out A Previous Product Revision.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 31a22 22 0 1 1 4 15 M9 18v13h13"/>
+    <path d="M32 19v14l10 6" stroke="#5EE1C7"/>
+  </g>
+</svg>

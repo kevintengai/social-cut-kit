@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Word Underline</title>
+  <desc id="desc">Draw A Short Emphasis Line Beneath A Headline.</desc>
+  <style>
+    .line{stroke-dasharray:100;animation:ink 3s ease-out infinite}@keyframes ink{0%,8%{stroke-dashoffset:100;opacity:0}20%{opacity:1}55%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 27h26 M41 27h14 M9 18h16 M31 18h17" opacity=".7"/><path class="line" pathLength="100" d="M8 40q25-6 48-2 M17 46q15-3 29-2" stroke="#5EE1C7"/>
+  </g>
+</svg>

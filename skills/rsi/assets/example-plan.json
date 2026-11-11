@@ -1,0 +1,11 @@
+{
+  "baseline_workflow": "Manual Caption Timing V1",
+  "candidate_workflow": "Phrase Grouping Pass V1",
+  "metric": "Hands-On Caption Correction Time",
+  "unit": "Minutes",
+  "direction": "lower",
+  "minimum_pairs": 3,
+  "minimum_median_gain": 2,
+  "guardrail": "Caption Errors Remaining At Editor Review",
+  "maximum_guard_increase": 0
+}

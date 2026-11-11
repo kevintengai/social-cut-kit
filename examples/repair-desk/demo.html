@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Repair Desk | Social Cut Kit Example</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f4f7;color:#152b41;font:22px/1.35 system-ui,sans-serif}.sheet{max-width:760px;padding:6vh 7vw;margin:auto}header{font-size:16px;letter-spacing:.07em;color:#4a6074}h1{font-size:clamp(40px,9vw,68px);letter-spacing:-.06em;margin:32px 0 8px}p{margin:0 0 34px}nav{display:flex;gap:12px;flex-wrap:wrap}button{font:inherit;color:inherit;padding:12px 22px;border-radius:10px;background:white;border:1px solid #bbc9d4;cursor:pointer}button[aria-pressed=true]{background:#142e49;color:white}ul{list-style:none;margin:28px 0;padding:0}li{background:white;border:1px solid #ccd5df;border-radius:12px;margin:12px 0;padding:24px}.job{font-weight:650}.state{font-size:17px;color:#496575;margin-top:6px}.count{font-size:19px;margin:20px 0;color:#44596c}footer{font-size:16px;color:#506175}
+</style></head><body><main class="sheet"><header>TENG AI SCHOOL · Social Cut Kit</header><h1>Repair Desk</h1><p>Which Jobs Are Ready For Pickup?</p>
+<nav aria-label="Filter Jobs"><button data-filter="all">All Jobs</button><button data-filter="ready">Ready Only</button></nav>
+<div class="count" role="status"></div><ul><li><div class="job">Camera Battery Door</div><div class="state">Waiting For Parts</div></li><li data-ready="true"><div class="job">Studio Light Cable</div><div class="state">Ready For Pickup</div></li><li><div class="job">Tripod Head</div><div class="state">On The Bench</div></li></ul><footer>Fictional Product Demo</footer></main>
+<script>
+function refresh(){const only=location.hash==='#ready';let count=0;for(const row of document.querySelectorAll('li')){row.hidden=only&&!row.dataset.ready;if(!row.hidden)count++}for(const button of document.querySelectorAll('button'))button.setAttribute('aria-pressed',String((button.dataset.filter==='ready')===only));document.querySelector('.count').textContent=count===1?'1 Job Showing':count+' Jobs Showing'}
+for(const button of document.querySelectorAll('button'))button.addEventListener('click',()=>{location.hash=button.dataset.filter});
+addEventListener('hashchange',refresh);refresh();
+</script></body></html>

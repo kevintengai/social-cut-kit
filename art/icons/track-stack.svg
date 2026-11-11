@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Track Stack</title>
+  <desc id="desc">Identify Separate Layers Of An Editable Sequence.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="7" y="10" width="50" height="12" rx="3"/>
+    <rect x="7" y="27" width="37" height="11" rx="3"/>
+    <rect x="19" y="44" width="38" height="11" rx="3" stroke="#5EE1C7"/>
+    <path d="M14 16h9 M14 32h6 M27 49h7"/>
+  </g>
+</svg>

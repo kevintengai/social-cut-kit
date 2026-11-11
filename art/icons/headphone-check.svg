@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Headphone Check</title>
+  <desc id="desc">Cue A Close Listen At An Edit Boundary.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 36v-6a23 23 0 0 1 46 0v6"/>
+    <rect x="8" y="32" width="11" height="20" rx="5" stroke="#5EE1C7"/>
+    <rect x="45" y="32" width="11" height="20" rx="5" stroke="#5EE1C7"/>
+    <path d="M55 46q0 10-13 10"/>
+  </g>
+</svg>

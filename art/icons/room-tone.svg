@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Room Tone</title>
+  <desc id="desc">Mark A Room Tone Sample Between Dialogue Takes.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 53V14l24-7 24 7v39 M32 7v12 M12 42h8l3-4 4 8 5-17 5 16 4-6 4 3h7" stroke="#5EE1C7"/>
+    <path d="M9 53h46"/>
+  </g>
+</svg>

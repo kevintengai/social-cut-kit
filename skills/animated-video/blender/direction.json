@@ -1,0 +1,13 @@
+{
+  "width": 1080,
+  "height": 1350,
+  "fps": 30,
+  "seconds": 5,
+  "body_color": "#203544",
+  "dial_color": "#384C55",
+  "accent_color": "#72F5CC",
+  "initial_level": 0.08,
+  "peak_level": 0.92,
+  "final_level": 0.64,
+  "camera_travel": 1.0
+}

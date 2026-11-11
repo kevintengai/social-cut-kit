@@ -1,0 +1,389 @@
+{
+  "version": 1,
+  "viewBox": [
+    0,
+    0,
+    64,
+    64
+  ],
+  "assets": [
+    {
+      "title": "Split Clip",
+      "group": "Timeline",
+      "usage": "Mark The Frame Where One Shot Becomes Two.",
+      "file": "icons/split-clip.svg",
+      "animated": false
+    },
+    {
+      "title": "Ripple Delete",
+      "group": "Timeline",
+      "usage": "Show A Removed Segment Closing The Timeline Gap.",
+      "file": "icons/ripple-delete.svg",
+      "animated": false
+    },
+    {
+      "title": "Track Stack",
+      "group": "Timeline",
+      "usage": "Identify Separate Layers Of An Editable Sequence.",
+      "file": "icons/track-stack.svg",
+      "animated": false
+    },
+    {
+      "title": "Cutaway",
+      "group": "Timeline",
+      "usage": "Introduce Supporting Footage Over The Main Shot.",
+      "file": "icons/cutaway.svg",
+      "animated": false
+    },
+    {
+      "title": "Loop Region",
+      "group": "Timeline",
+      "usage": "Mark A Short Section To Replay In The Editor.",
+      "file": "icons/loop-region.svg",
+      "animated": false
+    },
+    {
+      "title": "Keyframe Pair",
+      "group": "Timeline",
+      "usage": "Highlight A Change Between Two Animation Keys.",
+      "file": "icons/keyframe-pair.svg",
+      "animated": false
+    },
+    {
+      "title": "Vertical Crop",
+      "group": "Timeline",
+      "usage": "Mark A Portrait Reframe Inside Landscape Footage.",
+      "file": "icons/vertical-crop.svg",
+      "animated": false
+    },
+    {
+      "title": "Clip Handle",
+      "group": "Timeline",
+      "usage": "Show The Available Source Before Or After A Trim.",
+      "file": "icons/clip-handle.svg",
+      "animated": false
+    },
+    {
+      "title": "Voice Track",
+      "group": "Sound",
+      "usage": "Identify The Spoken Performance On A Track.",
+      "file": "icons/voice-track.svg",
+      "animated": false
+    },
+    {
+      "title": "Room Tone",
+      "group": "Sound",
+      "usage": "Mark A Room Tone Sample Between Dialogue Takes.",
+      "file": "icons/room-tone.svg",
+      "animated": false
+    },
+    {
+      "title": "Stereo Balance",
+      "group": "Sound",
+      "usage": "Compare Left And Right Channel Levels.",
+      "file": "icons/stereo-balance.svg",
+      "animated": false
+    },
+    {
+      "title": "Crossfade",
+      "group": "Sound",
+      "usage": "Show Two Audio Levels Crossing In A Transition.",
+      "file": "icons/crossfade.svg",
+      "animated": false
+    },
+    {
+      "title": "Peak Meter",
+      "group": "Sound",
+      "usage": "Point Out A Peak In Recorded Audio.",
+      "file": "icons/peak-meter.svg",
+      "animated": false
+    },
+    {
+      "title": "Beat Marker",
+      "group": "Sound",
+      "usage": "Mark The Beat That Anchors A Visual Cut.",
+      "file": "icons/beat-marker.svg",
+      "animated": false
+    },
+    {
+      "title": "Headphone Check",
+      "group": "Sound",
+      "usage": "Cue A Close Listen At An Edit Boundary.",
+      "file": "icons/headphone-check.svg",
+      "animated": false
+    },
+    {
+      "title": "Music Bed",
+      "group": "Sound",
+      "usage": "Identify A Music Layer Under Spoken Audio.",
+      "file": "icons/music-bed.svg",
+      "animated": false
+    },
+    {
+      "title": "Captions",
+      "group": "Text",
+      "usage": "Introduce Or Inspect The Caption Layer.",
+      "file": "icons/captions.svg",
+      "animated": false
+    },
+    {
+      "title": "Safe Margins",
+      "group": "Text",
+      "usage": "Check Caption And Headline Placement On Screen.",
+      "file": "icons/safe-margins.svg",
+      "animated": false
+    },
+    {
+      "title": "Lower Third",
+      "group": "Text",
+      "usage": "Mark A Speaker Name Or Role Plate.",
+      "file": "icons/lower-third.svg",
+      "animated": false
+    },
+    {
+      "title": "Word Highlight",
+      "group": "Text",
+      "usage": "Point Out The Word That Carries Emphasis.",
+      "file": "icons/word-highlight.svg",
+      "animated": false
+    },
+    {
+      "title": "Text Baseline",
+      "group": "Text",
+      "usage": "Align Two Text Treatments To The Same Baseline.",
+      "file": "icons/text-baseline.svg",
+      "animated": false
+    },
+    {
+      "title": "Speaker Label",
+      "group": "Text",
+      "usage": "Identify A Speaker Before Their First Line.",
+      "file": "icons/speaker-label.svg",
+      "animated": false
+    },
+    {
+      "title": "Transcript Match",
+      "group": "Text",
+      "usage": "Mark Confirmed Agreement Between Speech And Text.",
+      "file": "icons/transcript-match.svg",
+      "animated": false
+    },
+    {
+      "title": "Headline Card",
+      "group": "Text",
+      "usage": "Introduce The Main Promise At The Opening Frame.",
+      "file": "icons/headline-card.svg",
+      "animated": false
+    },
+    {
+      "title": "Pointer Click",
+      "group": "Product",
+      "usage": "Draw Attention To A Control During A Demo.",
+      "file": "icons/pointer-click.svg",
+      "animated": false
+    },
+    {
+      "title": "Touch Gesture",
+      "group": "Product",
+      "usage": "Show Where A Viewer Should Tap On A Phone.",
+      "file": "icons/touch-gesture.svg",
+      "animated": false
+    },
+    {
+      "title": "Slider Control",
+      "group": "Product",
+      "usage": "Highlight A Parameter Being Adjusted.",
+      "file": "icons/slider-control.svg",
+      "animated": false
+    },
+    {
+      "title": "Feature Zoom",
+      "group": "Product",
+      "usage": "Magnify A Small Product Detail.",
+      "file": "icons/feature-zoom.svg",
+      "animated": false
+    },
+    {
+      "title": "Screen Share",
+      "group": "Product",
+      "usage": "Introduce A Shared Application Window.",
+      "file": "icons/screen-share.svg",
+      "animated": false
+    },
+    {
+      "title": "Keyboard Shortcut",
+      "group": "Product",
+      "usage": "Cue A Keyboard Command In A Walkthrough.",
+      "file": "icons/keyboard-shortcut.svg",
+      "animated": false
+    },
+    {
+      "title": "Version History",
+      "group": "Product",
+      "usage": "Call Out A Previous Product Revision.",
+      "file": "icons/version-history.svg",
+      "animated": false
+    },
+    {
+      "title": "Settings Dial",
+      "group": "Product",
+      "usage": "Identify A Configuration Step.",
+      "file": "icons/settings-dial.svg",
+      "animated": false
+    },
+    {
+      "title": "Comment Thread",
+      "group": "Social",
+      "usage": "Invite A Response Or Mark A Viewer Question.",
+      "file": "icons/comment-thread.svg",
+      "animated": false
+    },
+    {
+      "title": "Save Bookmark",
+      "group": "Social",
+      "usage": "Point To The Save Action For A Reference Clip.",
+      "file": "icons/save-bookmark.svg",
+      "animated": false
+    },
+    {
+      "title": "Share Link",
+      "group": "Social",
+      "usage": "Cue A Resource Link In The Post.",
+      "file": "icons/share-link.svg",
+      "animated": false
+    },
+    {
+      "title": "Community Group",
+      "group": "Social",
+      "usage": "Identify A Community Invitation.",
+      "file": "icons/community-group.svg",
+      "animated": false
+    },
+    {
+      "title": "Pinned Reply",
+      "group": "Social",
+      "usage": "Flag A Reply That Should Stay Visible.",
+      "file": "icons/pinned-reply.svg",
+      "animated": false
+    },
+    {
+      "title": "Audience Retention",
+      "group": "Social",
+      "usage": "Show Where Viewers Leave A Sequence.",
+      "file": "icons/audience-retention.svg",
+      "animated": false
+    },
+    {
+      "title": "Notification Bell",
+      "group": "Social",
+      "usage": "Mark A Reminder Or Subscription Prompt.",
+      "file": "icons/notification-bell.svg",
+      "animated": false
+    },
+    {
+      "title": "Profile Badge",
+      "group": "Social",
+      "usage": "Call Attention To A Creator Profile.",
+      "file": "icons/profile-badge.svg",
+      "animated": false
+    },
+    {
+      "title": "Elbow Arrow",
+      "group": "Callouts",
+      "usage": "Connect A Side Label To A Specific Screen Control.",
+      "file": "icons/elbow-arrow.svg",
+      "animated": false
+    },
+    {
+      "title": "Curved Return",
+      "group": "Callouts",
+      "usage": "Bring Attention Back To A Prior Detail.",
+      "file": "icons/curved-return.svg",
+      "animated": false
+    },
+    {
+      "title": "Measurement Span",
+      "group": "Callouts",
+      "usage": "Show The Width Or Duration Of A Selected Region.",
+      "file": "icons/measurement-span.svg",
+      "animated": false
+    },
+    {
+      "title": "Detail Bracket",
+      "group": "Callouts",
+      "usage": "Frame An Interface Detail Without Covering Its Center.",
+      "file": "icons/detail-bracket.svg",
+      "animated": false
+    },
+    {
+      "title": "Waypoint Route",
+      "group": "Callouts",
+      "usage": "Trace The Order Of Three On-Screen Steps.",
+      "file": "icons/waypoint-route.svg",
+      "animated": false
+    },
+    {
+      "title": "Spotlight Beam",
+      "group": "Callouts",
+      "usage": "Direct Attention From A Caption Toward A Detail.",
+      "file": "icons/spotlight-beam.svg",
+      "animated": false
+    },
+    {
+      "title": "Step Ladder",
+      "group": "Callouts",
+      "usage": "Explain A Sequence With Three Ordered Levels.",
+      "file": "icons/step-ladder.svg",
+      "animated": false
+    },
+    {
+      "title": "Anchor Pin",
+      "group": "Callouts",
+      "usage": "Fix A Note To An Exact Point In A Screen Recording.",
+      "file": "icons/anchor-pin.svg",
+      "animated": false
+    },
+    {
+      "title": "Tap Ripple",
+      "group": "Motion",
+      "usage": "Mark A Tap Target With Two Outward Ripples.",
+      "file": "motion/tap-ripple.svg",
+      "animated": true
+    },
+    {
+      "title": "Focus Lock",
+      "group": "Motion",
+      "usage": "Settle Four Focus Corners Around A Detail.",
+      "file": "motion/focus-lock.svg",
+      "animated": true
+    },
+    {
+      "title": "Beat Bars",
+      "group": "Motion",
+      "usage": "Cue A Music Beat With A Three-Bar Motion.",
+      "file": "motion/beat-bars.svg",
+      "animated": true
+    },
+    {
+      "title": "Path Trace",
+      "group": "Motion",
+      "usage": "Lead The Eye From An Origin Toward An Arrowhead.",
+      "file": "motion/path-trace.svg",
+      "animated": true
+    },
+    {
+      "title": "Word Underline",
+      "group": "Motion",
+      "usage": "Draw A Short Emphasis Line Beneath A Headline.",
+      "file": "motion/word-underline.svg",
+      "animated": true
+    },
+    {
+      "title": "Swipe Cue",
+      "group": "Motion",
+      "usage": "Prompt A Horizontal Gesture With A Moving Chevron.",
+      "file": "motion/swipe-cue.svg",
+      "animated": true
+    }
+  ]
+}

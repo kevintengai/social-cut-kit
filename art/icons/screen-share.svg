@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Screen Share</title>
+  <desc id="desc">Introduce A Shared Application Window.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="11" width="54" height="35" rx="4"/>
+    <path d="M23 53h18 M32 46v7 M7 19h50"/>
+    <path d="M32 40V24 M25 31l7-7 7 7" stroke="#5EE1C7"/>
+  </g>
+</svg>

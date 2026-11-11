@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "title": "Facet Turntable",
+  "aspect": "Landscape",
+  "fps": 24,
+  "scenes": [
+    {
+      "id": "facet-turntable-1",
+      "mode": "3D Object",
+      "duration": 5,
+      "eyebrow": "Material Study",
+      "title": "Follow The Facets",
+      "body": "A Slow Orbit Brings The Highlight Across The Front Face.",
+      "background": "#172233",
+      "foreground": "#f4f6f9",
+      "accent": "#a1c4ff",
+      "motion": "Word Rise",
+      "mark": "Focus",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Crystal",
+      "material": "#91accb",
+      "light": "#fff2db",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -48,
+      "elevation": 18,
+      "orbit": 86,
+      "spin": -24,
+      "distance": 6.4,
+      "gloss": 0.84,
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 0,
+          "gain": 0.7,
+          "sound": "Room Air"
+        },
+        {
+          "type": "Sound",
+          "at": 2.8,
+          "gain": 0.6,
+          "sound": "Glass Point"
+        }
+      ]
+    },
+    {
+      "id": "facet-turntable-2",
+      "mode": "3D Object",
+      "duration": 4,
+      "eyebrow": "Second Angle",
+      "title": "Hold The Last Angle",
+      "body": "A Longer Hold Gives The Viewer Time To Read.",
+      "background": "#172233",
+      "foreground": "#f4f6f9",
+      "accent": "#c0f2d1",
+      "motion": "Word Rise",
+      "mark": "Orbit",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Prism",
+      "material": "#83bfae",
+      "light": "#c5f1ff",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": 24,
+      "elevation": 27,
+      "orbit": 14,
+      "spin": 52,
+      "distance": 6.6,
+      "gloss": 0.3,
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 0.1,
+          "gain": 0.55,
+          "sound": "Air Sweep"
+        },
+        {
+          "type": "Voice",
+          "at": 0.5,
+          "gain": 1,
+          "text": "Hold The Last Angle.",
+          "clip": ""
+        }
+      ]
+    }
+  ]
+}

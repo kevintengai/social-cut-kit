@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "title": "Give An Idea Shape",
+  "aspect": "Portrait",
+  "fps": 30,
+  "scenes": [
+    {
+      "id": "give-an-idea-shape-1",
+      "mode": "Kinetic Type",
+      "duration": 3.8,
+      "eyebrow": "Motion Study",
+      "title": "Give An Idea Shape",
+      "body": "Start With One Clear Sentence.",
+      "background": "#101925",
+      "foreground": "#f4f6f9",
+      "accent": "#8fefa8",
+      "motion": "Word Rise",
+      "mark": "Aperture",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 0.14,
+          "gain": 0.7,
+          "sound": "Paper Tap"
+        },
+        {
+          "type": "Voice",
+          "at": 0.4,
+          "gain": 1,
+          "text": "Give An Idea Shape.",
+          "clip": ""
+        }
+      ]
+    },
+    {
+      "id": "give-an-idea-shape-2",
+      "mode": "Process Diagram",
+      "duration": 5.2,
+      "eyebrow": "The Sequence",
+      "title": "Build It In Three Moves",
+      "body": "",
+      "background": "#122a2e",
+      "foreground": "#f4f6f9",
+      "accent": "#8fefa8",
+      "motion": "Word Rise",
+      "mark": "Route",
+      "steps": [
+        "Name The Idea",
+        "Map The Steps",
+        "Show The Change"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#96ecc2",
+      "light": "#fff0bf",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 0.85,
+          "gain": 0.48,
+          "sound": "Twin Tick"
+        },
+        {
+          "type": "Sound",
+          "at": 1.53,
+          "gain": 0.48,
+          "sound": "Twin Tick"
+        },
+        {
+          "type": "Sound",
+          "at": 2.21,
+          "gain": 0.48,
+          "sound": "Twin Tick"
+        }
+      ]
+    },
+    {
+      "id": "give-an-idea-shape-3",
+      "mode": "3D Object",
+      "duration": 4.6,
+      "eyebrow": "Spatial Study",
+      "title": "Change The View",
+      "body": "Let The Light Reveal The Surface.",
+      "background": "#191828",
+      "foreground": "#f4f6f9",
+      "accent": "#f1b0e9",
+      "motion": "Word Rise",
+      "mark": "Orbit",
+      "steps": [
+        "Start Here",
+        "Find A Pattern",
+        "Show The Result"
+      ],
+      "shape": "Orbit Ring",
+      "material": "#c98cbf",
+      "light": "#e5f3ff",
+      "lightYaw": -37,
+      "lightElevation": 44,
+      "intensity": 1,
+      "azimuth": -34,
+      "elevation": 24,
+      "orbit": 52,
+      "spin": 110,
+      "distance": 5.5,
+      "gloss": 0.65,
+      "cues": [
+        {
+          "type": "Sound",
+          "at": 0.07,
+          "gain": 0.62,
+          "sound": "Orbit Rise"
+        }
+      ]
+    }
+  ]
+}

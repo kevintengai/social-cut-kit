@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Clip Handle</title>
+  <desc id="desc">Show The Available Source Before Or After A Trim.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 26v-6h10 M8 40v6h10 M56 26v-6H46 M56 40v6H46"/>
+    <rect x="20" y="22" width="24" height="22" rx="2" stroke="#5EE1C7"/>
+    <path d="M25 33h14"/>
+  </g>
+</svg>

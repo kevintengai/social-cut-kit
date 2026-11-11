@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Path Trace</title>
+  <desc id="desc">Lead The Eye From An Origin Toward An Arrowhead.</desc>
+  <style>
+    .trace{stroke-dasharray:100;animation:draw 3.2s ease-in-out infinite}@keyframes draw{0%,10%{stroke-dashoffset:100}58%,90%{stroke-dashoffset:0}100%{stroke-dashoffset:100}}
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="45" r="3" stroke="#5EE1C7"/><path d="M14 44c17 0 6-23 24-23h12" stroke="#E7F4FF" opacity=".25"/><path class="trace" pathLength="100" d="M14 44c17 0 6-23 24-23h12" stroke="#5EE1C7"/><path d="M44 14l9 7-9 7"/>
+  </g>
+</svg>

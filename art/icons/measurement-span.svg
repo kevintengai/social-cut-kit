@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Measurement Span</title>
+  <desc id="desc">Show The Width Or Duration Of A Selected Region.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 17v30 M56 17v30 M10 32h44"/>
+    <path d="M17 25l-7 7 7 7 M47 25l7 7-7 7" stroke="#5EE1C7"/>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Anchor Pin</title>
+  <desc id="desc">Fix A Note To An Exact Point In A Screen Recording.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 55S15 36 15 23a17 17 0 0 1 34 0c0 13-17 32-17 32z"/>
+    <circle cx="32" cy="23" r="6" stroke="#5EE1C7"/>
+    <path d="M16 57h8 M40 57h8" stroke="#5EE1C7"/>
+  </g>
+</svg>

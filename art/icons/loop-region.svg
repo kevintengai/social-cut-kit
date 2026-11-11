@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Loop Region</title>
+  <desc id="desc">Mark A Short Section To Replay In The Editor.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 33v-6a12 12 0 0 1 12-12h27 M42 9l7 6-7 6 M55 31v6a12 12 0 0 1-12 12H16 M22 43l-7 6 7 6"/>
+    <path d="M28 25l11 7-11 7z" stroke="#5EE1C7"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Beat Bars</title>
+  <desc id="desc">Cue A Music Beat With A Three-Bar Motion.</desc>
+  <style>
+    .bar{transform-origin:32px 48px;animation:beat 1.8s ease-in-out infinite;stroke-width:7}.two{animation-delay:-.7s}.three{animation-delay:-1.1s}@keyframes beat{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1)}}
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path class="bar one" d="M17 48V29"/><path class="bar two" d="M32 48V16" stroke="#5EE1C7"/><path class="bar three" d="M47 48V24"/><path d="M9 54h46" stroke-width="2"/>
+  </g>
+</svg>

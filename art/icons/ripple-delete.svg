@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Ripple Delete</title>
+  <desc id="desc">Show A Removed Segment Closing The Timeline Gap.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="37" width="16" height="11" rx="2"/>
+    <rect x="43" y="37" width="16" height="11" rx="2"/>
+    <path d="M24 26l7 6 8-6 M31 12v18 M18 18h-7v10 M46 18h7v10" stroke="#5EE1C7"/>
+  </g>
+</svg>

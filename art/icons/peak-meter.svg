@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Peak Meter</title>
+  <desc id="desc">Point Out A Peak In Recorded Audio.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 46a25 25 0 0 1 50 0 M11 35l4 2 M21 22l2 5 M42 22l-2 5 M54 35l-4 2"/>
+    <path d="M32 45l15-17" stroke="#5EE1C7"/>
+    <circle cx="32" cy="45" r="3" stroke="#5EE1C7"/>
+  </g>
+</svg>

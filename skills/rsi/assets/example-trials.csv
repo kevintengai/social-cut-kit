@@ -1,0 +1,4 @@
+pair,input_ref,order,baseline,candidate,baseline_guard,candidate_guard,baseline_evidence,candidate_evidence
+P01,Fixture-Opening-V1,AB,12,9,1,1,Fixture-Log-01#A,Fixture-Log-01#B
+P02,Fixture-Interview-V1,BA,16,14,2,1,Fixture-Log-02#A,Fixture-Log-02#B
+P03,Fixture-Demo-V1,AB,10,9,0,0,Fixture-Log-03#A,Fixture-Log-03#B

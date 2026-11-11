@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Split Clip</title>
+  <desc id="desc">Mark The Frame Where One Shot Becomes Two.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 24h15v20H7z M42 24h15v20H42z"/>
+    <path d="M32 10v44 M26 14l6 6 6-6" stroke="#5EE1C7"/>
+  </g>
+</svg>

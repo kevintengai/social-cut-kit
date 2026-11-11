@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "title": "Find The Ready Repair",
+  "canvas": {
+    "width": 720,
+    "height": 1280,
+    "fps": 30,
+    "fit": "contain"
+  },
+  "assets": {
+    "B01": {
+      "path": "all-jobs.png",
+      "kind": "image"
+    },
+    "B02": {
+      "path": "ready-job.png",
+      "kind": "image"
+    },
+    "B03": {
+      "path": "ready-job.png",
+      "kind": "image"
+    },
+    "tap": {
+      "kind": "audio",
+      "path": "../../skills/video-edit/assets/cue-bank/sounds/button-up.wav"
+    }
+  },
+  "shots": [
+    {
+      "asset": "B01",
+      "in": 0.0,
+      "out": 3.0
+    },
+    {
+      "asset": "B02",
+      "in": 0.0,
+      "out": 3.0
+    },
+    {
+      "asset": "B03",
+      "in": 0.0,
+      "out": 2.0
+    }
+  ],
+  "captions": [
+    {
+      "at": 0.15,
+      "end": 2.85,
+      "text": "Which Repair Is Ready For Pickup?",
+      "position": "bottom"
+    },
+    {
+      "at": 3.15,
+      "end": 5.85,
+      "text": "One Filter Reveals The Ready Job.",
+      "position": "bottom"
+    },
+    {
+      "at": 6.15,
+      "end": 7.85,
+      "text": "Try The Filter In The Demo.",
+      "position": "bottom"
+    }
+  ],
+  "overlays": [],
+  "audio": [
+    {
+      "asset": "tap",
+      "at": 3,
+      "end": 3.11,
+      "in": 0,
+      "gain": 0.36
+    }
+  ]
+}

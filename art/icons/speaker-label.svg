@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Speaker Label</title>
+  <desc id="desc">Identify A Speaker Before Their First Line.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="21" cy="21" r="7"/>
+    <path d="M9 43q0-12 12-12 9 0 12 8"/>
+    <rect x="27" y="39" width="30" height="13" rx="3" stroke="#5EE1C7"/>
+    <path d="M33 45h15"/>
+  </g>
+</svg>

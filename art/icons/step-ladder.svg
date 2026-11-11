@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Step Ladder</title>
+  <desc id="desc">Explain A Sequence With Three Ordered Levels.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 50h15V36h15V22h21" stroke="#5EE1C7"/>
+    <path d="M12 40v-8h12 M27 26v-8h12 M41 12h8"/>
+  </g>
+</svg>

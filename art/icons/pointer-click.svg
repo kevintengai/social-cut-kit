@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Pointer Click</title>
+  <desc id="desc">Draw Attention To A Control During A Demo.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 14l5 36 9-11 10 13 7-5-10-13 15-3z"/>
+    <path d="M11 9L8 6 M9 19H5 M21 8V4" stroke="#5EE1C7"/>
+  </g>
+</svg>

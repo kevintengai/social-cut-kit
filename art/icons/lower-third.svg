@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Lower Third</title>
+  <desc id="desc">Mark A Speaker Name Or Role Plate.</desc>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="10" width="54" height="43" rx="4"/>
+    <path d="M6 39h34v9H6" stroke="#5EE1C7"/>
+    <path d="M12 44h14 M11 32h22"/>
+  </g>
+</svg>

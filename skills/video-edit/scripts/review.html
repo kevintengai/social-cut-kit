@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social Cut Kit Editor</title>
+<style>
+:root{color-scheme:dark;font:15px/1.45 "Inter",system-ui,sans-serif;background:#101114;color:#f3f4f6}
+*{box-sizing:border-box}body{margin:0}header,main{max-width:1400px;margin:auto;padding:20px clamp(16px,3vw,40px)}header{border-bottom:1px solid #393c42;display:flex;align-items:center;gap:1em}h1{font-size:clamp(20px,3vw,32px);margin:0}h2{font-size:17px;margin:0 0 10px}main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(270px,1fr);gap:24px}section{min-width:0}button{font:inherit;color:inherit;background:#282b31;border:1px solid #474b52;border-radius:6px;padding:7px 12px;cursor:pointer}button:hover,button:focus-visible{border-color:#90e7c0}.primary{background:#9be8c6;color:#0a2219;border-color:transparent;font-weight:650}.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}.counter{font:14px/1.4 "IBM Plex Mono",monospace;margin-left:auto}
+#stage{position:relative;container-type:inline-size;background:black;overflow:hidden;max-height:58vh;margin:auto}#stage img,#stage video,#labels{position:absolute;pointer-events:none}#labels{inset:0;color:white;font:700 var(--caption-size,6cqw)/1.12 Arial,sans-serif;text-align:center;text-shadow:0 1px 2px black;-webkit-text-stroke:var(--outline,.25cqw) #141414;paint-order:stroke fill}.cue{position:absolute;left:5.5%;right:5.5%;white-space:pre-line;overflow-wrap:anywhere}.top{top:7%}.bottom{bottom:7%}.center{top:50%;transform:translateY(-50%)}
+input[type=range]{width:100%;accent-color:#9be8c6}textarea{width:100%;min-height:32vh;resize:vertical;padding:12px;border-radius:6px;border:1px solid #464951;background:#191b20;color:#edf2f4;font:13px/1.5 "IBM Plex Mono",monospace;tab-size:2}.shots{display:flex;gap:5px;overflow-x:auto;padding:2px 0 8px}.shots button{white-space:nowrap}.shots .active{border-color:#9be8c6}.status{color:#b9c5d1;min-height:1.5em}.error{color:#ffbbad}.hint{color:#adb2bb;font-size:13px;margin:.2em 0 10px}
+@media(max-width:760px){main{grid-template-columns:1fr}#stage{max-height:52vh}}
+</style></head><body>
+<header><h1 id="title">Social Cut Kit Editor</h1></header>
+<main><section aria-label="Source Playback">
+<div id="stage"><div id="labels"></div></div>
+<div class="bar"><button class="primary" id="play">Play</button><button id="prev" aria-label="Previous Frame">Previous Frame</button><button id="next" aria-label="Next Frame">Next Frame</button><output class="counter" id="time">0.00 S</output></div>
+<input type="range" id="seek" aria-label="Playhead" value="0" min="0" step="any">
+<h2>Shots</h2><div class="shots" id="shots"></div>
+<div class="bar"><button id="split">Split Shot At Playhead</button><button id="caption">Add Caption At Playhead</button></div>
+</section><section><h2><label for="document">Editable Timeline</label></h2>
+<p class="hint">Adjust Source Cuts, Overlays, Captions, And Audio Cues Here. Save To Apply Edits To Playback.</p>
+<textarea id="document" spellcheck="false"></textarea><div class="bar"><button id="save" class="primary">Save Timeline</button><button id="reset">Reset Unsaved Changes</button></div>
+<div id="status" class="status" role="status"></div></section></main>
+<script>
+"use strict";
+const byId = id => document.getElementById(id);
+const stage = byId("stage"), labels = byId("labels"), editor = byId("document");
+let data, model, time = 0, playing = false, anchor = 0, frameId = 0, audioContext = null;
+let layers = [], activeCaption = "", dirty = false;
+function status(message, error = false) {
+  byId("status").textContent = message;
+  byId("status").classList.toggle("error", error);
+}
+function serialized(obj) { return JSON.stringify(obj, null, 2); }
+function newLayer(row, type, i) {
+  const asset = model.assets[row.asset];
+  const kind = type === "audio" ? "audio" : (asset.kind === "image" ? "img" : "video");
+  const media = document.createElement(kind);
+  media.src = "media/" + encodeURIComponent(row.asset);
+  media.setAttribute("aria-hidden", "true");
+  media.style.display = "none";
+  if (kind !== "img") {
+    media.preload = "auto";
+    media.playsInline = true;
+    media.muted = type === "overlay" || row.gain === 0;
+    media.volume = Math.min(1, row.gain ?? 1);
+    if (kind === "video") media.style.objectFit = row.fit || "contain";
+    media.addEventListener("loadedmetadata", () => draw(true));
+    media.addEventListener("error", () => status("Browser Could Not Play Source " + row.asset + ". Check The Browser Codec And File Path.", true));
+  }
+  if (type === "shot") {
+    const [x,y,w,h] = row.geometry.browser;
+    Object.assign(media.style, {left:x*100+"%",top:y*100+"%",width:w*100+"%",height:h*100+"%",objectFit:"fill",
+      filter:"brightness("+row.brightness+") contrast("+row.contrast+") saturate("+row.saturation+")"});
+  } else if (type === "overlay") {
+    Object.assign(media.style, {left:row.x / model.width * 100 + "%",top:row.y / model.height * 100 + "%",width:row.width / model.width * 100 + "%",height:"auto"});
+  }
+  stage.insertBefore(media, labels);
+  return {media, row, type, i, live:false, gainNode:null};
+}
+function setState(next, message) {
+  stop();
+  layers.forEach(l => {
+    if (l.media.pause) l.media.pause();
+    if (l.gainNode) l.gainNode.disconnect();
+    l.media.removeAttribute("src");
+    if (l.media.load) l.media.load();
+    l.media.remove();
+  });
+  layers = [];
+  data = next; model = data.model;
+  byId("title").textContent = model.title;
+  document.title = model.title + " | Social Cut Kit";
+  editor.value = serialized(data.project); dirty = false;
+  byId("seek").max = model.duration;
+  stage.style.aspectRatio = model.width + "/" + model.height;
+  stage.style.width = "min(100%, calc(52vh * " + model.width / model.height + "))";
+  const style = model.caption_style;
+  stage.style.setProperty("--caption-size",style.size/model.width*100+"cqw");
+  labels.style.fontFamily = style.font + ", sans-serif";
+  labels.style.color = style.color;
+  labels.style.webkitTextStroke = String(style.stroke*2/model.width*100)+"cqw "+style.outline;
+  labels.style.textShadow = "none";
+  const shots = byId("shots"); shots.replaceChildren();
+  model.shots.forEach((row,i) => {
+    const button = document.createElement("button");
+    button.textContent = String(i+1) + " · " + row.asset;
+    button.onclick = () => seek(row.at);
+    shots.append(button);
+    layers.push(newLayer(row,"shot",i));
+  });
+  model.overlays.forEach((r,i) => layers.push(newLayer(r,"overlay",i)));
+  model.audio.forEach((r,i) => layers.push(newLayer(r,"audio",i)));
+  labels.replaceChildren(); activeCaption = "";
+  seek(Math.min(time,model.duration));
+  status(message);
+}
+function draw(force) {
+  if (!model) return;
+  const position = Math.max(0, Math.min(time, model.duration - 0.001));
+  for (const l of layers) {
+    const {media,row,type} = l;
+    const end = type === "shot" ? row.at + row.duration : row.end;
+    const live = position >= row.at - .0000001 && position < end - .0000001;
+    if (type === "shot") byId("shots").children[l.i].classList.toggle("active", live);
+    media.style.display = live && type !== "audio" ? "block" : "none";
+    if (media.pause) {
+      if (live && media.readyState > 0) {
+        const speed = row.speed || 1;
+        const desired = row.start + Math.max(0,position - row.at) * speed;
+        const limit = Number.isFinite(media.duration) ? Math.max(0,media.duration-.001) : desired;
+        if (force || !l.live || Math.abs(media.currentTime - desired) > .18) media.currentTime = Math.min(limit,desired);
+        media.playbackRate = speed;
+        if (playing && media.paused) media.play().catch(() => {});
+        if (!playing && !media.paused) media.pause();
+      } else if (!media.paused) media.pause();
+    }
+    l.live = live;
+  }
+  const cues = model.captions.filter(c => position >= c.at && position < c.end);
+  const key = JSON.stringify(cues);
+  if (key !== activeCaption) {
+    labels.replaceChildren();
+    cues.forEach(c => {
+      const div = document.createElement("div"); div.className = "cue " + c.position;
+      if (c.position === "top" || c.position === "bottom") div.style[c.position] = model.caption_style.margin + "%";
+      div.textContent = c.text; labels.append(div);
+    });
+    activeCaption = key;
+  }
+  byId("seek").value = time;
+  byId("time").textContent = time.toFixed(2) + " / " + model.duration.toFixed(2) + " S";
+}
+function stop() {
+  playing = false; cancelAnimationFrame(frameId); byId("play").textContent = "Play";
+  layers.forEach(l => { if (l.media.pause) l.media.pause(); });
+}
+function seek(t) { stop(); time = Math.min(model.duration,Math.max(0,t)); draw(true); }
+function tick(now) {
+  if (!playing) return;
+  time = Math.min(model.duration,(now-anchor)/1000);
+  if (time >= model.duration) stop();
+  draw(false);
+  if (playing) frameId = requestAnimationFrame(tick);
+}
+async function play() {
+  if (!model) return;
+  if (playing) { stop(); return; }
+  if (time >= model.duration) seek(0);
+  if (window.AudioContext) {
+    audioContext ||= new AudioContext();
+    await audioContext.resume();
+    for (const l of layers.filter(l => l.media.pause && !l.gainNode && l.type !== "overlay")) {
+      const gain = audioContext.createGain();
+      audioContext.createMediaElementSource(l.media).connect(gain); gain.connect(audioContext.destination);
+      gain.gain.value = l.row.gain ?? 1; l.media.volume = 1; l.gainNode = gain;
+    }
+  }
+  playing = true; byId("play").textContent = "Pause";
+  anchor = performance.now() - time * 1000; draw(true); frameId = requestAnimationFrame(tick);
+}
+byId("play").onclick = () => play().catch(e => status(e.message,true));
+byId("seek").oninput = e => seek(Number(e.target.value));
+byId("prev").onclick = () => seek((Math.round(time*model.fps)-1)/model.fps);
+byId("next").onclick = () => seek((Math.round(time*model.fps)+1)/model.fps);
+editor.oninput = () => { dirty = true; status("Unsaved Changes"); };
+byId("reset").onclick = () => { editor.value = serialized(data.project); dirty = false; status("Saved Timeline Restored."); };
+byId("save").onclick = async () => {
+  try {
+    const project = JSON.parse(editor.value);
+    const response = await fetch("save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({project,revision:data.revision})});
+    const next = await response.json();
+    if (!response.ok) throw Error(next.error || "Save Failed.");
+    setState(next,"Timeline Saved.");
+  } catch (e) { status(e.message,true); }
+};
+function change(fn) {
+  if (dirty) return status("Save Or Reset The Current Changes First.",true);
+  try {
+    const draft = JSON.parse(editor.value); fn(draft);
+    editor.value = serialized(draft); dirty = true; stop(); status("Edit Added. Save Timeline To Apply.");
+  } catch (e) { status(e.message,true); }
+}
+byId("split").onclick = () => change(draft => {
+  const t = Math.round(time*model.fps)/model.fps;
+  const i = model.shots.findIndex(s => t > s.at+.000001 && t < s.at+s.duration-.000001);
+  if (i < 0) throw Error("Place The Playhead Inside A Shot.");
+  const shot = draft.shots[i], s = model.shots[i], split = s.start+(t-s.at)*s.speed;
+  draft.shots.splice(i,1,{...shot,in:s.start,out:split,lead:0,tail:0},{...shot,in:split,out:s.end,lead:0,tail:0});
+});
+byId("caption").onclick = () => change(draft => {
+  const at = Math.min((Math.round(model.duration*model.fps)-1)/model.fps,Math.round(time*model.fps)/model.fps);
+  (draft.captions ||= []).push({at,end:Math.min(at+1,model.duration),text:"Your Caption",position:"bottom"});
+});
+window.onbeforeunload = e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } };
+fetch("state").then(r => r.json()).then(s => setState(s,"Ready.")).catch(e => status(e.message,true));
+</script></body></html>

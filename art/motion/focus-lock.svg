@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Focus Lock</title>
+  <desc id="desc">Settle Four Focus Corners Around A Detail.</desc>
+  <style>
+    .corners{transform-origin:32px 32px;animation:lock 3s ease-in-out infinite}@keyframes lock{0%,100%{transform:scale(1.05)}35%,75%{transform:scale(.73)}}
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <g fill="none" stroke="#E7F4FF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <g class="corners"><path d="M10 24V11h14 M40 11h14v13 M54 40v13H40 M24 53H10V40"/></g><path d="M27 32h10 M32 27v10" stroke="#5EE1C7"/>
+  </g>
+</svg>
