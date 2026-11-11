@@ -4,6 +4,8 @@
 
 Eight TENG AI SCHOOL Skills For Turning A Brief, A Recording, Or An Animation Idea Into An Editable Social Video. The Kit Includes A Local Footage Editor, An Offline Motion Studio, An Asset Library, And An Example You Can Open Before Installing Any Skills.
 
+New Here? Read The [Start Here Sheet](START-HERE.md) First. It Shows What To Install And Which Skill To Ask For.
+
 ## Try An Edit
 
 Unzip The Download. In A Terminal At The Product Root, Run The Following With Python 3.10 Or Later. The Footage Editor Uses FFmpeg And FFprobe From Your System Path.
