@@ -19,7 +19,7 @@ import speech
 import takes
 
 GUIDES = ["SKILL.md", "SPEECH.md", "TECHNICAL.md", "TITLES.md", "RECREATION.md", "CAMERA.md", "RESOLVE.md",
-          "PUBLISH.md", "assets/cue-bank/README.md", "remotion/README.md"]
+          "PUBLISH.md", "INSERTS.md", "assets/cue-bank/README.md", "remotion/README.md"]
 # Units And Product Names Keep Their Own Spelling Inside Title Case Prose.
 SPELLED = {"dB", "dBFS", "dBTP", "kHz", "macOS"}
 WORKFLOWS = {"setup": setup_check.parser, "defaults": defaults.parser}
@@ -173,7 +173,7 @@ class GuideTests(unittest.TestCase):
         for topic in ("Saved User Defaults", "Brief", "Style", "Phrase", "HDR", "Loudness", "Resolve", "Remotion", "Posting"):
             self.assertIn(topic, front[1])
         for guide in ("BRIEF.md", "STYLES.md", "TECHNICAL.md", "SPEECH.md", "TITLES.md", "RECREATION.md", "CAMERA.md",
-                      "RESOLVE.md", "PUBLISH.md", "assets/cue-bank/README.md", "remotion/README.md", "../reflect/SKILL.md"):
+                      "RESOLVE.md", "PUBLISH.md", "INSERTS.md", "assets/cue-bank/README.md", "remotion/README.md", "../reflect/SKILL.md"):
             self.assertIn(f"]({guide}", text)
         for rule in ("~/.social-cut-kit/video-edit.md", "Begin Your First Reply By Listing, In A Single Line, The Saved Defaults In Use",
                      "Current Instructions Always Override Stored Defaults", "Offer To Record It",

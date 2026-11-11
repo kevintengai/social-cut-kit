@@ -41,6 +41,9 @@ Read [The Style Index](STYLES.md) Before Planning A Cut. It Chooses Between The 
 | Owner Review Or The Approved Render In Remotion, And What Differs There | [Remotion Review And Render](remotion/README.md) |
 | An Editable Resolve Project As The Deliverable | [Native Resolve Assembly](RESOLVE.md) |
 | Publishing Or Scheduling A Reviewed Master | [Posting And Scheduling](PUBLISH.md) |
+| A Graphic That Has To Be Drawn And Animated | [Animated Inserts](INSERTS.md) |
+
+When The Owner Asks For Animated Graphics, Or A Beat Needs Movement That A Screenshot Or A Title Cannot Carry, Follow [Animated Inserts](INSERTS.md). It Has You List Those Beats, Write A Shot Brief For Each, And Hand Them To The Animated Video Skill Without Being Asked Again.
 
 ## Start With A Working Project
 
