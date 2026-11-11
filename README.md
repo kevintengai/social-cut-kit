@@ -1,4 +1,4 @@
-# Social Cut Kit
+# Social Cut Kit 2.1
 
 <img src="brand/school-mark.png" alt="TENG AI SCHOOL" width="235">
 
@@ -42,13 +42,23 @@ To Install Specific Skills, Append Their Folder Names. For Example, `python inst
 | Review A Finished Session | [Reflect](skills/reflect/SKILL.md) | An Evidence-Based Account Of The Result And The Work That Produced It |
 | Test A Better Editing Method | [Workflow Trials](skills/rsi/SKILL.md) | A Paired Comparison With A Measurable Improvement Threshold |
 
+## Camera Motion, Resolve, And Publishing
+
+| You Want To | Start Here |
+| --- | --- |
+| Give A Second Clip The Camera Movement Of A Reference | Install NumPy And OpenCV, Then [Measure And Review The Move On The Target Clip](skills/video-edit/CAMERA.md) |
+| Hand An Editor A Native Resolve Timeline With Separate Tracks | Open The Destination Project In Resolve Studio 21.1 Or Later And [Build Its Editable Tracks](skills/video-edit/RESOLVE.md) |
+| Publish An Approved Master Or Reserve A Specific Time | [Prepare The Post, Submit Through The Authorized Account, And Verify The Receipt Or Queue Entry](skills/video-edit/PUBLISH.md) |
+
+The Video Editor Also Exposes These Workflows As `camera`, `resolve`, And `post`. Run `python skills/video-edit/scripts/edit_video.py camera --help` From The Product Root Or Substitute The Workflow You Need.
+
 ## Work With Your Footage
 
 - Inspect A Source, Find Silences And Scene Changes, And Assemble Selected Takes In Timeline Order. Use The Original Recording For Speech And Keep Audio Handles On The Cut.
 - Transcribe With A Separately Installed Local Recognizer, Or Import Existing Word Timings, SRT, Or WebVTT. The Caption Mapper Follows Trims, Handles, Repeated Shots, And Speed Changes. [Speech Tools](skills/video-edit/SPEECH.md)
-- Track A Detail Across An Authorized Reference Or Audition Repeated Attempts In A Recording. [Reference And Take Tools](skills/video-edit/RECREATION.md)
+- Track A Single Detail To Study A Shot, Or Transfer Its Overall Pan, Zoom, And Rotation To A Second Clip. [Reference And Take Tools](skills/video-edit/RECREATION.md) · [Camera Motion Transfer](skills/video-edit/CAMERA.md)
 - Build A Transparent Title With A Highlighted Keyword, Or Add One Of The 40 Original Sound Cues Across The Footage And Animation Tools. [Title Overlays](skills/video-edit/TITLES.md) · [Editorial Cues](skills/video-edit/assets/cue-bank/README.md)
-- Use The Timeline Helper To Hand An OTIO Cut List And SRT Captions To Another Editor. The Optional Resolve Import Command Targets A Named Open Project. Confirm Effect Translation, Media Links, And Audio Levels In The Receiving Editor.
+- Build Directly In Resolve When That Is The Delivery Editor. For Interchange With Other Editors, The Kit Also Writes OTIO And SRT. [Native Resolve Assembly](skills/video-edit/RESOLVE.md)
 - For School Productions, Let The Owner Personally Review The Saved Edit In Its Editor Before Any Video Export. A Source Check Or Still Image Can Help Diagnose An Issue During Preparation.
 
 ## What The Download Contains

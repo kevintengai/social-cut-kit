@@ -3,9 +3,12 @@
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
+# Resolve's Bundled Python May Start With An Isolated Module Search Path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from example import example
 from handoff import otio
 from media import analyze, process
@@ -13,11 +16,20 @@ from review import review
 from timeline import EditError, load, number, prepare, probe, srt, write_new
 
 
+WORKFLOWS = {
+    "camera": ("camera_transfer.py", "Transfer Pan, Zoom, And Rotation Between Clips."),
+    "resolve": ("resolve_native.py", "Build An Editable Timeline Directly In DaVinci Resolve."),
+    "post": ("posting.py", "Prepare And Verify A Post Or Scheduled Release."),
+}
+
+
 def parser():
     cli = argparse.ArgumentParser(description=__doc__)
     commands = cli.add_subparsers(dest="command", required=True, metavar="COMMAND")
     def command(key, description):
         return commands.add_parser(key, help=description, description=description)
+    for key, (_, description) in WORKFLOWS.items():
+        command(key, description)
     command("example", "Create A New Self-Contained Example Folder.").add_argument("folder", type=Path)
     command("probe", "Inspect Media Streams.").add_argument("source", type=Path)
     scan = command("analyze", "Locate Silence And Picture Changes.")
@@ -46,6 +58,10 @@ def parser():
 
 
 def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if argv and argv[0] in WORKFLOWS:
+        script, _ = WORKFLOWS[argv[0]]
+        return subprocess.run([sys.executable, str(Path(__file__).with_name(script)), *argv[1:]]).returncode
     args = parser().parse_args(argv)
     command = args.command
     if command == "render" and not args.owner_approved:
@@ -84,7 +100,7 @@ def main(argv=None):
 
 if __name__ == "__main__":
     try:
-        main()
+        raise SystemExit(main())
     except (EditError, OSError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         sys.exit(1)

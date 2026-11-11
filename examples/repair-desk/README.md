@@ -13,3 +13,11 @@ python skills/video-script/scripts/retention.py csv examples/repair-desk/retenti
 ```
 
 Open `shots.html` To Review The Plan. Use The Video Edit Skill With `edit.json` To Review The Cut. The Spoken Lines In The Plan Are A Recording Script. Record A Narrator Or Use A Caption Track If You Want Those Lines In The Finished Piece.
+
+To Inspect How The Supplied Eight-Second Cut Maps To Native Resolve Tracks, Run This From The Product Root. The Dry Run Works With Resolve Closed.
+
+```sh
+python skills/video-edit/scripts/edit_video.py resolve examples/repair-desk/timeline.json --project "Repair Desk" --name "Repair Desk 01" --dry-run
+```
+
+To Build The Editable Timeline In An Open Project, Follow The [Native Resolve Guide](../../skills/video-edit/RESOLVE.md).

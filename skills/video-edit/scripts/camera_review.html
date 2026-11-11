@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camera Motion Review | Social Cut Kit</title>
+<style>
+:root{color-scheme:light;--ink:#152c46;--muted:#465c71;--line:#ccd5dc;--accent:#175576;--focus:#257b9e}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f6f8;color:var(--ink);font:16px/1.45 Inter,system-ui,sans-serif}
+main{max-width:1240px;margin:auto;padding:clamp(18px,3vw,44px)}
+header p{margin:0;color:var(--muted);font-size:.88rem;font-weight:650}
+h1{margin:4px 0 20px;font-size:clamp(1.8rem,4vw,3rem);line-height:1.08;letter-spacing:-.045em}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(265px,320px);align-items:start;gap:16px}
+section,aside{min-width:0;border:1px solid var(--line);border-radius:12px;background:white;overflow:hidden}
+.screen{background:#101923;min-height:230px;height:min(60vh,580px);display:grid;place-items:center;position:relative}
+canvas{display:block;max-width:100%;max-height:100%;width:auto;height:auto}
+.screen p{position:absolute;color:#edf3f7;text-align:center;margin:24px;pointer-events:none}
+.transport{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px;align-items:center}
+.transport input{grid-column:1/-1;width:100%}
+.time{justify-self:end;font-variant-numeric:tabular-nums}
+aside{padding:17px}
+h2{margin:0 0 12px;font-size:1.08rem}
+label{display:block;font-weight:600}
+.line{display:flex;justify-content:space-between;align-items:center;gap:8px}
+output{font-weight:450;font-variant-numeric:tabular-nums;color:var(--muted)}
+button,select,input{font:inherit}
+input[type=range]{accent-color:var(--accent);min-width:0}
+button,select{border:1px solid #a6b7c2;border-radius:7px;padding:8px 12px;background:white;color:var(--ink)}
+button{cursor:pointer;font-weight:600}
+button:disabled{opacity:.55;cursor:default}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+button.primary{border-color:var(--accent);background:var(--accent);color:white}
+input[type=file]{display:block;max-width:100%;font-size:.82rem;margin-top:5px}
+.control{margin:13px 0}
+.control input[type=range],.control select{width:100%;margin-top:4px}
+fieldset{border:0;border-top:1px solid var(--line);margin:18px 0 0;padding:10px 0 0;min-width:0}
+.status{margin:14px 0 0;font-size:.93rem;color:var(--muted);overflow-wrap:anywhere}.status[data-error=true]{color:#9c3030}
+#measurement{margin:0 14px 14px;color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.screen{height:min(50vh,430px)}}
+</style>
+</head>
+<body>
+<main>
+<header><p>TENG AI SCHOOL · Social Cut Kit</p><h1>Camera Motion Review</h1></header>
+<div class="layout">
+<section aria-label="Target Playback">
+<div class="screen"><canvas id="frame" aria-label="Target With Transferred Camera Motion"></canvas><p id="empty">Choose The Target Clip To Review Its Motion.</p></div>
+<div class="transport">
+<button id="play" class="primary" disabled>Play</button><output class="time" id="clock">0.00 / 0.00 s</output>
+<input id="seek" type="range" aria-label="Target Playhead" min="0" max="1" step=".001" value="0" disabled>
+<label><input type="checkbox" id="original"> Show Original</label>
+</div>
+<p id="measurement"></p></section>
+<aside><h2>Review Files</h2>
+<label class="control">Target Clip<input type="file" id="source" accept="video/*,.mov,.mkv,.m4v"></label>
+<label class="control">Open Another Plan<input type="file" id="planFile" accept=".json,application/json"></label>
+<fieldset id="settings" disabled><legend>Motion Settings</legend>
+<div class="control"><label class="line" for="strength">Strength <output id="strengthOut"></output></label><input id="strength" type="range" min="0" max="3" step=".01"></div>
+<div class="control"><label class="line" for="anchor_x">Horizontal Anchor <output id="anchor_xOut"></output></label><input id="anchor_x" type="range" min="0" max="1" step=".01"></div>
+<div class="control"><label class="line" for="anchor_y">Vertical Anchor <output id="anchor_yOut"></output></label><input id="anchor_y" type="range" min="0" max="1" step=".01"></div>
+<label class="control">Edges<select id="edge_mode"><option value="cover">Crop To Fill</option><option value="reflect">Mirror Edges</option></select></label>
+<label class="control">Timing<select id="timing"><option value="stretch">Fit Reference To Target</option><option value="hold">Use Reference Time And Hold</option></select></label>
+<button id="save" type="button">Save Edited Plan</button>
+</fieldset></aside>
+</div>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+</main>
+<!--CAMERA_PLAN-->
+<script type="text/plain" id="cameraHashWorker">
+"use strict";
+const rounds = new Uint32Array([
+  0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+  0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+  0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+  0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+  0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+  0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+  0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+  0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+]);
+function rotateRight(value, count) {
+  return (value >>> count) | (value << (32 - count));
+}
+function compress(view, offset, state, words) {
+  for (let i = 0; i < 16; i++) words[i] = view.getUint32(offset + 4*i);
+  for (let i = 16; i < 64; i++) {
+    const x = words[i-15], y = words[i-2];
+    const first = rotateRight(x,7) ^ rotateRight(x,18) ^ (x >>> 3);
+    const second = rotateRight(y,17) ^ rotateRight(y,19) ^ (y >>> 10);
+    words[i] = words[i-16] + first + words[i-7] + second;
+  }
+  let a=state[0], b=state[1], c=state[2], d=state[3], e=state[4], f=state[5], g=state[6], h=state[7];
+  for (let i = 0; i < 64; i++) {
+    const choose = (e & f) ^ (~e & g);
+    const majority = (a & b) ^ (a & c) ^ (b & c);
+    const eMix = rotateRight(e,6) ^ rotateRight(e,11) ^ rotateRight(e,25);
+    const aMix = rotateRight(a,2) ^ rotateRight(a,13) ^ rotateRight(a,22);
+    const carry = (h + eMix + choose + rounds[i] + words[i]) | 0;
+    h=g; g=f; f=e; e=(d+carry)|0; d=c; c=b; b=a; a=(carry+aMix+majority)|0;
+  }
+  state[0]+=a; state[1]+=b; state[2]+=c; state[3]+=d;
+  state[4]+=e; state[5]+=f; state[6]+=g; state[7]+=h;
+}
+async function fileDigest(file) {
+  const state = new Uint32Array([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,
+    0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19]);
+  const words = new Uint32Array(64);
+  const remainder = file.size % 64;
+  const padding = new Uint8Array(remainder < 56 ? 64 : 128);
+  const chunkSize = 4 * 1024 * 1024;
+  let lastPercent = 0;
+  for (let start = 0; start < file.size; start += chunkSize) {
+    const end = Math.min(start + chunkSize, file.size);
+    const buffer = await file.slice(start,end).arrayBuffer();
+    if (buffer.byteLength !== end-start) throw Error("Incomplete File Read.");
+    const view = new DataView(buffer);
+    const full = buffer.byteLength - (buffer.byteLength % 64);
+    for (let offset = 0; offset < full; offset += 64) compress(view,offset,state,words);
+    if (full < buffer.byteLength) padding.set(new Uint8Array(buffer,full));
+    const percent = Math.floor(100*end/file.size);
+    if (percent >= lastPercent+5 && percent < 100) {
+      self.postMessage({percent});
+      lastPercent = percent;
+    }
+  }
+  padding[remainder] = 0x80;
+  const final = new DataView(padding.buffer);
+  final.setUint32(padding.length-8, Math.floor(file.size / 0x20000000));
+  final.setUint32(padding.length-4, (file.size % 0x20000000) * 8);
+  for (let offset = 0; offset < padding.length; offset += 64) compress(final,offset,state,words);
+  return Array.from(state, word => word.toString(16).padStart(8,"0")).join("");
+}
+self.onmessage = async ({data}) => {
+  try { self.postMessage({digest: await fileDigest(data)}); }
+  catch { self.postMessage({error: true}); }
+};
+</script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const surface = $("frame"), ctx = surface.getContext("2d",{alpha:false});
+const video = document.createElement("video");
+video.playsInline = true;
+video.preload = "auto";
+const tile = document.createElement("canvas");
+const tileContext = tile.getContext("2d");
+let plan = null, currentFile = null, mediaURL = "", mediaVersion = 0, ready = false, callback = null;
+let cancelHash = null;
+function message(text, error = false) { $("status").textContent = text; $("status").dataset.error = String(error); }
+function bounded(v, lo, hi) {return Number.isFinite(v) && v >= lo && v <= hi;}
+function validate(p) {
+  if (!p || p.schema !== "camera-transfer/v1" || !p.source || !p.reference || !p.settings || !Array.isArray(p.samples) || !p.samples.length) throw Error("Expected A Camera Transfer Plan.");
+  const s = p.settings;
+  if (!bounded(s.strength,0,3) || !bounded(s.anchor_x,0,1) || !bounded(s.anchor_y,0,1) || !["cover","reflect"].includes(s.edge_mode) || !["stretch","hold"].includes(s.timing) || !bounded(s.fps,1,240)) throw Error("Invalid Motion Settings.");
+  const validDuration = value => Number.isFinite(value) && value >= .000001;
+  const validPixels = value => Number.isInteger(value) && value >= 2;
+  if (!validDuration(p.source.duration) || !validDuration(p.reference.duration) || !validPixels(p.source.width) || !validPixels(p.source.height) || typeof p.source.name !== "string" || !Number.isSafeInteger(p.source.bytes) || p.source.bytes < 1) throw Error("Invalid Source Metadata.");
+  if (typeof p.source.sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(p.source.sha256))
+    throw Error("The Plan Must Include The Original Target SHA-256.");
+  if (p.samples[0]?.t !== 0) throw Error("The Motion Path Must Begin At Zero.");
+  for (let i=0; i<p.samples.length; i++) {
+    const k=p.samples[i];
+    if (!k || ![k.t,k.x,k.y,k.angle].every(Number.isFinite) || !bounded(k.zoom,1e-8,1e8) || !bounded(k.confidence,0,1) || (i && k.t<=p.samples[i-1].t)) throw Error("Invalid Motion Samples.");
+  }
+  return p;
+}
+function sampleMotion(t) {
+  const arr=plan.samples;
+  const when=plan.settings.timing==="stretch" ? t*plan.reference.duration/plan.source.duration : t;
+  let lo=0,hi=arr.length-1;
+  while(lo<hi){const mid=(lo+hi)>>1;if(arr[mid].t<when) lo=mid+1;else hi=mid;}
+  const b=arr[lo], a=arr[Math.max(0,lo-1)];
+  const k=b.t===a.t ? 0 : Math.max(0,Math.min(1,(when-a.t)/(b.t-a.t)));
+  return {x:a.x+k*(b.x-a.x),y:a.y+k*(b.y-a.y),angle:a.angle+k*(b.angle-a.angle),
+    zoom:Math.exp(Math.log(a.zoom)+k*Math.log(b.zoom/a.zoom)),status:k<.5?a.status:b.status};
+}
+function geometry(m, s, w, h) {
+  const W=w-1,H=h-1,cx=W/2,cy=H/2,ax=W*s.anchor_x,ay=H*s.anchor_y;
+  const a=m.angle*s.strength*Math.PI/180, c=Math.cos(a),r=Math.sin(a);
+  let z=m.zoom**s.strength;
+  const qx=ax+m.x*W*s.strength+z*(c*(cx-ax)-r*(cy-ay));
+  const qy=ay+m.y*H*s.strength+z*(r*(cx-ax)+c*(cy-ay));
+  if(s.edge_mode==="cover"){
+    for(const x of [0,W]) for(const y of [0,H]){
+      const dx=x-qx,dy=y-qy;
+      z=Math.max(z,Math.abs(c*dx+r*dy)/cx,Math.abs(-r*dx+c*dy)/cy);
+    }
+  }
+  return {qx,qy,c,r,z};
+}
+function mirrored(w,h) {
+  // Tile Periods Exclude The Repeated End Pixels, As In A Reflect-101 Boundary.
+  const ratio=Math.min(1,1280/Math.max(w,h));
+  const iw=Math.max(2,Math.round(w*ratio)),ih=Math.max(2,Math.round(h*ratio));
+  const px=2*(iw-1),py=2*(ih-1);
+  if(tile.width!==px||tile.height!==py){tile.width=px;tile.height=py;}
+  for(const flipX of [false,true]) for(const flipY of [false,true]){
+    tileContext.setTransform(flipX?-1:1,0,0,flipY?-1:1,flipX?px+1:0,flipY?py+1:0);
+    tileContext.drawImage(video,0,0,iw,ih);
+  }
+  tileContext.resetTransform();
+  const pattern=ctx.createPattern(tile,"repeat");
+  const sx=(w-1)/(iw-1),sy=(h-1)/(ih-1);
+  pattern.setTransform(new DOMMatrix([sx,0,0,sy,(1-sx)/2,(1-sy)/2]));
+  return pattern;
+}
+function draw(time = video.currentTime || 0) {
+  if(!ready||!plan||video.readyState<2) return;
+  const w=plan.source.width,h=plan.source.height;
+  const m=sampleMotion(time), g=geometry(m,plan.settings,w,h);
+  ctx.resetTransform();ctx.fillStyle="#101923";ctx.fillRect(0,0,surface.width,surface.height);
+  ctx.setTransform(surface.width/w,0,0,surface.height/h,0,0);
+  if($("original").checked) ctx.drawImage(video,0,0,w,h);
+  else {
+    ctx.translate(g.qx+.5,g.qy+.5);ctx.transform(g.z*g.c,g.z*g.r,-g.z*g.r,g.z*g.c,0,0);ctx.translate(-w/2,-h/2);
+    if(plan.settings.edge_mode==="cover") ctx.drawImage(video,0,0,w,h);
+    else {
+      ctx.fillStyle=mirrored(w,h);
+      const extent=(Math.hypot(w,h)+Math.hypot(g.qx,g.qy))/g.z+Math.max(w,h);
+      ctx.fillRect(-extent,-extent,2*extent,2*extent);
+    }
+  }
+  ctx.resetTransform();
+  $("seek").value=time;$("clock").textContent=time.toFixed(2)+" / "+plan.source.duration.toFixed(2)+" s";
+  $("measurement").textContent="Pan "+(100*m.x).toFixed(1)+"%, "+(100*m.y).toFixed(1)+"% · Zoom "+m.zoom.toFixed(3)+"× · Rotation "+m.angle.toFixed(2)+"°";
+}
+function nextFrame() {
+  if(callback!==null||!ready||video.paused||video.ended) return;
+  if(video.requestVideoFrameCallback) callback=video.requestVideoFrameCallback((_,meta)=>{callback=null;draw(meta.mediaTime);nextFrame();});
+  else callback=requestAnimationFrame(()=>{callback=null;draw();nextFrame();});
+}
+function cancelFrame() {
+  if(callback===null) return;
+  if(video.cancelVideoFrameCallback) video.cancelVideoFrameCallback(callback);
+  else cancelAnimationFrame(callback);
+  callback=null;
+}
+function dropMedia() {
+  mediaVersion++;
+  if(cancelHash) cancelHash();
+  ready=false;currentFile=null;cancelFrame();video.pause();
+  video.removeAttribute("src");video.load();
+  if(mediaURL) URL.revokeObjectURL(mediaURL);
+  mediaURL="";$("empty").hidden=false;$("play").disabled=true;$("seek").disabled=true;
+  $("clock").textContent="0.00 / 0.00 s";$("seek").value=0;$("measurement").textContent="";
+  ctx.resetTransform();ctx.clearRect(0,0,surface.width,surface.height);
+}
+function fields() {
+  for(const key of ["strength","anchor_x","anchor_y"]){
+    $(key).value=plan.settings[key];$(key+"Out").textContent=plan.settings[key].toFixed(2);
+  }
+  for(const key of ["edge_mode","timing"]) $(key).value=plan.settings[key];
+}
+function installPlan(obj) {
+  validate(obj);dropMedia();plan=obj;$("settings").disabled=false;$("source").value="";
+  fields();message("Choose "+obj.source.name+" To Review This Plan.");
+}
+function workerDigest(file, token) {
+  return new Promise((resolve,reject) => {
+    const workerURL = URL.createObjectURL(new Blob([$("cameraHashWorker").textContent], {type:"text/javascript"}));
+    let worker, settled = false;
+    function finish(digest, failure = false) {
+      if (settled) return;
+      settled = true;
+      if (worker) worker.terminate();
+      URL.revokeObjectURL(workerURL);
+      if (cancelHash === cancel) cancelHash = null;
+      if (failure) reject(Error("Could Not Verify The Original Target File."));
+      else resolve(digest);
+    }
+    function cancel() { finish(null); }
+    try {
+      worker = new Worker(workerURL);
+      cancelHash = cancel;
+      worker.onerror = worker.onmessageerror = () => finish(null,true);
+      worker.onmessage = ({data}) => {
+        if (token !== mediaVersion) return cancel();
+        if (typeof data?.digest === "string" && /^[a-f0-9]{64}$/.test(data.digest)) finish(data.digest);
+        else if (Number.isInteger(data?.percent) && data.percent >= 0 && data.percent < 100)
+          message("Verifying The Original Target File ("+data.percent+"%).");
+        else finish(null,true);
+      };
+      worker.postMessage(file);
+    } catch { finish(null,true); }
+  });
+}
+async function targetDigest(file, token) {
+  if (file.size <= 64*1024*1024 && globalThis.crypto?.subtle) {
+    try {
+      const bytes = await file.arrayBuffer();
+      if (token !== mediaVersion) return null;
+      const hash = await crypto.subtle.digest("SHA-256",bytes);
+      return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,"0")).join("");
+    } catch {
+      if (token !== mediaVersion) return null;
+    }
+  }
+  return workerDigest(file,token);
+}
+async function selectFile(file) {
+  dropMedia();if(!file) return;
+  if(!plan){message("Open A Motion Plan First.",true);return;}
+  if(file.name!==plan.source.name||file.size!==plan.source.bytes){message("Choose The Original Target Clip Listed In This Plan.",true);return;}
+  const token=mediaVersion;
+  message("Verifying The Original Target File.");
+  let digest;
+  try { digest = await targetDigest(file, token); }
+  catch {
+    if (token === mediaVersion) message("Could Not Verify The Original Target File. Select The File Again.",true);
+    return;
+  }
+  if(token!==mediaVersion)return;
+  if(digest!==plan.source.sha256.toLowerCase()){message("The Target File Hash Differs From The Plan.",true);return;}
+  currentFile=file;mediaURL=URL.createObjectURL(file);video.src=mediaURL;
+  message("Reading Target Media…");
+}
+video.addEventListener("loadedmetadata",()=>{
+  if(!plan||!currentFile)return;
+  const src=plan.source;
+  if(video.videoWidth!==src.width||video.videoHeight!==src.height||!Number.isFinite(video.duration)||
+      Math.abs(video.duration-src.duration)>Math.max(.1,1/plan.settings.fps)){
+    dropMedia();message("The Target Dimensions Or Duration Differ From The Plan.",true);return;
+  }
+  const scale=Math.min(1,1440/Math.max(src.width,src.height));
+  surface.width=Math.max(1,Math.round(src.width*scale));surface.height=Math.max(1,Math.round(src.height*scale));
+  $("seek").max=src.duration;$("seek").step=1/plan.settings.fps;ready=true;
+  $("empty").hidden=true;$("play").disabled=false;$("seek").disabled=false;
+  message("Reviewing "+src.name+". Changes To Motion Settings Update The Preview.");draw();
+});
+video.addEventListener("loadeddata",()=>draw());
+video.addEventListener("seeked",()=>{draw();nextFrame();});
+video.addEventListener("error",()=>{if(!currentFile)return;dropMedia();message("This Browser Could Not Decode The Target Clip. Use A Browser That Supports Its Codec.",true);});
+video.addEventListener("play",()=>{$("play").textContent="Pause";nextFrame();});
+video.addEventListener("pause",()=>{cancelFrame();$("play").textContent="Play";draw();});
+video.addEventListener("ended",()=>{draw();$("play").textContent="Replay";});
+$("play").onclick=async()=>{if(!ready)return;if(video.paused){if(video.ended) video.currentTime=0;try{await video.play();}catch{message("Playback Was Unavailable In This Browser.",true);}}else video.pause();};
+$("seek").oninput=()=>{if(ready)video.currentTime=Number($("seek").value);};
+$("original").onchange=()=>draw();
+for(const key of ["strength","anchor_x","anchor_y","edge_mode","timing"]) $(key).addEventListener("input",()=>{
+  plan.settings[key]=$(key).type==="range"?Number($(key).value):$(key).value;fields();draw();
+});
+$("source").onchange=()=>selectFile($("source").files[0]).catch(err=>message(err.message,true));
+$("planFile").onchange=async()=>{try{const f=$("planFile").files[0];if(f)installPlan(JSON.parse(await f.text()));}
+  catch(err){message("Could Not Open Plan. "+err.message,true);}};
+$("save").onclick=()=>{
+  if(!plan)return;
+  const url=URL.createObjectURL(new Blob([JSON.stringify(plan,null,2)+"\n"],{type:"application/json"}));
+  const a=document.createElement("a");a.href=url;a.download="motion-edited.json";a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),3000);
+  message("Edited Plan Download Requested. Use This Revision For Your Next Review Or Approved Render.");
+};
+try{const embedded=$("embeddedPlan");if(embedded) installPlan(JSON.parse(embedded.textContent));else message("Open A Motion Plan To Begin.");}
+catch(err){message("Could Not Read Embedded Plan. "+err.message,true);}
+</script>
+</body></html>

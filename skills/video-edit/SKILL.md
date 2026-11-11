@@ -1,11 +1,13 @@
 ---
 name: video-edit
-description: Assemble, Inspect, And Review An Editable Local Video Timeline. Use For Multi-Source Cuts, Dialogue Handles, Captions, Reframing, Color, Overlays, Music, Sound Effects, And Approved MP4 Delivery.
+description: Edit Social Videos, Transfer Camera Motion, Build Native DaVinci Resolve Timelines, And Carry Approved Media Through Posting Or Scheduling.
 ---
 
 # Social Cut Kit Video Editor
 
 Build The Edit In A JSON Timeline. Review It In The Included Browser Editor, Which Plays The Original Source Files. Keep The Timeline And Media Together So Another Editor Can Reopen The Project.
+
+When The Task Calls For A Reference Camera Move, Run The [Camera Transfer Workflow](CAMERA.md). When The Deliverable Is An Editable Resolve Project, Use [Native Resolve Assembly](RESOLVE.md). When The User Asks To Publish Or Schedule A Reviewed Master, Use The [Posting And Scheduling Workflow](PUBLISH.md) And Verify The Result At The Destination.
 
 For Repeated Takes, Camera Reference Tracking, Or Speech Recovery, Use The [Reference Tools](RECREATION.md) And [Speech Tools](SPEECH.md). For A Text-Overlay Skit Or A Highlighted Callout, Build A [Transparent Title](TITLES.md) And Place It On The Overlay Track. Choose Audio Cues From The [Included Sound Bank](assets/cue-bank/README.md).
 
@@ -89,7 +91,8 @@ On An Existing Master, Run `python scripts/delivery_check.py finished.mp4 --time
 ## Verification
 
 ```sh
-python -B -m unittest discover -s tests -p test_edit.py -v
+python -B -m unittest discover -s tests -v
+node --test tests/test_camera_identity.cjs
 ```
 
-The Tests Build Disposable PNG And WAV Fixtures. They Exercise Validation, Audio Analysis, Browser Saving And Media Range Requests, Stereo Routing, Retiming, Reframing, Color, Captions, Interchange Structure, Output Protection, And The Full FFmpeg Filter Graph Without Writing A Video File.
+The Tests Exercise Editing, Camera Tracking, Native Timeline Assembly, And Posting Receipts With Temporary Fixtures. The Node.js Tests Check That The Review Player Opens The Exact Target File. Install The Optional Dependencies Listed In The Workflow Guides To Run The Vision And Named-Time-Zone Checks.
